@@ -24,6 +24,7 @@
 ## Платформа «Синапс.Инсайт»
 
 - [`docs/platform/README.md`](docs/platform/README.md) — оглавление разделов платформы, разобранных по скриншотам.
+- [`docs/platform/html/user-guide.html`](docs/platform/html/user-guide.html) и [`docs/platform/html/admin-guide.html`](docs/platform/html/admin-guide.html) — руководство пользователя и руководство администратора отдельными HTML-страницами, по ролям, а не по экранам меню.
 
 ## Демо-кейсы для ретейла
 

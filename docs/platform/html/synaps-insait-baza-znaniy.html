@@ -670,10 +670,10 @@ footer.page-footer {
 <li class="app-menu-section">Управление данными</li>
 <li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Анализ схем</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Граф процедур</a><span class="doc-badge">описано</span></li>
-<li class="app-menu-item sub todo" data-menu-key=""><span class="app-menu-link">Граф код→таблица</span><span class="doc-badge todo">ещё не описано</span></li>
-<li class="app-menu-item sub todo" data-menu-key=""><span class="app-menu-link">Граф доступа</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Граф код→таблица</a><span class="doc-badge">описано</span></li>
+<li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Граф доступа</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Каталог</span><span class="doc-badge todo">ещё не описано</span></li>
-<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Агенты</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item has-doc" data-menu-key="agenty"><a class="app-menu-link" href="#/agenty" data-page-link="agenty">Агенты</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Администрирование</span><span class="doc-badge todo">ещё не описано</span></li>
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Мониторинг</span><span class="doc-badge todo">ещё не описано</span></li></ul>
       <p class="app-menu-note">Это карта реального левого меню платформы. Пункты с меткой «описано» открывают свою страницу прямо здесь, без перезагрузки; остальные ещё не разобраны.</p>
@@ -702,10 +702,10 @@ footer.page-footer {
 <li class="app-menu-section">Управление данными</li>
 <li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Анализ схем</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Граф процедур</a><span class="doc-badge">описано</span></li>
-<li class="app-menu-item sub todo" data-menu-key=""><span class="app-menu-link">Граф код→таблица</span><span class="doc-badge todo">ещё не описано</span></li>
-<li class="app-menu-item sub todo" data-menu-key=""><span class="app-menu-link">Граф доступа</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Граф код→таблица</a><span class="doc-badge">описано</span></li>
+<li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Граф доступа</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Каталог</span><span class="doc-badge todo">ещё не описано</span></li>
-<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Агенты</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item has-doc" data-menu-key="agenty"><a class="app-menu-link" href="#/agenty" data-page-link="agenty">Агенты</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Администрирование</span><span class="doc-badge todo">ещё не описано</span></li>
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Мониторинг</span><span class="doc-badge todo">ещё не описано</span></li></ul>
       <p class="app-menu-note">Это карта реального левого меню платформы. Пункты с меткой «описано» открывают свою страницу прямо здесь, без перезагрузки; остальные ещё не разобраны.</p>
@@ -1603,12 +1603,159 @@ footer.page-footer {
   <span>База знаний job-RAG · платформа «Синапс.Инсайт»</span>
   <span>docs/platform/upravlenie-dannymi.md</span>
 </footer>
+
+<section id="upravlenie-dannymi__izvlechenie">
+  <h2>Граф код→таблица</h2>
+  <div class="prose wide">
+  <p>Три независимых блока на одном экране — судя по всему, это конвейер «код → извлечённые связи → проиндексировано».</p>
+  <h3>1. Извлечение из код-коллекции</h3>
+  <p style="color:var(--ink-soft);">Пустое состояние: «Код-коллекций нет. Создайте коллекцию типа «Кодовая база» (с целевыми сервис/БД ОМ) и загрузите репозиторий.»</p>
+  <p>Раскрывает термин «ОМ»: похоже, это реестр целевых сервисов/баз данных платформы, к которому привязывается коллекция типа «Кодовая база» при подключении репозитория.</p>
+  </div>
+</section>
+
+<section id="upravlenie-dannymi__svyazi">
+  <h2>2. Связи документ→таблица/процедура</h2>
+  <blockquote class="screen-quote">
+    <span class="quote-label">Текст на экране</span>
+    <p>«Пересобирает lineage-связи документов с таблицами/процедурами из уже проиндексированных чанков (без переэмбеддинга). Бэкфилл существующих документов и доразрешение упоминаний после роста каталога.»</p>
+  </blockquote>
+  <div class="prose wide">
+  <p>Дропдаун «Коллекция» (на скриншоте: «Сохранённые ответы (шаблоны)») + кнопка <b>Извлечь связи</b>. Когда каталог таблиц/процедур растёт, система может задним числом просканировать уже проиндексированные документы и найти в них упоминания вновь появившихся сущностей — без повторного эмбеддинга, то есть дёшево.</p>
+  </div>
+</section>
+
+<section id="upravlenie-dannymi__gitlab">
+  <h2>3. GitLab синхронизация</h2>
+  <blockquote class="screen-quote">
+    <span class="quote-label">Текст на экране</span>
+    <p>«Догрузка изменений из репозитория коллекции: инкремент (только новые коммиты), сверка (reconcile по дереву — самолечение) или полный пере-синк. История прогонов ниже.»</p>
+  </blockquote>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Режим</th><th>Смысл</th></tr></thead>
+    <tbody>
+      <tr><td>Инкремент</td><td>Только новые коммиты с прошлой синхронизации</td></tr>
+      <tr><td>Сверка</td><td>«Reconcile по дереву — самолечение»: сверяет репозиторий с проиндексированным и чинит расхождения</td></tr>
+      <tr><td>Полный пере-синк</td><td>Полная переиндексация репозитория с нуля</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <span class="callout-title">Наблюдение</span>
+    <p style="margin-bottom:0;">Источник кода — конкретно <b>GitLab</b>. «Коллекция» в обоих блоках (2 и 3) показывает значение «Сохранённые ответы (шаблоны)» — то есть шаблоны из «Мои шаблоны» тоже организованы как коллекция, к которой применимы операции lineage/синхронизации. Неясно, осмысленный ли это выбор в примере или просто дефолт дропдауна.</p>
+  </div>
+</section>
+
+<section id="upravlenie-dannymi__dostup">
+  <h2>Граф доступа</h2>
+  <div class="prose wide"><p>Два таба: <b>Политики доступа</b> (активен) и <b>Карта покрытия</b>.</p></div>
+  <blockquote class="screen-quote">
+    <span class="quote-label">Текст на экране</span>
+    <p>«Row-фильтры и маски для персон и пользователей. Ключи — «схема.таблица» и «схема.таблица.колонка» (каталог не входит). Эффект — в предпросмотре.»</p>
+  </blockquote>
+  <div class="prose wide"><p>Поля: «Тип» (значение «Персона») и «Персона» («— выберите —»).</p></div>
+  <div class="callout link">
+    <span class="callout-title">⚠ Важнейшая находка: это и есть разграничение доступа, которого «не хватало» по ТЗ</span>
+    <p>В анализе ТЗ было зафиксировано: разграничение прав отложено в «опционально в v2» — комплаенс-риск для брокера. <b>Этот экран показывает, что в реальном продукте такой механизм уже есть</b> — row-фильтры (какие строки видны) и маски (какие колонки скрыты) по персоне и пользователю, с ключами на уровне <code>схема.таблица</code> и <code>схема.таблица.колонка</code>.</p>
+    <p style="margin-bottom:0;">На скриншоте персона не выбрана — не видно ни одной реально настроенной политики. Вывод меняется: вопрос не «спроектировать разграничение с нуля», а «включить и заполнить уже существующий механизм» — и проверить перед релизом v1, что row-политики реально настроены и покрывают всех менеджеров/клиентов.</p>
+  </div>
+</section>
+
+<section id="upravlenie-dannymi__open-q-2">
+  <h2>Открытые вопросы (граф код→таблица / доступа)</h2>
+  <ul class="qlist">
+    <li>Что покажет «Карта покрытия» в «Графе доступа» — список незащищённых таблиц/колонок?</li>
+    <li>Реально ли настроены row-фильтры/маски хотя бы для одной персоны?</li>
+    <li>Почему в дропдауне «Коллекция» по умолчанию выбраны «Сохранённые ответы (шаблоны)»?</li>
+  </ul>
+</section>
+
+<footer class="page-footer">
+  <span>База знаний job-RAG · платформа «Синапс.Инсайт»</span>
+  <span>docs/platform/upravlenie-dannymi.md</span>
+</footer>
+</section>
+<section class="page-doc" id="doc-agenty" hidden>
+<section id="agenty__naznachenie">
+  <h2>Назначение экрана</h2>
+  <div class="prose wide">
+  <p>Каталог и конструктор агентов платформы.</p>
+  </div>
+  <blockquote class="screen-quote">
+    <span class="quote-label">Текст на экране</span>
+    <p>«Соберите нового агента на канвасе — он пройдёт утверждение DS→ИБ и появится в селекторе чата. Существующих можно редактировать на канвасе как новую версию.»</p>
+  </blockquote>
+</section>
+
+<section id="agenty__elementy">
+  <h2>Элементы экрана</h2>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Элемент</th><th>Назначение</th></tr></thead>
+    <tbody>
+      <tr><td><b>⭐ Создать агента</b></td><td>Собрать нового агента на визуальном конструкторе («канвасе»)</td></tr>
+      <tr><td><b>📋 Реестр агентов</b></td><td>Полный реестр за пределами списка «активных»</td></tr>
+      <tr><td>«Мои заявки (0)»</td><td>Заявки текущего пользователя на утверждение</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Агент</th><th>Тип</th><th>Канвас</th></tr></thead>
+    <tbody>
+      <tr><td>Синапс.Инсайт — Аналитик (планировщик)</td><td>RAG</td><td>системный (без flow)</td></tr>
+      <tr><td>Синапс.Инсайт — Closed-book RAG (системный)</td><td>RAG</td><td>системный (без flow)</td></tr>
+      <tr><td>Синапс.Инсайт — Closed-book RAG (канвасный)</td><td>RAG</td><td>Редактировать на канвасе</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="agenty__ds">
+  <h2>Разгадан смысл «DS»</h2>
+  <div class="prose wide">
+  <p>В статье про «Задачи» оставался открытым вопрос, что означает «DS» в заголовке экрана согласования агентов. Формулировка здесь — <b>«утверждение DS→ИБ»</b> — вместе с описанием той стадии («домены данных, узлы и параметры») подсказывает, что DS, скорее всего, означает не «Data Science», а <b>Data Steward</b> — роль, ответственная за то, к каким доменам/таблицам данных агенту разрешено обращаться. После DS-проверки заявка уходит на «ИБ» (информационную безопасность).</p>
+  </div>
+</section>
+
+<section id="agenty__klassy">
+  <h2>Два класса агентов, теперь видно наглядно</h2>
+  <div class="prose wide">
+  <ul>
+    <li><b>Системные агенты без flow</b> — простые, без визуально сконструированного графа обработки; вероятно, это то, чем управляют «Промпты персон».</li>
+    <li><b>Канвасные агенты</b> — визуально сконструированный граф обработки (flow), полноценный governed-агент, требующий согласования DS→ИБ.</li>
+  </ul>
+  </div>
+</section>
+
+<section id="agenty__closed-book">
+  <h2>«Closed-book RAG» — агент, сознательно не использующий retrieval</h2>
+  <div class="prose wide">
+  <p>Два из трёх «активных агентов» называются <b>«Closed-book RAG»</b> — «closed-book» обычно означает «отвечать по собственным знаниям модели, без внешнего поиска», прямая противоположность идее RAG. Вероятно, используется как эталон для сравнения («что отвечает модель без доступа к нашим данным») или как обработчик вопросов, для которых поиск не нужен (общие вопросы вне корпоративных данных).</p>
+  </div>
+</section>
+
+<section id="agenty__open-q">
+  <h2>Открытые вопросы</h2>
+  <ul class="qlist">
+    <li>Верна ли гипотеза о расшифровке «DS» как Data Steward?</li>
+    <li>Чем отличаются «системный» и «канвасный» варианты одного типа агента (Closed-book RAG)?</li>
+    <li>Что показывает «Реестр агентов» в отличие от «Активных агентов»?</li>
+    <li>Как выглядит сам «канвас» — какие узлы доступны?</li>
+  </ul>
+</section>
+
+<footer class="page-footer">
+  <span>База знаний job-RAG · платформа «Синапс.Инсайт»</span>
+  <span>docs/platform/agenty.md</span>
+</footer>
 </section>
   </main>
 </div>
 
 <script>
-const PAGE_META = {"kalibrovka-politiki-poiska": {"title": "Политики поиска — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><span>Калибровка</span><span class=\"sep\">›</span><b>Политики поиска</b>", "h1": "Политики поиска", "tagline": "Как система решает, какому найденному тексту доверять, когда искать ещё раз и по какому пути обрабатывать разные вопросы.", "badge": "docs/platform/kalibrovka-politiki-poiska.md", "toc": "<ol><li><a href=\"#kalibrovka-politiki-poiska__rag-intro\">Что такое RAG-агент</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__prosto\">Совсем просто</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__primery\">Обзор с примерами</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__reference\">Детальный референс</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__planner\">Планировщик / реплан</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__routing\">Роутинг вопросов</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__open-q\">Открытые вопросы</a></li></ol>"}, "chat": {"title": "Чат — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Чат</b>", "h1": "Чат", "tagline": "Главный экран диалога с RAG-агентом: история чатов, выбор модели и агента, экспорт в PDF.", "badge": "docs/platform/chat.md", "toc": "<ol><li><a href=\"#chat__rag-intro\">Что такое RAG-агент</a></li>\n<li><a href=\"#chat__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#chat__panel\">Панель истории чатов</a></li>\n<li><a href=\"#chat__toolbar\">Верхняя панель диалога</a></li>\n<li><a href=\"#chat__observations\">Наблюдения</a></li>\n<li><a href=\"#chat__open-q\">Открытые вопросы</a></li></ol>"}, "istochniki-dokumenty": {"title": "Источники → Документы — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><span>Источники</span><span class=\"sep\">›</span><b>Документы</b>", "h1": "Документы", "tagline": "Реестр загруженных источников для RAG-индексации: статусы, коллекции, домены, фрагменты.", "badge": "docs/platform/istochniki-dokumenty.md", "toc": "<ol><li><a href=\"#istochniki-dokumenty__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#istochniki-dokumenty__actions\">Действия</a></li>\n<li><a href=\"#istochniki-dokumenty__filters\">Панель фильтров</a></li>\n<li><a href=\"#istochniki-dokumenty__columns\">Колонки таблицы</a></li>\n<li><a href=\"#istochniki-dokumenty__observations\">Наблюдения</a></li>\n<li><a href=\"#istochniki-dokumenty__open-q\">Открытые вопросы</a></li></ol>"}, "moi-shablony": {"title": "Мои шаблоны — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Мои шаблоны</b>", "h1": "Мои шаблоны", "tagline": "Курируемые образцы ответов: recall на похожий вопрос, строгий и обычный режим, обезличенные тексты.", "badge": "docs/platform/moi-shablony.md", "toc": "<ol><li><a href=\"#moi-shablony__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#moi-shablony__fields\">Поля формы</a></li>\n<li><a href=\"#moi-shablony__modes\">Recall и «строгий» режим</a></li>\n<li><a href=\"#moi-shablony__connection\">Связь с Кейсами 01/02</a></li>\n<li><a href=\"#moi-shablony__open-q\">Открытые вопросы</a></li></ol>"}, "zadachi": {"title": "Задачи — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Задачи</b>", "h1": "Задачи", "tagline": "Конвейер human-in-the-loop модерации: предложения, согласование агентов, статистика, очередь обработки, промпты персон.", "badge": "docs/platform/zadachi-review-pipeline.md", "toc": "<ol><li><a href=\"#zadachi__obzor\">Общая картина</a></li>\n<li><a href=\"#zadachi__predlozheniya\">1. Предложения</a></li>\n<li><a href=\"#zadachi__agenty-utverzhdenie\">2. Агенты на утверждении</a></li>\n<li><a href=\"#zadachi__statistika\">3. Статистика</a></li>\n<li><a href=\"#zadachi__ochered\">4. Очередь обработки</a></li>\n<li><a href=\"#zadachi__prompty-person\">5. Промпты персон</a></li>\n<li><a href=\"#zadachi__svyaz\">Связь с проектом</a></li>\n<li><a href=\"#zadachi__open-q\">Открытые вопросы</a></li></ol>"}, "kalibrovka-detektora-i-otladka": {"title": "Калибровка детектора и Отладка сессий — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Калибровка</b>", "h1": "Калибровка детектора и Отладка сессий", "tagline": "Пороги детектора таблиц (источник is_table для политик ранжирования) и разбор диалогов по инструментам/плану/ответам.", "badge": "docs/platform/kalibrovka-detektora-i-otladka.md", "toc": "<ol><li><a href=\"#kalibrovka-detektora-i-otladka__detektor\">Калибровка детектора таблиц</a></li>\n<li><a href=\"#kalibrovka-detektora-i-otladka__otladka\">Отладка сессий</a></li>\n<li><a href=\"#kalibrovka-detektora-i-otladka__open-q\">Открытые вопросы</a></li></ol>"}, "upravlenie-dannymi": {"title": "Управление данными — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Управление данными</b>", "h1": "Управление данными", "tagline": "Анализ схемы таблиц по FQN и граф lineage хранимых процедур.", "badge": "docs/platform/upravlenie-dannymi.md", "toc": "<ol><li><a href=\"#upravlenie-dannymi__analiz-schem\">Анализ схемы таблицы</a></li>\n<li><a href=\"#upravlenie-dannymi__graf-procedur\">Граф процедур (lineage)</a></li>\n<li><a href=\"#upravlenie-dannymi__open-q\">Открытые вопросы</a></li></ol>"}};
+const PAGE_META = {"kalibrovka-politiki-poiska": {"title": "Политики поиска — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><span>Калибровка</span><span class=\"sep\">›</span><b>Политики поиска</b>", "h1": "Политики поиска", "tagline": "Как система решает, какому найденному тексту доверять, когда искать ещё раз и по какому пути обрабатывать разные вопросы.", "badge": "docs/platform/kalibrovka-politiki-poiska.md", "toc": "<ol><li><a href=\"#kalibrovka-politiki-poiska__rag-intro\">Что такое RAG-агент</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__prosto\">Совсем просто</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__primery\">Обзор с примерами</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__reference\">Детальный референс</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__planner\">Планировщик / реплан</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__routing\">Роутинг вопросов</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__open-q\">Открытые вопросы</a></li></ol>"}, "chat": {"title": "Чат — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Чат</b>", "h1": "Чат", "tagline": "Главный экран диалога с RAG-агентом: история чатов, выбор модели и агента, экспорт в PDF.", "badge": "docs/platform/chat.md", "toc": "<ol><li><a href=\"#chat__rag-intro\">Что такое RAG-агент</a></li>\n<li><a href=\"#chat__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#chat__panel\">Панель истории чатов</a></li>\n<li><a href=\"#chat__toolbar\">Верхняя панель диалога</a></li>\n<li><a href=\"#chat__observations\">Наблюдения</a></li>\n<li><a href=\"#chat__open-q\">Открытые вопросы</a></li></ol>"}, "istochniki-dokumenty": {"title": "Источники → Документы — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><span>Источники</span><span class=\"sep\">›</span><b>Документы</b>", "h1": "Документы", "tagline": "Реестр загруженных источников для RAG-индексации: статусы, коллекции, домены, фрагменты.", "badge": "docs/platform/istochniki-dokumenty.md", "toc": "<ol><li><a href=\"#istochniki-dokumenty__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#istochniki-dokumenty__actions\">Действия</a></li>\n<li><a href=\"#istochniki-dokumenty__filters\">Панель фильтров</a></li>\n<li><a href=\"#istochniki-dokumenty__columns\">Колонки таблицы</a></li>\n<li><a href=\"#istochniki-dokumenty__observations\">Наблюдения</a></li>\n<li><a href=\"#istochniki-dokumenty__open-q\">Открытые вопросы</a></li></ol>"}, "moi-shablony": {"title": "Мои шаблоны — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Мои шаблоны</b>", "h1": "Мои шаблоны", "tagline": "Курируемые образцы ответов: recall на похожий вопрос, строгий и обычный режим, обезличенные тексты.", "badge": "docs/platform/moi-shablony.md", "toc": "<ol><li><a href=\"#moi-shablony__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#moi-shablony__fields\">Поля формы</a></li>\n<li><a href=\"#moi-shablony__modes\">Recall и «строгий» режим</a></li>\n<li><a href=\"#moi-shablony__connection\">Связь с Кейсами 01/02</a></li>\n<li><a href=\"#moi-shablony__open-q\">Открытые вопросы</a></li></ol>"}, "zadachi": {"title": "Задачи — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Задачи</b>", "h1": "Задачи", "tagline": "Конвейер human-in-the-loop модерации: предложения, согласование агентов, статистика, очередь обработки, промпты персон.", "badge": "docs/platform/zadachi-review-pipeline.md", "toc": "<ol><li><a href=\"#zadachi__obzor\">Общая картина</a></li>\n<li><a href=\"#zadachi__predlozheniya\">1. Предложения</a></li>\n<li><a href=\"#zadachi__agenty-utverzhdenie\">2. Агенты на утверждении</a></li>\n<li><a href=\"#zadachi__statistika\">3. Статистика</a></li>\n<li><a href=\"#zadachi__ochered\">4. Очередь обработки</a></li>\n<li><a href=\"#zadachi__prompty-person\">5. Промпты персон</a></li>\n<li><a href=\"#zadachi__svyaz\">Связь с проектом</a></li>\n<li><a href=\"#zadachi__open-q\">Открытые вопросы</a></li></ol>"}, "kalibrovka-detektora-i-otladka": {"title": "Калибровка детектора и Отладка сессий — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Калибровка</b>", "h1": "Калибровка детектора и Отладка сессий", "tagline": "Пороги детектора таблиц (источник is_table для политик ранжирования) и разбор диалогов по инструментам/плану/ответам.", "badge": "docs/platform/kalibrovka-detektora-i-otladka.md", "toc": "<ol><li><a href=\"#kalibrovka-detektora-i-otladka__detektor\">Калибровка детектора таблиц</a></li>\n<li><a href=\"#kalibrovka-detektora-i-otladka__otladka\">Отладка сессий</a></li>\n<li><a href=\"#kalibrovka-detektora-i-otladka__open-q\">Открытые вопросы</a></li></ol>"}, "upravlenie-dannymi": {"title": "Управление данными — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Управление данными</b>", "h1": "Управление данными", "tagline": "Анализ схемы таблиц, граф lineage процедур, граф код→таблица (GitLab), граф доступа (row-фильтры и маски).", "badge": "docs/platform/upravlenie-dannymi.md", "toc": "<ol><li><a href=\"#upravlenie-dannymi__analiz-schem\">Анализ схемы таблицы</a></li>\n<li><a href=\"#upravlenie-dannymi__graf-procedur\">Граф процедур (lineage)</a></li>\n<li><a href=\"#upravlenie-dannymi__open-q\">Открытые вопросы</a></li>\n<li><a href=\"#upravlenie-dannymi__izvlechenie\">Граф код→таблица</a></li>\n<li><a href=\"#upravlenie-dannymi__svyazi\">Связи документ→таблица/процедура</a></li>\n<li><a href=\"#upravlenie-dannymi__gitlab\">GitLab синхронизация</a></li>\n<li><a href=\"#upravlenie-dannymi__dostup\">Граф доступа</a></li>\n<li><a href=\"#upravlenie-dannymi__open-q-2\">Открытые вопросы (код/доступ)</a></li></ol>"}, "agenty": {"title": "Агенты — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Агенты</b>", "h1": "Агенты", "tagline": "Конструктор агентов на канвасе, согласование DS→ИБ, системные vs канвасные агенты, Closed-book RAG.", "badge": "docs/platform/agenty.md", "toc": "<ol><li><a href=\"#agenty__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#agenty__elementy\">Элементы экрана</a></li>\n<li><a href=\"#agenty__ds\">Разгадан смысл «DS»</a></li>\n<li><a href=\"#agenty__klassy\">Два класса агентов</a></li>\n<li><a href=\"#agenty__closed-book\">«Closed-book RAG»</a></li>\n<li><a href=\"#agenty__open-q\">Открытые вопросы</a></li></ol>"}};
 const DEFAULT_KEY = "kalibrovka-politiki-poiska";
 
 function activate(key, opts) {

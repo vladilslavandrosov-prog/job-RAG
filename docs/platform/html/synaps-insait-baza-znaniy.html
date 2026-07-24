@@ -613,6 +613,8 @@ footer.page-footer {
 .app-menu-item .doc-badge { margin-left:auto; flex:none; font-family:'IBM Plex Mono',monospace; font-size:.56rem; letter-spacing:.02em; padding:1px 5px; border-radius:4px; background: var(--keep-soft); color: var(--keep); }
 .app-menu-item.active { opacity:1; color: var(--accent); font-weight:600; background: var(--accent-soft); border-left: 2px solid var(--accent); padding-left:6px; margin-left:-2px;}
 .app-menu-item.active .doc-badge { background: var(--accent); color: #fff; }
+.doc-badge.todo { background: transparent; border: 1px dashed var(--ink-soft); color: var(--ink-soft); }
+.app-menu-item.todo { opacity: .6; }
 .app-menu-note { font-size:.7rem; line-height:1.45; color: var(--ink-soft); margin-top:10px; }
 
 @media (max-width: 960px) {
@@ -668,12 +670,12 @@ footer.page-footer {
 <li class="app-menu-section">Управление данными</li>
 <li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Анализ схем</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Граф процедур</a><span class="doc-badge">описано</span></li>
-<li class="app-menu-item sub" data-menu-key=""><span class="app-menu-link">Граф код→таблица</span></li>
-<li class="app-menu-item sub" data-menu-key=""><span class="app-menu-link">Граф доступа</span></li>
-<li class="app-menu-item" data-menu-key=""><span class="app-menu-link">Каталог</span></li>
-<li class="app-menu-item" data-menu-key=""><span class="app-menu-link">Агенты</span></li>
-<li class="app-menu-item" data-menu-key=""><span class="app-menu-link">Администрирование</span></li>
-<li class="app-menu-item" data-menu-key=""><span class="app-menu-link">Мониторинг</span></li></ul>
+<li class="app-menu-item sub todo" data-menu-key=""><span class="app-menu-link">Граф код→таблица</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item sub todo" data-menu-key=""><span class="app-menu-link">Граф доступа</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Каталог</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Агенты</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Администрирование</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Мониторинг</span><span class="doc-badge todo">ещё не описано</span></li></ul>
       <p class="app-menu-note">Это карта реального левого меню платформы. Пункты с меткой «описано» открывают свою страницу прямо здесь, без перезагрузки; остальные ещё не разобраны.</p>
     </div>
     <div class="toc-title">На этой странице</div>
@@ -700,12 +702,12 @@ footer.page-footer {
 <li class="app-menu-section">Управление данными</li>
 <li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Анализ схем</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item sub has-doc" data-menu-key="upravlenie-dannymi"><a class="app-menu-link" href="#/upravlenie-dannymi" data-page-link="upravlenie-dannymi">Граф процедур</a><span class="doc-badge">описано</span></li>
-<li class="app-menu-item sub" data-menu-key=""><span class="app-menu-link">Граф код→таблица</span></li>
-<li class="app-menu-item sub" data-menu-key=""><span class="app-menu-link">Граф доступа</span></li>
-<li class="app-menu-item" data-menu-key=""><span class="app-menu-link">Каталог</span></li>
-<li class="app-menu-item" data-menu-key=""><span class="app-menu-link">Агенты</span></li>
-<li class="app-menu-item" data-menu-key=""><span class="app-menu-link">Администрирование</span></li>
-<li class="app-menu-item" data-menu-key=""><span class="app-menu-link">Мониторинг</span></li></ul>
+<li class="app-menu-item sub todo" data-menu-key=""><span class="app-menu-link">Граф код→таблица</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item sub todo" data-menu-key=""><span class="app-menu-link">Граф доступа</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Каталог</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Агенты</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Администрирование</span><span class="doc-badge todo">ещё не описано</span></li>
+<li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Мониторинг</span><span class="doc-badge todo">ещё не описано</span></li></ul>
       <p class="app-menu-note">Это карта реального левого меню платформы. Пункты с меткой «описано» открывают свою страницу прямо здесь, без перезагрузки; остальные ещё не разобраны.</p>
     </div>
     <div class="toc-title">На этой странице</div>

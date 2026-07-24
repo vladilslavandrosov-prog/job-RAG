@@ -615,6 +615,40 @@ footer.page-footer {
 .app-menu-item.active .doc-badge { background: var(--accent); color: #fff; }
 .doc-badge.todo { background: transparent; border: 1px dashed var(--ink-soft); color: var(--ink-soft); }
 .app-menu-item.todo { opacity: .6; }
+
+/* ---- Q&A cards (open questions registry) ---- */
+.qa-card {
+  border: 1px solid var(--line);
+  background: var(--paper-raised);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 14px 0;
+  box-shadow: var(--shadow);
+}
+.qa-card.qa-resolved { border-left: 3px solid var(--boost); }
+.qa-q { font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; margin: 0 0 8px; }
+.qa-options { list-style: upper-alpha; padding-left: 1.4em; margin: 0; font-size: .92rem; color: var(--ink-soft); }
+.qa-options li { margin: 4px 0; }
+
+/* ---- temporary menu block (to be removed once questions are answered) ---- */
+.temp-menu {
+  margin-top: 18px;
+  padding: 12px;
+  border: 1px dashed var(--penalty);
+  border-radius: 10px;
+  background: var(--penalty-soft);
+}
+.temp-menu-title {
+  font-size: .68rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--penalty);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.temp-menu-note { font-size: .7rem; color: var(--ink-soft); margin-top: 8px; line-height: 1.4; }
+.temp-menu .app-menu-link { color: var(--penalty); font-weight: 600; }
+
 .app-menu-note { font-size:.7rem; line-height:1.45; color: var(--ink-soft); margin-top:10px; }
 
 @media (max-width: 960px) {
@@ -678,6 +712,13 @@ footer.page-footer {
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Мониторинг</span><span class="doc-badge todo">ещё не описано</span></li></ul>
       <p class="app-menu-note">Это карта реального левого меню платформы. Пункты с меткой «описано» открывают свою страницу прямо здесь, без перезагрузки; остальные ещё не разобраны.</p>
     </div>
+    <div class="temp-menu">
+      <div class="temp-menu-title">Временный раздел</div>
+      <ul class="app-menu-list">
+        <li class="app-menu-item has-doc" data-menu-key="otkrytye-voprosy"><a class="app-menu-link" href="#/otkrytye-voprosy" data-page-link="otkrytye-voprosy">Открытые вопросы</a><span class="doc-badge">сводный реестр</span></li>
+      </ul>
+      <p class="temp-menu-note">Не часть реального меню платформы — сводка всех открытых вопросов для сверки с командой. Уберётся отсюда по мере получения ответов.</p>
+    </div>
     <div class="toc-title">На этой странице</div>
     <div class="toc-page-slot"></div>
   </nav>
@@ -709,6 +750,13 @@ footer.page-footer {
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Администрирование</span><span class="doc-badge todo">ещё не описано</span></li>
 <li class="app-menu-item todo" data-menu-key=""><span class="app-menu-link">Мониторинг</span><span class="doc-badge todo">ещё не описано</span></li></ul>
       <p class="app-menu-note">Это карта реального левого меню платформы. Пункты с меткой «описано» открывают свою страницу прямо здесь, без перезагрузки; остальные ещё не разобраны.</p>
+    </div>
+    <div class="temp-menu">
+      <div class="temp-menu-title">Временный раздел</div>
+      <ul class="app-menu-list">
+        <li class="app-menu-item has-doc" data-menu-key="otkrytye-voprosy"><a class="app-menu-link" href="#/otkrytye-voprosy" data-page-link="otkrytye-voprosy">Открытые вопросы</a><span class="doc-badge">сводный реестр</span></li>
+      </ul>
+      <p class="temp-menu-note">Не часть реального меню платформы — сводка всех открытых вопросов для сверки с командой. Уберётся отсюда по мере получения ответов.</p>
     </div>
     <div class="toc-title">На этой странице</div>
     <div class="toc-page-slot"></div>
@@ -1751,11 +1799,227 @@ footer.page-footer {
   <span>docs/platform/agenty.md</span>
 </footer>
 </section>
+<section class="page-doc" id="doc-otkrytye-voprosy" hidden>
+<section id="otkrytye-voprosy__intro-oq">
+  <h2>Как использовать этот реестр</h2>
+  <div class="prose wide">
+  <p>Все открытые вопросы из статей базы знаний, собранные в одном месте и сгруппированные по пунктам меню платформы — в порядке самого меню. По каждому вопросу — варианты ответа (гипотезы на основе того, что уже известно из соседних экранов), а не подтверждённые факты. Отметка «разгадано» — там, где по косвенным данным сложилась достаточно уверенная версия.</p>
+  <p style="color:var(--ink-soft);">Это черновик для сверки с реальной командой платформы, а не финальный источник истины. Вопросы сгруппированы по экрану специально, чтобы можно было переслать конкретный блок ответственному за конкретный раздел.</p>
+  </div>
+</section>
+
+<section id="otkrytye-voprosy__oq-chat">
+  <h2>Чат</h2>
+<div class="qa-card">
+  <p class="qa-q">❓ Что означает «veai» в названии модели <code>OpenAI/gpt-5.4 · veai</code>?</p>
+  <ol class="qa-options"><li>Внутреннее имя прокси/шлюза, через который вызывается модель</li>
+<li>Маркировка окружения/деплоя (dev/staging/prod тег)</li>
+<li>Сокращение от названия команды/проекта интеграции LLM</li>
+<li>Часть названия тарифного плана/квоты у провайдера</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Действительно ли выбор OpenAI/gpt-5.4 отправляет данные за периметр компании? <i>(критично для комплаенса)</i></p>
+  <ol class="qa-options"><li>Да — прямой вызов облачного API, нарушение критерия приёмки №8 ТЗ</li>
+<li>Нет — локально хостящийся/приватный OpenAI-совместимый деплой</li>
+<li>Зависит от роли/окружения — для прод-данных используется локальная модель</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Какие ещё модели доступны в этом селекторе?</p>
+  <ol class="qa-options"><li>Локальные модели через Ollama (упомянуты в ТЗ)</li>
+<li>Другие облачные модели (Anthropic и т.д.)</li>
+<li>Только одна эта модель на момент снимка</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что показывает переключатель «Рассуждения» — реальные шаги инструментов или только текст размышления?</p>
+  <ol class="qa-options"><li>Полный technical reasoning log (SQL, чанки, план)</li>
+<li>Только текстовое chain-of-thought без привязки к вызовам инструментов</li>
+<li>Оба слоя, переключатель просто скрывает/показывает блок целиком</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что делает чекбокс со звездой рядом с «Агент»?</p>
+  <ol class="qa-options"><li>Добавить агента в избранное</li>
+<li>Отметить чат/сессию как избранную</li>
+<li>Переключатель между системным и канвасным режимом</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Полный список доступных агентов/персон?</p>
+  <ol class="qa-options"><li>Открыт полностью — видно только «Аналитик» и три «Активных агента»</li></ol>
+</div></section>
+<section id="otkrytye-voprosy__oq-shablony">
+  <h2>Мои шаблоны</h2>
+<div class="qa-card">
+  <p class="qa-q">❓ Что показывается на странице, если уже есть сохранённые шаблоны?</p>
+  <ol class="qa-options"><li>Список карточек/строк с созданными шаблонами</li>
+<li>Та же форма создания, но с вкладкой «мои шаблоны» рядом</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Как именно работает «recall» — векторное сходство или отдельный механизм?</p>
+  <ol class="qa-options"><li>Тот же векторный поиск, что и для документов, по отдельной коллекции</li>
+<li>Отдельный, более простой механизм (точное/нечёткое совпадение фраз)</li>
+<li>Комбинация: грубый фильтр по ключевым словам + векторное ранжирование</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что произойдёт при конфликте — вопрос похож сразу на два шаблона?</p>
+  <ol class="qa-options"><li>Побеждает шаблон с наивысшим сходством (score)</li>
+<li>Применяются оба (склеенный ответ)</li>
+<li>Приоритет по порядку создания/последнему изменению</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Какие типы графиков доступны в дропдауне «График»?</p>
+  <ol class="qa-options"><li>Открыт полностью — виден только «— нет —»</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Кто может создавать/редактировать шаблоны?</p>
+  <ol class="qa-options"><li>Только куратор/аналитик с отдельной ролью</li>
+<li>Любой пользователь для своих будущих вопросов</li>
+<li>Роль зависит от типа шаблона (обычный vs строгий)</li></ol>
+</div></section>
+<section id="otkrytye-voprosy__oq-dokumenty">
+  <h2>Источники → Документы</h2>
+<div class="qa-card">
+  <p class="qa-q">❓ Что означают все значения «Тип» документа кроме Другое/Регламент/Политика?</p>
+  <ol class="qa-options"><li>Соответствует типам из «Предложений» (document_review, glossary_term)</li>
+<li>Отдельный, более простой список категорий по жанру документа</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что находится в меню «...» по каждой строке таблицы документов?</p>
+  <ol class="qa-options"><li>Просмотр фрагментов/чанков документа</li>
+<li>Повторная индексация конкретного документа</li>
+<li>Удаление, изменение видимости/домена</li>
+<li>Комбинация из нескольких пунктов выше</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Как выглядит статус, отличный от «Готово»?</p>
+  <ol class="qa-options"><li>Аналогично статусу «Упавшие» из «Очереди обработки» (красный)</li>
+<li>Отдельный набор статусов специфичный для документов</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Полный список доменов и коллекций, кроме Производство/AZ_tech?</p>
+  <ol class="qa-options"><li>Открыт полностью — вероятно, есть домены и для брокера, и для кредитного риска</li></ol>
+</div></section>
+<section id="otkrytye-voprosy__oq-zadachi">
+  <h2>Задачи</h2>
+<div class="qa-card">
+  <p class="qa-q">❓ Что такое колонка «Паттерн» в «Предложениях», почему всегда пусто?</p>
+  <ol class="qa-options"><li>Поле для будущей функциональности, ещё не реализовано</li>
+<li>Заполняется только для определённых типов предложений</li>
+<li>Технический regex, которым найден кандидат — не заполнен в этих строках</li></ol>
+</div><div class="qa-card qa-resolved">
+  <p class="qa-q">❓ Что означает «DS» в «Агенты на утверждении (DS)»? <span class="chip chip-boost" style="margin-left:8px;">разгадано</span></p>
+  <ol class="qa-options"><li><b>Data Steward</b> — роль, проверяющая домены данных/узлы/параметры агента</li>
+<li>Data Science (команда) — менее вероятно</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Расходятся ли «С ошибкой: 0» и «Ошибка индексации: 92»?</p>
+  <ol class="qa-options"><li>Разные метрики: одна про ошибки обработки предложения, другая — тип самого предложения</li>
+<li>Баг в отображении/агрегации статистики</li>
+<li>«С ошибкой» относится только к последним N предложениям</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Связаны ли 5 «упавших» задач с 92 «ошибками индексации»?</p>
+  <ol class="qa-options"><li>Да, одни и те же события на разных стадиях</li>
+<li>Нет, независимые счётчики из разных систем/периодов</li>
+<li>Частичное пересечение</li></ol>
+</div><div class="qa-card qa-resolved">
+  <p class="qa-q">❓ Где конфигурируются «канвасные (governed) агенты»? <span class="chip chip-boost" style="margin-left:8px;">разгадано</span></p>
+  <ol class="qa-options"><li>Через раздел «Агенты» — конструктор на канвасе</li></ol>
+</div></section>
+<section id="otkrytye-voprosy__oq-politiki">
+  <h2>Калибровка → Политики поиска</h2>
+<div class="qa-card">
+  <p class="qa-q">❓ Полный текст regex-паттернов интентов (обрезаны на скриншоте)?</p>
+  <ol class="qa-options"><li>Открыт полностью — критично для оценки полноты покрытия синонимов</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что произойдёт при создании новой политики через «+ Политика»?</p>
+  <ol class="qa-options"><li>Те же поля, что в таблице: название, regex, класс, действия</li>
+<li>Есть скрытые поля (например, приоритет применения политик)</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Идентичны ли regex-паттерны код-процедур-шум и процедура-документация-шум?</p>
+  <ol class="qa-options"><li>Да, один триггер интента для двух payload-классов (is_code и procedural)</li>
+<li>Нет, совпадение — визуальный артефакт обрезки текста</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Есть ли механизм реланирования для ошибок выполнения SQL (не только низкой уверенности)? <i>(важно для Кейса 01)</i></p>
+  <ol class="qa-options"><li>Нет — поэтому агент в Кейсе 01 не переисправил упавший SQL</li>
+<li>Есть, но не сработал в конкретном случае по другой причине</li>
+<li>Делегировано самой LLM (перегенерировать при ошибке)</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Какие ещё категории роутинга кроме Data-вопросов и Структурных вопросов?</p>
+  <ol class="qa-options"><li>Категория для документных/текстовых вопросов</li>
+<li>Категория для кода (учитывая GitLab-интеграцию и is_code)</li>
+<li>Категория для email/переписки</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что скрыто во «Встроенных правилах (зашиты в код)»?</p>
+  <ol class="qa-options"><li>Открыт полностью — блок свёрнут по умолчанию в UI</li></ol>
+</div></section>
+<section id="otkrytye-voprosy__oq-kalibrovka">
+  <h2>Калибровка → Детектор / Отладка сессий</h2>
+<div class="qa-card">
+  <p class="qa-q">❓ Что содержит «Корни measure» и как range-роутер соотносится с Роутингом вопросов?</p>
+  <ol class="qa-options"><li>Range-роутер — узкий предшественник общего роутинга, только числовые диапазоны</li>
+<li>Независимый параллельный механизм для табличных/числовых данных</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Какие данные пишутся в аудит-БД, если её сконфигурировать? <i>(важно для Кейса 01)</i></p>
+  <ol class="qa-options"><li>Полный reasoning log: SQL, чанки, план</li>
+<li>Только базовые метаданные (пользователь/время/модель)</li>
+<li>Настраиваемый уровень детализации</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что делает вкладка «Обслуживание» в калибровке детектора?</p>
+  <ol class="qa-options"><li>Ручной запуск переиндексации/техобслуживания коллекции</li>
+<li>Просмотр логов/состояния детектора</li>
+<li>Очистка устаревших данных калибровки</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что означают «оценки» диалогов в «Отладке сессий»?</p>
+  <ol class="qa-options"><li>Пользовательские оценки ответов (лайк/дизлайк)</li>
+<li>Автоматические оценки качества (confidence, relevance)</li>
+<li>Оценки от куратора/QA-команды вручную</li></ol>
+</div></section>
+<section id="otkrytye-voprosy__oq-upravlenie">
+  <h2>Управление данными</h2>
+<div class="qa-card">
+  <p class="qa-q">❓ Что такое «ОМ» и почему в примере «нет сервисов в ОМ»?</p>
+  <ol class="qa-options"><li>«Объектная модель» — реестр объектов данных по всей организации</li>
+<li>«Операционная модель» — реестр сервисов/окружений для коллекций</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Как выглядит заполненный граф процедур — визуализация или только метрики?</p>
+  <ol class="qa-options"><li>Полноценная интерактивная визуализация графа</li>
+<li>Только табличные метрики покрытия, без графики</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что покажет «Анализ схем» после запуска?</p>
+  <ol class="qa-options"><li>Список колонок с типами (сырая схема)</li>
+<li>Сгенерированные текстовые описания полей для RAG</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Как соотносятся Граф процедур, Граф код→таблица и Граф доступа?</p>
+  <ol class="qa-options"><li>Единая lineage-система с тремя проекциями</li>
+<li>Независимые инструменты на общем движке «ОМ»</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что покажет «Карта покрытия» в Графе доступа?</p>
+  <ol class="qa-options"><li>Таблицы/колонки без назначенных row-политик или масок</li>
+<li>Тепловая карта покрытия по всем персонам</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Реально ли настроены row-фильтры/маски хотя бы для одной персоны? <i>(критично для комплаенса)</i></p>
+  <ol class="qa-options"><li>Настроены и работают — на скриншоте просто персона не выбрана</li>
+<li>Экран существует, но конфигурация пуста</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Почему в дропдауне «Коллекция» по умолчанию «Сохранённые ответы (шаблоны)»?</p>
+  <ol class="qa-options"><li>Осмысленный выбор — шаблоны действительно синхронизируются из GitLab</li>
+<li>Случайность — первое/последнее использованное значение</li></ol>
+</div></section>
+<section id="otkrytye-voprosy__oq-agenty">
+  <h2>Агенты</h2>
+<div class="qa-card">
+  <p class="qa-q">❓ Верна ли гипотеза о расшифровке «DS» как Data Steward?</p>
+  <ol class="qa-options"><li>Основная версия — да</li>
+<li>Альтернатива — Data Science (название команды)</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Чем отличаются «системный» и «канвасный» варианты одного агента (Closed-book RAG)?</p>
+  <ol class="qa-options"><li>Только форма конфигурации, поведение идентично</li>
+<li>Разное поведение — канвасный допускает более сложную логику</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Что показывает «Реестр агентов» в отличие от «Активных агентов»?</p>
+  <ol class="qa-options"><li>Все агенты, включая неактивные/архивные версии</li>
+<li>Полная история версий каждого агента</li></ol>
+</div><div class="qa-card">
+  <p class="qa-q">❓ Как выглядит сам «канвас» — какие узлы доступны?</p>
+  <ol class="qa-options"><li>Открыт полностью — не увиден ни на одном скриншоте</li></ol>
+</div>
+</section>
+
+<footer class="page-footer">
+  <span>База знаний job-RAG · платформа «Синапс.Инсайт»</span>
+  <span>docs/platform/otkrytye-voprosy.md</span>
+</footer>
+</section>
   </main>
 </div>
 
 <script>
-const PAGE_META = {"kalibrovka-politiki-poiska": {"title": "Политики поиска — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><span>Калибровка</span><span class=\"sep\">›</span><b>Политики поиска</b>", "h1": "Политики поиска", "tagline": "Как система решает, какому найденному тексту доверять, когда искать ещё раз и по какому пути обрабатывать разные вопросы.", "badge": "docs/platform/kalibrovka-politiki-poiska.md", "toc": "<ol><li><a href=\"#kalibrovka-politiki-poiska__rag-intro\">Что такое RAG-агент</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__prosto\">Совсем просто</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__primery\">Обзор с примерами</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__reference\">Детальный референс</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__planner\">Планировщик / реплан</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__routing\">Роутинг вопросов</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__open-q\">Открытые вопросы</a></li></ol>"}, "chat": {"title": "Чат — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Чат</b>", "h1": "Чат", "tagline": "Главный экран диалога с RAG-агентом: история чатов, выбор модели и агента, экспорт в PDF.", "badge": "docs/platform/chat.md", "toc": "<ol><li><a href=\"#chat__rag-intro\">Что такое RAG-агент</a></li>\n<li><a href=\"#chat__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#chat__panel\">Панель истории чатов</a></li>\n<li><a href=\"#chat__toolbar\">Верхняя панель диалога</a></li>\n<li><a href=\"#chat__observations\">Наблюдения</a></li>\n<li><a href=\"#chat__open-q\">Открытые вопросы</a></li></ol>"}, "istochniki-dokumenty": {"title": "Источники → Документы — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><span>Источники</span><span class=\"sep\">›</span><b>Документы</b>", "h1": "Документы", "tagline": "Реестр загруженных источников для RAG-индексации: статусы, коллекции, домены, фрагменты.", "badge": "docs/platform/istochniki-dokumenty.md", "toc": "<ol><li><a href=\"#istochniki-dokumenty__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#istochniki-dokumenty__actions\">Действия</a></li>\n<li><a href=\"#istochniki-dokumenty__filters\">Панель фильтров</a></li>\n<li><a href=\"#istochniki-dokumenty__columns\">Колонки таблицы</a></li>\n<li><a href=\"#istochniki-dokumenty__observations\">Наблюдения</a></li>\n<li><a href=\"#istochniki-dokumenty__open-q\">Открытые вопросы</a></li></ol>"}, "moi-shablony": {"title": "Мои шаблоны — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Мои шаблоны</b>", "h1": "Мои шаблоны", "tagline": "Курируемые образцы ответов: recall на похожий вопрос, строгий и обычный режим, обезличенные тексты.", "badge": "docs/platform/moi-shablony.md", "toc": "<ol><li><a href=\"#moi-shablony__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#moi-shablony__fields\">Поля формы</a></li>\n<li><a href=\"#moi-shablony__modes\">Recall и «строгий» режим</a></li>\n<li><a href=\"#moi-shablony__connection\">Связь с Кейсами 01/02</a></li>\n<li><a href=\"#moi-shablony__open-q\">Открытые вопросы</a></li></ol>"}, "zadachi": {"title": "Задачи — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Задачи</b>", "h1": "Задачи", "tagline": "Конвейер human-in-the-loop модерации: предложения, согласование агентов, статистика, очередь обработки, промпты персон.", "badge": "docs/platform/zadachi-review-pipeline.md", "toc": "<ol><li><a href=\"#zadachi__obzor\">Общая картина</a></li>\n<li><a href=\"#zadachi__predlozheniya\">1. Предложения</a></li>\n<li><a href=\"#zadachi__agenty-utverzhdenie\">2. Агенты на утверждении</a></li>\n<li><a href=\"#zadachi__statistika\">3. Статистика</a></li>\n<li><a href=\"#zadachi__ochered\">4. Очередь обработки</a></li>\n<li><a href=\"#zadachi__prompty-person\">5. Промпты персон</a></li>\n<li><a href=\"#zadachi__svyaz\">Связь с проектом</a></li>\n<li><a href=\"#zadachi__open-q\">Открытые вопросы</a></li></ol>"}, "kalibrovka-detektora-i-otladka": {"title": "Калибровка детектора и Отладка сессий — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Калибровка</b>", "h1": "Калибровка детектора и Отладка сессий", "tagline": "Пороги детектора таблиц (источник is_table для политик ранжирования) и разбор диалогов по инструментам/плану/ответам.", "badge": "docs/platform/kalibrovka-detektora-i-otladka.md", "toc": "<ol><li><a href=\"#kalibrovka-detektora-i-otladka__detektor\">Калибровка детектора таблиц</a></li>\n<li><a href=\"#kalibrovka-detektora-i-otladka__otladka\">Отладка сессий</a></li>\n<li><a href=\"#kalibrovka-detektora-i-otladka__open-q\">Открытые вопросы</a></li></ol>"}, "upravlenie-dannymi": {"title": "Управление данными — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Управление данными</b>", "h1": "Управление данными", "tagline": "Анализ схемы таблиц, граф lineage процедур, граф код→таблица (GitLab), граф доступа (row-фильтры и маски).", "badge": "docs/platform/upravlenie-dannymi.md", "toc": "<ol><li><a href=\"#upravlenie-dannymi__analiz-schem\">Анализ схемы таблицы</a></li>\n<li><a href=\"#upravlenie-dannymi__graf-procedur\">Граф процедур (lineage)</a></li>\n<li><a href=\"#upravlenie-dannymi__open-q\">Открытые вопросы</a></li>\n<li><a href=\"#upravlenie-dannymi__izvlechenie\">Граф код→таблица</a></li>\n<li><a href=\"#upravlenie-dannymi__svyazi\">Связи документ→таблица/процедура</a></li>\n<li><a href=\"#upravlenie-dannymi__gitlab\">GitLab синхронизация</a></li>\n<li><a href=\"#upravlenie-dannymi__dostup\">Граф доступа</a></li>\n<li><a href=\"#upravlenie-dannymi__open-q-2\">Открытые вопросы (код/доступ)</a></li></ol>"}, "agenty": {"title": "Агенты — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Агенты</b>", "h1": "Агенты", "tagline": "Конструктор агентов на канвасе, согласование DS→ИБ, системные vs канвасные агенты, Closed-book RAG.", "badge": "docs/platform/agenty.md", "toc": "<ol><li><a href=\"#agenty__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#agenty__elementy\">Элементы экрана</a></li>\n<li><a href=\"#agenty__ds\">Разгадан смысл «DS»</a></li>\n<li><a href=\"#agenty__klassy\">Два класса агентов</a></li>\n<li><a href=\"#agenty__closed-book\">«Closed-book RAG»</a></li>\n<li><a href=\"#agenty__open-q\">Открытые вопросы</a></li></ol>"}};
+const PAGE_META = {"kalibrovka-politiki-poiska": {"title": "Политики поиска — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><span>Калибровка</span><span class=\"sep\">›</span><b>Политики поиска</b>", "h1": "Политики поиска", "tagline": "Как система решает, какому найденному тексту доверять, когда искать ещё раз и по какому пути обрабатывать разные вопросы.", "badge": "docs/platform/kalibrovka-politiki-poiska.md", "toc": "<ol><li><a href=\"#kalibrovka-politiki-poiska__rag-intro\">Что такое RAG-агент</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__prosto\">Совсем просто</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__primery\">Обзор с примерами</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__reference\">Детальный референс</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__planner\">Планировщик / реплан</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__routing\">Роутинг вопросов</a></li>\n<li><a href=\"#kalibrovka-politiki-poiska__open-q\">Открытые вопросы</a></li></ol>"}, "chat": {"title": "Чат — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Чат</b>", "h1": "Чат", "tagline": "Главный экран диалога с RAG-агентом: история чатов, выбор модели и агента, экспорт в PDF.", "badge": "docs/platform/chat.md", "toc": "<ol><li><a href=\"#chat__rag-intro\">Что такое RAG-агент</a></li>\n<li><a href=\"#chat__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#chat__panel\">Панель истории чатов</a></li>\n<li><a href=\"#chat__toolbar\">Верхняя панель диалога</a></li>\n<li><a href=\"#chat__observations\">Наблюдения</a></li>\n<li><a href=\"#chat__open-q\">Открытые вопросы</a></li></ol>"}, "istochniki-dokumenty": {"title": "Источники → Документы — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><span>Источники</span><span class=\"sep\">›</span><b>Документы</b>", "h1": "Документы", "tagline": "Реестр загруженных источников для RAG-индексации: статусы, коллекции, домены, фрагменты.", "badge": "docs/platform/istochniki-dokumenty.md", "toc": "<ol><li><a href=\"#istochniki-dokumenty__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#istochniki-dokumenty__actions\">Действия</a></li>\n<li><a href=\"#istochniki-dokumenty__filters\">Панель фильтров</a></li>\n<li><a href=\"#istochniki-dokumenty__columns\">Колонки таблицы</a></li>\n<li><a href=\"#istochniki-dokumenty__observations\">Наблюдения</a></li>\n<li><a href=\"#istochniki-dokumenty__open-q\">Открытые вопросы</a></li></ol>"}, "moi-shablony": {"title": "Мои шаблоны — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Мои шаблоны</b>", "h1": "Мои шаблоны", "tagline": "Курируемые образцы ответов: recall на похожий вопрос, строгий и обычный режим, обезличенные тексты.", "badge": "docs/platform/moi-shablony.md", "toc": "<ol><li><a href=\"#moi-shablony__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#moi-shablony__fields\">Поля формы</a></li>\n<li><a href=\"#moi-shablony__modes\">Recall и «строгий» режим</a></li>\n<li><a href=\"#moi-shablony__connection\">Связь с Кейсами 01/02</a></li>\n<li><a href=\"#moi-shablony__open-q\">Открытые вопросы</a></li></ol>"}, "zadachi": {"title": "Задачи — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Задачи</b>", "h1": "Задачи", "tagline": "Конвейер human-in-the-loop модерации: предложения, согласование агентов, статистика, очередь обработки, промпты персон.", "badge": "docs/platform/zadachi-review-pipeline.md", "toc": "<ol><li><a href=\"#zadachi__obzor\">Общая картина</a></li>\n<li><a href=\"#zadachi__predlozheniya\">1. Предложения</a></li>\n<li><a href=\"#zadachi__agenty-utverzhdenie\">2. Агенты на утверждении</a></li>\n<li><a href=\"#zadachi__statistika\">3. Статистика</a></li>\n<li><a href=\"#zadachi__ochered\">4. Очередь обработки</a></li>\n<li><a href=\"#zadachi__prompty-person\">5. Промпты персон</a></li>\n<li><a href=\"#zadachi__svyaz\">Связь с проектом</a></li>\n<li><a href=\"#zadachi__open-q\">Открытые вопросы</a></li></ol>"}, "kalibrovka-detektora-i-otladka": {"title": "Калибровка детектора и Отладка сессий — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Калибровка</b>", "h1": "Калибровка детектора и Отладка сессий", "tagline": "Пороги детектора таблиц (источник is_table для политик ранжирования) и разбор диалогов по инструментам/плану/ответам.", "badge": "docs/platform/kalibrovka-detektora-i-otladka.md", "toc": "<ol><li><a href=\"#kalibrovka-detektora-i-otladka__detektor\">Калибровка детектора таблиц</a></li>\n<li><a href=\"#kalibrovka-detektora-i-otladka__otladka\">Отладка сессий</a></li>\n<li><a href=\"#kalibrovka-detektora-i-otladka__open-q\">Открытые вопросы</a></li></ol>"}, "upravlenie-dannymi": {"title": "Управление данными — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Управление данными</b>", "h1": "Управление данными", "tagline": "Анализ схемы таблиц, граф lineage процедур, граф код→таблица (GitLab), граф доступа (row-фильтры и маски).", "badge": "docs/platform/upravlenie-dannymi.md", "toc": "<ol><li><a href=\"#upravlenie-dannymi__analiz-schem\">Анализ схемы таблицы</a></li>\n<li><a href=\"#upravlenie-dannymi__graf-procedur\">Граф процедур (lineage)</a></li>\n<li><a href=\"#upravlenie-dannymi__open-q\">Открытые вопросы</a></li>\n<li><a href=\"#upravlenie-dannymi__izvlechenie\">Граф код→таблица</a></li>\n<li><a href=\"#upravlenie-dannymi__svyazi\">Связи документ→таблица/процедура</a></li>\n<li><a href=\"#upravlenie-dannymi__gitlab\">GitLab синхронизация</a></li>\n<li><a href=\"#upravlenie-dannymi__dostup\">Граф доступа</a></li>\n<li><a href=\"#upravlenie-dannymi__open-q-2\">Открытые вопросы (код/доступ)</a></li></ol>"}, "agenty": {"title": "Агенты — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Агенты</b>", "h1": "Агенты", "tagline": "Конструктор агентов на канвасе, согласование DS→ИБ, системные vs канвасные агенты, Closed-book RAG.", "badge": "docs/platform/agenty.md", "toc": "<ol><li><a href=\"#agenty__naznachenie\">Назначение экрана</a></li>\n<li><a href=\"#agenty__elementy\">Элементы экрана</a></li>\n<li><a href=\"#agenty__ds\">Разгадан смысл «DS»</a></li>\n<li><a href=\"#agenty__klassy\">Два класса агентов</a></li>\n<li><a href=\"#agenty__closed-book\">«Closed-book RAG»</a></li>\n<li><a href=\"#agenty__open-q\">Открытые вопросы</a></li></ol>"}, "otkrytye-voprosy": {"title": "Открытые вопросы — Синапс.Инсайт", "crumb": "<span>Синапс.Инсайт</span><span class=\"sep\">›</span><b>Открытые вопросы (сводный реестр)</b>", "h1": "Открытые вопросы", "tagline": "Все открытые вопросы из всех статей в одном месте, по пунктам меню, с вариантами ответа. Временный раздел — будет удалён по мере получения реальных ответов.", "badge": "docs/platform/otkrytye-voprosy.md", "toc": "<ol><li><a href=\"#otkrytye-voprosy__intro-oq\">Как использовать</a></li>\n<li><a href=\"#otkrytye-voprosy__oq-chat\">Чат</a></li>\n<li><a href=\"#otkrytye-voprosy__oq-shablony\">Мои шаблоны</a></li>\n<li><a href=\"#otkrytye-voprosy__oq-dokumenty\">Документы</a></li>\n<li><a href=\"#otkrytye-voprosy__oq-zadachi\">Задачи</a></li>\n<li><a href=\"#otkrytye-voprosy__oq-politiki\">Политики поиска</a></li>\n<li><a href=\"#otkrytye-voprosy__oq-kalibrovka\">Детектор / Отладка</a></li>\n<li><a href=\"#otkrytye-voprosy__oq-upravlenie\">Управление данными</a></li>\n<li><a href=\"#otkrytye-voprosy__oq-agenty\">Агенты</a></li></ol>"}};
 const DEFAULT_KEY = "kalibrovka-politiki-poiska";
 
 function activate(key, opts) {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Политики поиска — Синапс.Инсайт</title>
+<title>Чат — Синапс.Инсайт</title>
 <style>
 @font-face {
   font-family: 'IBM Plex Mono';
@@ -639,19 +639,19 @@ footer.page-footer {
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="crumb"><span>Синапс.Инсайт</span><span class="sep">›</span><span>Калибровка</span><span class="sep">›</span><b>Политики поиска</b></div>
+    <div class="crumb"><span>Синапс.Инсайт</span><span class="sep">›</span><b>Чат</b></div>
     <div class="page-title-row">
-      <h1>Политики поиска</h1>
-      <span class="page-badge">docs/platform/kalibrovka-politiki-poiska.md</span>
+      <h1>Чат</h1>
+      <span class="page-badge">docs/platform/chat.md</span>
     </div>
-    <p class="tagline">Как система решает, какому найденному тексту доверять, когда искать ещё раз и по какому пути обрабатывать разные вопросы.</p>
+    <p class="tagline">Главный экран диалога с RAG-агентом: история чатов, выбор модели и агента, экспорт в PDF.</p>
   </div>
 </header>
 <div class="shell">
   <nav class="toc toc-desktop" aria-label="Навигация">
     <div class="app-menu">
       <div class="app-menu-title">Меню платформы «Синапс.Инсайт»</div>
-      <ul class="app-menu-list"><li class="app-menu-item has-doc"><a class="app-menu-link" href="chat.html">Чат</a><span class="doc-badge">описано</span></li>
+      <ul class="app-menu-list"><li class="app-menu-item has-doc active"><span class="app-menu-link">Чат</span></li>
 <li class="app-menu-item has-doc"><a class="app-menu-link" href="moi-shablony.html">Мои шаблоны</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-section">Источники</li>
 <li class="app-menu-item sub has-doc"><a class="app-menu-link" href="istochniki-dokumenty.html">Документы</a><span class="doc-badge">описано</span></li>
@@ -663,7 +663,7 @@ footer.page-footer {
 <li class="app-menu-item sub"><span class="app-menu-link">Промпты персон</span></li>
 <li class="app-menu-section">Калибровка</li>
 <li class="app-menu-item sub"><span class="app-menu-link">Калибровка детектора</span></li>
-<li class="app-menu-item sub has-doc active"><span class="app-menu-link">Политики поиска</span></li>
+<li class="app-menu-item sub has-doc"><a class="app-menu-link" href="kalibrovka-politiki-poiska.html">Политики поиска</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item sub"><span class="app-menu-link">Отладка сессий</span></li>
 <li class="app-menu-section">Управление данными</li>
 <li class="app-menu-item sub"><span class="app-menu-link">Анализ схем</span></li>
@@ -679,18 +679,16 @@ footer.page-footer {
     <div class="toc-title">На этой странице</div>
     <ol><li><a href="#rag-intro">Что такое RAG-агент</a></li>
 <li><a href="#naznachenie">Назначение экрана</a></li>
-<li><a href="#prosto">Совсем просто</a></li>
-<li><a href="#primery">Обзор с примерами</a></li>
-<li><a href="#reference">Детальный референс</a></li>
-<li><a href="#planner">Планировщик / реплан</a></li>
-<li><a href="#routing">Роутинг вопросов</a></li>
+<li><a href="#panel">Панель истории чатов</a></li>
+<li><a href="#toolbar">Верхняя панель диалога</a></li>
+<li><a href="#observations">Наблюдения</a></li>
 <li><a href="#open-q">Открытые вопросы</a></li></ol>
   </nav>
   <details class="toc-mobile">
     <summary>Меню и оглавление</summary>
     <div class="app-menu">
       <div class="app-menu-title">Меню платформы «Синапс.Инсайт»</div>
-      <ul class="app-menu-list"><li class="app-menu-item has-doc"><a class="app-menu-link" href="chat.html">Чат</a><span class="doc-badge">описано</span></li>
+      <ul class="app-menu-list"><li class="app-menu-item has-doc active"><span class="app-menu-link">Чат</span></li>
 <li class="app-menu-item has-doc"><a class="app-menu-link" href="moi-shablony.html">Мои шаблоны</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-section">Источники</li>
 <li class="app-menu-item sub has-doc"><a class="app-menu-link" href="istochniki-dokumenty.html">Документы</a><span class="doc-badge">описано</span></li>
@@ -702,7 +700,7 @@ footer.page-footer {
 <li class="app-menu-item sub"><span class="app-menu-link">Промпты персон</span></li>
 <li class="app-menu-section">Калибровка</li>
 <li class="app-menu-item sub"><span class="app-menu-link">Калибровка детектора</span></li>
-<li class="app-menu-item sub has-doc active"><span class="app-menu-link">Политики поиска</span></li>
+<li class="app-menu-item sub has-doc"><a class="app-menu-link" href="kalibrovka-politiki-poiska.html">Политики поиска</a><span class="doc-badge">описано</span></li>
 <li class="app-menu-item sub"><span class="app-menu-link">Отладка сессий</span></li>
 <li class="app-menu-section">Управление данными</li>
 <li class="app-menu-item sub"><span class="app-menu-link">Анализ схем</span></li>
@@ -718,11 +716,9 @@ footer.page-footer {
     <div class="toc-title">На этой странице</div>
     <ol><li><a href="#rag-intro">Что такое RAG-агент</a></li>
 <li><a href="#naznachenie">Назначение экрана</a></li>
-<li><a href="#prosto">Совсем просто</a></li>
-<li><a href="#primery">Обзор с примерами</a></li>
-<li><a href="#reference">Детальный референс</a></li>
-<li><a href="#planner">Планировщик / реплан</a></li>
-<li><a href="#routing">Роутинг вопросов</a></li>
+<li><a href="#panel">Панель истории чатов</a></li>
+<li><a href="#toolbar">Верхняя панель диалога</a></li>
+<li><a href="#observations">Наблюдения</a></li>
 <li><a href="#open-q">Открытые вопросы</a></li></ol>
   </details>
   <main id="main">
@@ -731,382 +727,92 @@ footer.page-footer {
 <section id="rag-intro">
   <h2>Что такое RAG-агент</h2>
   <div class="prose wide">
-  <p>Если вы впервые видите эту страницу — сначала пара слов о том, что вообще имеется в виду.</p>
-  <p><b>RAG-агент</b> (от англ. <i>Retrieval-Augmented Generation</i> — «генерация, дополненная поиском») — это ИИ-ассистент, который отвечает не «из головы» по общим знаниям, как обычный чат-бот, а сначала ищет подходящие фрагменты в реальных документах и данных компании (договоры, регламенты, CRM, таблицы), и только потом формирует ответ на их основе — с указанием, из какого именно документа взята информация.</p>
-  <p>Аналогия: представьте помощника, который вместо ответа по памяти каждый раз идёт в архив, находит нужные бумаги, читает их и только после этого отвечает — со ссылкой на источник, а не придумывает на ходу. Именно так и работает система «Синапс.Инсайт», о которой эта страница.</p>
-  <p>Страница, которую вы читаете, документирует один конкретный экран такой системы — тот, где настраивается, каким из найденных фрагментов доверять больше, а каким меньше, и когда стоит поискать ещё раз. Если хочется более подробного введения в устройство RAG — см. глоссарий базы знаний (<code>docs/glossary/rag-document-ingestion.md</code>).</p>
+  <p><b>RAG-агент</b> (от англ. <i>Retrieval-Augmented Generation</i>) — это ИИ-ассистент, который перед ответом ищет релевантные фрагменты в реальных документах и данных компании, а не отвечает «из головы». Подробнее — на странице <a href="kalibrovka-politiki-poiska.html">«Политики поиска»</a>, где это объясняется на аналогии с библиотекарем.</p>
   </div>
 </section>
 
 <section id="naznachenie">
   <h2>Назначение экрана</h2>
-  <div class="prose">
-  <p>Экран управляет <b>пост-обработкой результатов поиска (re-ranking) на основе распознанного намерения (интента) запроса</b>.</p>
-
-  <blockquote class="screen-quote">
-    <span class="quote-label">Текст на экране</span>
-    <p>«Класс чанков (commit_msg, схемы drawio&hellip;) уместен лишь при интенте запроса. Вне интента — выкидываем (drop) или штрафуем (penalty), чтобы реальные документы не тонули в шуме.»</p>
-  </blockquote>
-
-  <p>В индекс попадают чанки разных «классов» контента — не только обычный текст документов, но и, например, сообщения коммитов git, чертежи/схемы (drawio), код хранимых процедур, описания таблиц БД. Без фильтрации такой технический «шум» может попасть в выдачу по обычному бизнес-вопросу и испортить ответ. Этот экран — инструмент, которым калибруется, когда такой контент уместен, а когда его нужно приглушать или полностью убирать.</p>
-
-  <p>Это расширяет базовый retrieval (см. глоссарий «Загрузка документов в RAG-агента») ещё одной ступенью: <b>осмысленной фильтрацией найденного по правилам</b>, которой в ТЗ проекта нет ни слова.</p>
-  </div>
-</section>
-
-<section id="prosto">
-  <h2><span class="depth d1">Уровень · совсем просто</span></h2>
-  <div class="prose">
-  <p>Представьте библиотекаря, который ищет для вас ответ по полкам.</p>
-
-  <h3>1. Политики ранжирования — «не все найденные страницы стоит показывать»</h3>
-  <p>Спросили: «какие у нас в компании есть системы». Библиотекарь принёс охапку страниц — и среди них случайно затесалась страница из журнала техобслуживания (техническая заметка про правку кода). Есть правило: «если вопрос не про историю правок — такую страницу вообще не показывай». А страницу с таблицей не выкидываем никогда — она почти всегда пригождается.</p>
-  <p>А если бы вы спросили прямо «покажи историю правок кода» — тогда эту страницу уже не выкидывают совсем, но всё равно чуть отодвигают назад в стопке: такие страницы обычно скучные и малополезные, даже когда в тему.</p>
-
-  <h3>2. Планировщик/реплан — «не уверен — сходи поищи ещё в другом шкафу»</h3>
-  <p>Библиотекарь посмотрел в шкафу «документы», нашёл что-то, но не уверен (как 2 из 10) — говорит «это не то» и идёт смотреть в шкаф «код». Там находит явно то, что нужно (7 из 10) — и несёт уже это.</p>
-  <p>Если находка средняя (не то чтобы точно да, не то чтобы точно нет) — можно (по желанию, это отдельная настройка) позвать ещё одного проверяющего, чтобы убедиться, что находка правда отвечает на вопрос, прежде чем нести читателю.</p>
-
-  <h3>3. Роутинг — «разные вопросы — в разные окошки»</h3>
-  <p>«Сколько у нас клиентов» — это вопрос-счётчик, идёт в окошко «посчитать по таблице». «Как устроена система скидок» — это вопрос «объясни, как это работает», идёт в другое окошко. Нельзя завести правило-триггер по слову «что» — потому что «что» есть почти в любом вопросе, и тогда всё подряд шло бы в одно окошко.</p>
-  </div>
-
-  <div class="callout">
-    <span class="callout-title">Мини-FAQ совсем просто</span>
-    <ul>
-      <li>Сделать библиотекаря придирчивее (строже порог) → реже ошибается, но медленнее.</li>
-      <li>Сделать его менее придирчивым (мягче порог) → быстрее, но чаще приносит не то.</li>
-      <li>Позвать доп. проверяющего (LLM-судья) → точнее, но дороже (платите за лишнюю пару глаз).</li>
-      <li>Убрать фильтр для «мусорных» страниц (выключить политику) → мусор снова полезет в ответы.</li>
-      <li>Попытаться завести триггер на слишком общее слово → система не разрешит его сохранить.</li>
-    </ul>
-  </div>
-</section>
-
-<section id="primery">
-  <h2><span class="depth d2">Уровень · на примерах</span></h2>
   <div class="prose wide">
-  <p>На странице три независимых механизма, которые решают одну и ту же проблему — «поиск нашёл что-то похожее, но подходит ли оно на самом деле» — но на разных этапах. Порядок, в котором они реально применяются к одному запросу:</p>
-  <ol>
-    <li><b>Роутинг</b> решает <i>куда</i> вообще идти за ответом (в SQL/данные? в код? в документы?) — ещё до поиска.</li>
-    <li><b>Планировщик/реплан</b> решает, <i>доверять ли тому, что нашли</i> — и если нет, ищет ещё раз в другом месте.</li>
-    <li><b>Политики ранжирования</b> решают, <i>какие из найденных кусков текста оставить, приглушить или выкинуть</i> — уже после того, как что-то нашлось.</li>
-  </ol>
-
-  <h3>1. Политики ранжирования — «не весь найденный текст одинаково полезен»</h3>
-  <p>Поиск в векторной базе находит «похожее по смыслу», но «похожее» ≠ «уместное». Политика — это правило: «для чанков класса X — если вопрос реально про X, оставь (или подними); если нет — принизь или выкинь совсем».</p>
-  </div>
-
-  <div class="example">
-    <span class="example-query">«Какие системы есть в компании?»</span>
-    <p style="margin-bottom:10px; color:var(--ink-soft); font-size:.92rem;">Ни один из 5 интентов не распознан. Поиск вернул 4 куска: 2 обычных фрагмента, 1 сообщение коммита, 1 описание таблицы.</p>
-    <ul class="trace">
-      <li><span class="arrow">→</span> 2 обычных фрагмента — ни одна политика не касается, идут в ответ как есть</li>
-      <li><span class="arrow">→</span> фрагмент-коммит: <code class="regex">kind=commit_msg</code>, интента нет <span class="chip chip-drop">drop</span> — <b>полностью убирается</b></li>
-      <li><span class="arrow">→</span> фрагмент-таблица: <code class="regex">is_table</code>, интента нет <span class="chip chip-keep">keep</span> — остаётся как есть</li>
-    </ul>
-    <p style="margin-top:12px; margin-bottom:0; font-size:.9rem; color:var(--ink-soft);">Итог: модель получит 3 куска вместо 4 — коммит-шум отфильтрован автоматически, хотя формально был «похож» на вопрос.</p>
-  </div>
-
-  <div class="screen-mock">
-    <div class="screen-mock-bar">
-      <div class="screen-mock-dots"><span></span><span></span><span></span></div>
-      <div class="screen-mock-title">Синапс.Инсайт · Чат</div>
-      <div class="screen-mock-illustration-tag">иллюстрация</div>
-    </div>
-    <div class="screen-mock-body">
-      <div class="mock-chunks">
-        <div class="mock-chunk is-kept"><span class="mock-chunk-tag">документ</span><span class="mock-chunk-text">Перечень корпоративных систем и их владельцев&nbsp;&hellip;</span></div>
-        <div class="mock-chunk is-kept"><span class="mock-chunk-tag">документ</span><span class="mock-chunk-text">Регламент внутреннего документооборота, п. 4.2&nbsp;&hellip;</span></div>
-        <div class="mock-chunk is-dropped"><span class="mock-chunk-tag">commit_msg</span><span class="mock-chunk-text">fix: renamed getUserSystems() &rarr; listSystems()</span><span class="mock-stamp drop">DROP</span></div>
-        <div class="mock-chunk is-kept"><span class="mock-chunk-tag">таблица</span><span class="mock-chunk-text">system_registry: id, name, owner, status&nbsp;&hellip;</span></div>
-      </div>
-      <div class="mock-arrow-down">после политик ранжирования</div>
-      <div class="mock-final-answer">В компании используются: CRM, биллинг, система документооборота, реестр систем (<code>system_registry</code>)&nbsp;&hellip; <i style="opacity:.7">— коммит-сообщение в ответ не попало</i></div>
-    </div>
-  </div>
-
-  <div class="example">
-    <span class="example-query">«Покажи историю коммитов по модулю авторизации»</span>
-    <p style="margin-bottom:0; font-size:.95rem;">Слова «коммит»/«история» совпадают с триггером <code>commit_msg-шум</code> → интент <span class="chip chip-intent-yes">распознан</span>. Казалось бы — <span class="chip chip-keep">keep</span>? Нет: действие «в интенте» для этой политики — <span class="chip chip-penalty">penalty 0.15</span>. Даже в своей теме коммит-сообщения получают лёгкий штраф — это сознательное решение: коммиты низкокачественны почти всегда.</p>
-  </div>
-
-  <div class="example">
-    <span class="example-query">«Как устроена процедура согласования договора?»</span>
-    <p style="margin-bottom:0; font-size:.95rem;">Слово «процедур» совпадает сразу с двумя политиками (<code>код-процедур-шум</code>, <code>процедура-документация-шум</code>) → интент распознан для обеих → обе <span class="chip chip-keep">keep</span>. Код процедуры или её описание пройдут без понижения — вопрос реально «в теме».</p>
-  </div>
-
-  <div class="prose wide">
-  <h3>2. Планировщик / реплан — «не нашли с первого раза — попробуй ещё раз в другом месте»</h3>
-  <p>У каждого результата поиска есть число «уверенность». Если оно маленькое — система не сдаётся, а автоматически пробует тот же вопрос в другом источнике.</p>
-  </div>
-
-  <div class="example">
-    <span class="example-query">«Есть ли ограничение по объёму данных для функции X?»</span>
-    <ul class="trace">
-      <li><span class="arrow">1.</span> Ищем в «документы» → нашли, уверенность <b class="val">0.22</b></li>
-      <li><span class="arrow">2.</span> 0.22 &lt; 0.35 → «по сути не нашлось» → автоматически ищем в «код»</li>
-      <li><span class="arrow">3.</span> Там уверенность <b class="val">0.72</b> → выше 0.60 → «явно нашлось» → этот результат идёт в ответ</li>
-    </ul>
-  </div>
-
-  <div class="screen-mock">
-    <div class="screen-mock-bar">
-      <div class="screen-mock-dots"><span></span><span></span><span></span></div>
-      <div class="screen-mock-title">Синапс.Инсайт · Планировщик</div>
-      <div class="screen-mock-illustration-tag">иллюстрация</div>
-    </div>
-    <div class="screen-mock-body">
-      <div class="mock-flow">
-        <div class="mock-source fail">
-          <div class="mock-source-name">Источник: Документы</div>
-          <div class="mock-source-conf">0.22</div>
-          <div class="mock-source-verdict">✗ ниже порога 0.35 — «не нашлось»</div>
-        </div>
-        <div class="mock-flow-arrow"><span class="arrow-glyph">&rarr;</span>реплан</div>
-        <div class="mock-source success">
-          <div class="mock-source-name">Источник: Код</div>
-          <div class="mock-source-conf">0.72</div>
-          <div class="mock-source-verdict">✓ выше порога 0.60 — «явно нашлось»</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="prose wide" style="margin-top:-6px;">
-  <p style="font-size:.95rem; color:var(--ink-soft);">А если бы уверенность была <b class="val">0.50</b> («серая зона»)? По умолчанию (LLM-судья выключен) система взяла бы, что нашла, без доп. проверки. Если включить LLM-судью — отдельный вызов модели проверил бы, действительно ли текст отвечает на вопрос, и при промахе всё равно запустил бы повторный поиск. Разница — в цене: надёжнее, но дороже.</p>
-
-  <h3>3. Роутинг вопросов — «разные вопросы — разными путями»</h3>
-  <p>Одни вопросы эффективнее превратить в SQL к таблицам («сколько», «количество»), другие — в объяснение структуры («как устроено»), третьи — в обычный поиск по тексту. Роутинг заранее определяет путь по триггерным фразам/regex.</p>
-  </div>
-
-  <div class="route-grid">
-    <div class="route-card">
-      <div class="card-title">«Сколько всего активных договоров?»</div>
-      <p style="font-size:.88rem; color:var(--ink-soft); margin-bottom:0;">Содержит «сколько» → категория <b>Data-вопросы</b> → путь SQL/расчёт по таблице</p>
-    </div>
-    <div class="route-card">
-      <div class="card-title">«Как устроен порядок предоставления привилегий?»</div>
-      <p style="font-size:.88rem; color:var(--ink-soft); margin-bottom:0;">Содержит «порядок предоставления» → категория <b>Структурные вопросы</b> → объяснение структуры/логики</p>
-    </div>
-    <div class="route-card">
-      <div class="card-title">Триггер «что» — отклонён</div>
-      <p style="font-size:.88rem; color:var(--ink-soft); margin-bottom:0;">Слишком общее слово встречается почти в любом вопросе → «Проверить» не пропустит такое правило</p>
-    </div>
-  </div>
-
-  <div class="screen-mock">
-    <div class="screen-mock-bar">
-      <div class="screen-mock-dots"><span></span><span></span><span></span></div>
-      <div class="screen-mock-title">Синапс.Инсайт · Роутинг</div>
-      <div class="screen-mock-illustration-tag">иллюстрация</div>
-    </div>
-    <div class="screen-mock-body">
-      <div class="mock-route-input">«Сколько всего активных договоров?»</div>
-      <div class="mock-lanes">
-        <div class="mock-lane active">
-          <div class="mock-lane-name">Data-вопросы</div>
-          <div class="mock-lane-dest">&rarr; SQL / расчёт по таблице</div>
-        </div>
-        <div class="mock-lane">
-          <div class="mock-lane-name">Структурные вопросы</div>
-          <div class="mock-lane-dest">&rarr; объяснение структуры</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <h3>Мини-FAQ: что будет, если поменять параметр</h3>
-  <div class="table-wrap">
-  <table>
-    <thead><tr><th>Если сделать это&hellip;</th><th>&hellip;то будет вот так</th></tr></thead>
-    <tbody>
-      <tr><td>Поднять нижний порог уверенности (0.35 → 0.5)</td><td>Система чаще решает «не нашлось» и чаще переискивает → надёжнее, но медленнее и дороже</td></tr>
-      <tr><td>Опустить нижний порог (до 0.15)</td><td>Реже перепроверяет себя, чаще соглашается с первым найденным → риск шума, но быстрее</td></tr>
-      <tr><td>Включить «LLM-судью релевантности»</td><td>В «серой зоне» — доп. проверка перед доверием результату → точнее, но лишний вызов модели</td></tr>
-      <tr><td>Снять «Вкл» у <code>commit_msg-шум</code></td><td>Коммит-сообщения перестают фильтроваться — риск, что технический шум попадёт в бизнес-ответы</td></tr>
-      <tr><td>Добавить в «Data-вопросы» триггер «все»</td><td>Система отклонит его при проверке — сохранить не получится</td></tr>
-    </tbody>
-  </table>
+  <p>Основной рабочий экран платформы — интерфейс диалога с RAG-агентом. Состоит из двух панелей: список чатов слева и сама переписка справа.</p>
   </div>
 </section>
 
-<section id="reference">
-  <h2><span class="depth d3">Уровень · полный референс</span></h2>
-
-  <h3>Действия на экране</h3>
+<section id="panel">
+  <h2>Панель истории чатов</h2>
   <div class="table-wrap">
   <table>
     <thead><tr><th>Элемент</th><th>Назначение</th></tr></thead>
     <tbody>
-      <tr><td><b>+ Политика</b></td><td>Создать новую политику ранжирования</td></tr>
-      <tr><td>✏️ в строке</td><td>Редактировать политику</td></tr>
-      <tr><td>🗑 в строке</td><td>Удалить политику</td></tr>
-      <tr><td>☑ «Вкл»</td><td>Включить/выключить политику без удаления</td></tr>
-      <tr><td><b>Сохранить роутинг</b></td><td>Применить фразы/regex ко всем категориям роутинга разом</td></tr>
+      <tr><td>Поиск по чатам</td><td>Полнотекстовый поиск среди сохранённых диалогов</td></tr>
+      <tr><td>Группировка по дате («Сегодня»)</td><td>Чаты сгруппированы по дням</td></tr>
+      <tr><td>Список чатов</td><td>Каждый чат — отдельная сессия с сохранённой историей</td></tr>
     </tbody>
   </table>
   </div>
+</section>
 
-  <h3>Как устроена одна политика</h3>
-  <div class="prose wide">
-  <p>Каждая строка таблицы политик — правило вида: «если чанк относится к классу X — веди себя так-то, в зависимости от того, распознан ли в запросе соответствующий интент».</p>
-  </div>
-  <div class="legend">
-    <span class="item"><span class="chip chip-keep">keep</span> оставить как есть</span>
-    <span class="item"><span class="chip chip-boost">boost</span> повысить релевантность</span>
-    <span class="item"><span class="chip chip-penalty">penalty</span> понизить (мягко)</span>
-    <span class="item"><span class="chip chip-drop">drop</span> исключить полностью</span>
-  </div>
-
-  <h3>Действующие политики</h3>
+<section id="toolbar">
+  <h2>Верхняя панель диалога</h2>
   <div class="table-wrap">
   <table>
-    <thead><tr><th>Политика</th><th>Класс (payload)</th><th>В интенте</th><th>Вне интента</th><th>Вкл</th></tr></thead>
+    <thead><tr><th>Элемент</th><th>Назначение</th></tr></thead>
     <tbody>
-      <tr><td class="policy-name">commit_msg-шум</td><td><code>kind=commit_msg</code></td><td><span class="chip chip-penalty">penalty 0.15</span></td><td><span class="chip chip-drop">drop</span></td><td>✅</td></tr>
-      <tr><td class="policy-name">diagram-шум</td><td><code>diagram_type=*присутствует</code></td><td><span class="chip chip-keep">keep</span></td><td><span class="chip chip-penalty">penalty 0.30</span></td><td>✅</td></tr>
-      <tr><td class="policy-name">код-процедур-шум</td><td><code>is_code=*присутствует</code></td><td><span class="chip chip-keep">keep</span></td><td><span class="chip chip-penalty">penalty 0.25</span></td><td>✅</td></tr>
-      <tr><td class="policy-name">процедура-документация-шум</td><td><code>procedural=*присутствует</code></td><td><span class="chip chip-keep">keep</span></td><td><span class="chip chip-penalty">penalty 0.20</span></td><td>✅</td></tr>
-      <tr><td class="policy-name">таблица-схема-boost</td><td><code>is_table=*присутствует</code></td><td><span class="chip chip-boost">boost 0.20</span></td><td><span class="chip chip-keep">keep</span></td><td>✅</td></tr>
+      <tr><td><b>+ Новый чат</b></td><td>Начать новую сессию диалога</td></tr>
+      <tr><td><b>‹ Скрыть историю</b></td><td>Свернуть панель списка чатов</td></tr>
+      <tr><td><b>↓ PDF</b></td><td>Экспорт диалога в PDF (неактивна, пока в чате нет сообщений)</td></tr>
+      <tr><td><b>Модель</b> — <code>OpenAI/gpt-5.4 · veai</code></td><td>Выбор LLM, обрабатывающей диалог</td></tr>
+      <tr><td><b>Агент</b> — <code>★ Синапс.Инсайт — Аналитик</code></td><td>Выбор агента/роли-персоны для чата</td></tr>
+      <tr><td>☆ чекбокс со звездой</td><td>Судя по всему — добавить в избранное</td></tr>
+      <tr><td><b>🔴 Рассуждения</b></td><td>Показ «рассуждений» модели (chain-of-thought) прямо в интерфейсе</td></tr>
+      <tr><td>🌙</td><td>Переключатель тёмной/светлой темы интерфейса</td></tr>
     </tbody>
   </table>
+  </div>
+</section>
+
+<section id="observations">
+  <h2>Наблюдения и связь с проектом</h2>
+
+  <div class="callout link">
+    <span class="callout-title">⚠ Модель OpenAI/gpt-5.4 — потенциальное противоречие с ТЗ по безопасности</span>
+    <p>ТЗ (раздел 3.2 «Безопасность») требует: «Все данные хранятся исключительно на сервере компании — никакие данные не передаются в облако или третьим лицам» и «Доступ к компонентам системы (Qdrant, Ollama) ограничен файрволом — только localhost». Критерий приёмки №8 (раздел 4.1) — «Данные не покидают периметр компании», порог 100%, критичность Критический.</p>
+    <p style="margin-bottom:0;">Явное упоминание Ollama в ТЗ подразумевает локальные модели без внешних вызовов. Если <code>OpenAI/gpt-5.4</code> в этом селекторе — буквально облачный API OpenAI, а не внутренний прокси/деплой с похожим именем, выбор такой модели для чата с клиентскими данными <b>нарушает критический критерий приёмки №8</b>. Суффикс <code>veai</code> может быть названием внутреннего прокси — это стоит уточнить отдельно, прежде чем делать вывод, но сам факт наличия опции с названием «OpenAI» при заявленном требовании «данные не покидают периметр» — повод для отдельной проверки на комплаенс-уровне.</p>
   </div>
 
   <div class="callout">
-    <span class="callout-title">Асимметрия между политиками</span>
-    <ul style="margin-bottom:0;">
-      <li><code>commit_msg-шум</code> — самая жёсткая: даже при совпадении интента только лёгкий штраф, а не keep; вне интента — полное исключение.</li>
-      <li><code>diagram-шум</code>, <code>код-процедур-шум</code>, <code>процедура-документация-шум</code> — «нейтральные»: keep в теме, штраф разной силы вне темы.</li>
-      <li><code>таблица-схема-boost</code> — единственная с положительным действием: усиление в теме, keep вне темы.</li>
-    </ul>
+    <span class="callout-title">Переключатель «Рассуждения»</span>
+    <p style="margin-bottom:0;">Частично перекрывает рекомендацию 4.6 из анализа ТЗ (раздельное логирование технических шагов) — но выводит это прямо в интерфейс чата, а не только в служебный лог. Стоит проверить: показывает ли «Рассуждения» реальные шаги (SQL, найденные чанки) или только текстовое рассуждение модели без привязки к конкретным вызовам инструментов.</p>
   </div>
 
-  <h3>Блок «Тест-запрос»</h3>
-  <div class="prose wide">
-  <p>Симулятор прямо на экране: вводите пример запроса, жмёте «Проверить» — под полем построчный разбор, какой интент распознан и какое действие сработало бы.</p>
+  <div class="callout">
+    <span class="callout-title">Выбор агента/персоны</span>
+    <p style="margin-bottom:0;">Дропдаун «Агент» подтверждает, что в системе есть заранее сконфигурированные роли — один и тот же RAG-движок обслуживает разных пользователей через разные преднастроенные системные промпты (связано с разделом «Задачи → Промпты персон»).</p>
   </div>
-  <div class="table-wrap">
-  <table>
-    <thead><tr><th>Политика</th><th>Интент</th><th>Действие</th></tr></thead>
-    <tbody>
-      <tr><td class="policy-name">commit_msg-шум</td><td><span class="chip chip-intent-no">— нет</span></td><td><span class="chip chip-drop">drop</span></td></tr>
-      <tr><td class="policy-name">diagram-шум</td><td><span class="chip chip-intent-no">— нет</span></td><td><span class="chip chip-penalty">penalty 0.30</span></td></tr>
-      <tr><td class="policy-name">код-процедур-шум</td><td><span class="chip chip-intent-no">— нет</span></td><td><span class="chip chip-penalty">penalty 0.25</span></td></tr>
-      <tr><td class="policy-name">процедура-документация-шум</td><td><span class="chip chip-intent-no">— нет</span></td><td><span class="chip chip-penalty">penalty 0.20</span></td></tr>
-      <tr><td class="policy-name">таблица-схема-boost</td><td><span class="chip chip-intent-no">— нет</span></td><td><span class="chip chip-keep">keep</span></td></tr>
-    </tbody>
-  </table>
-  </div>
-
-  <h3>Наблюдения и связь с проектом</h3>
-  <div class="prose wide">
-  <ul>
-    <li><b>Этого механизма нет ни в ТЗ, ни в исходном глоссарии</b> — независимый от базового retrieval уровень пост-фильтрации по метаданным чанка и интенту.</li>
-    <li><b>Интент определяется по regex на ключевые слова</b>, а не отдельной ML-моделью — просто и прозрачно, но хрупко: синонимы и опечатки, не попавшие в regex, не распознаются.</li>
-    <li>Платформа индексирует не только бизнес-документы, но и технический контент (коммиты, drawio-схемы, код процедур, описания таблиц) — шире, чем источники данных из ТЗ.</li>
-    <li>Regex-паттерны у <code>код-процедур-шум</code> и <code>процедура-документация-шум</code> выглядят идентично — стоит уточнить, один ли это триггер интента для двух разных payload-классов.</li>
-  </ul>
-  </div>
-
-  <h3>Новые термины</h3>
-  <div class="table-wrap">
-  <table>
-    <thead><tr><th>Термин</th><th>Смысл</th></tr></thead>
-    <tbody>
-      <tr><td><b>Интент запроса</b></td><td>Распознанное намерение пользователя, здесь — через regex по ключевым словам</td></tr>
-      <tr><td><b>Payload / класс чанка</b></td><td>Метаданные, прикреплённые к чанку при индексации (<code>kind=commit_msg</code>, <code>is_table=true</code>)</td></tr>
-      <tr><td><b>Re-ranking</b></td><td>Этап после базового поиска, где к чанкам применяются boost/penalty/drop</td></tr>
-    </tbody>
-  </table>
-  </div>
-</section>
-
-<section id="planner">
-  <h2>Планировщик — реплан (добор источника)</h2>
-  <blockquote class="screen-quote">
-    <span class="quote-label">Текст на экране</span>
-    <p>«Если план искал в одном источнике (документы/код) и ничего не нашёл или уверенность ниже порога — планировщик автоматически добирает недостающий источник тем же вопросом перед ответом.»</p>
-  </blockquote>
-
-  <div class="table-wrap">
-  <table>
-    <thead><tr><th>Элемент</th><th>Значение</th><th>Смысл</th></tr></thead>
-    <tbody>
-      <tr><td>☑ Включить реплан</td><td>включено</td><td>Автоматически повторить поиск в другом источнике при неудаче</td></tr>
-      <tr><td>Нижний порог</td><td class="val">0.35</td><td>Ниже — результат считается отсутствующим</td></tr>
-      <tr><td>☐ LLM-судья релевантности</td><td>выключено</td><td>Доп. проверка через LLM в «серой зоне»</td></tr>
-      <tr><td>Верхний порог</td><td class="val">0.60</td><td>Выше — «явно нашлось»</td></tr>
-    </tbody>
-  </table>
-  </div>
-
-  <div class="confidence">
-    <div class="confidence-markers">
-      <span class="confidence-marker m1">0.22</span>
-      <span class="confidence-marker m2">0.72</span>
-    </div>
-    <div class="confidence-bar">
-      <div class="zone zone-drop">не нашлось</div>
-      <div class="zone zone-gray">серая зона</div>
-      <div class="zone zone-keep">явно нашлось</div>
-    </div>
-    <div class="confidence-ticks"><span>0</span><span>0.35</span><span>0.60</span><span>1.0</span></div>
-  </div>
-
-  <div class="callout link">
-    <span class="callout-title">Связь с Кейсом 01</span>
-    <p style="margin-bottom:0;">Этот механизм — кандидат на объяснение главного дефекта из <code>case-01-d8-014-brief.md</code>: агент сослался на «синтаксический сбой» в SQL по позициям. Реплан, судя по описанию, реагирует на <b>низкую уверенность retrieval</b>, а не на <b>ошибку выполнения</b> уже сгенерированного SQL — это, вероятно, два разных класса сбоя, и для второго отдельного механизма восстановления не описано.</p>
-  </div>
-</section>
-
-<section id="routing">
-  <h2>Роутинг вопросов — дополнительные фразы/regex</h2>
-  <blockquote class="screen-quote">
-    <span class="quote-label">Текст на экране</span>
-    <p>«Добавляет фразы/regex к встроенным правилам роутинга (аддитивно — базовые всегда активны). Применяется автоматически в течение ~минуты. Сохранить можно только после успешной «Проверить». Слишком общие паттерны (ловящие нейтральные слова вроде «все», «что») отклоняются.»</p>
-  </blockquote>
-
-  <div class="route-grid">
-    <div class="route-card">
-      <div class="card-title">Data-вопросы <span style="font-weight:400;color:var(--ink-soft);">(расчёт/выборка/фильтр по таблице)</span></div>
-      <div class="trigger-list">
-        <span class="trigger">сколько</span><span class="trigger">количество</span><span class="trigger">как выдаются</span><span class="trigger">привилегии</span>
-      </div>
-    </div>
-    <div class="route-card">
-      <div class="card-title">Структурные вопросы <span style="font-weight:400;color:var(--ink-soft);">(как устроено)</span></div>
-      <div class="trigger-list">
-        <span class="trigger">как устроен</span><span class="trigger">по какому принципу</span><span class="trigger">порядок предоставления</span>
-      </div>
-    </div>
-  </div>
-  <p class="prose wide" style="font-size:.92rem; color:var(--ink-soft);">Каждая категория — своя карточка с переключателем «Фразы/Regex», разворачиваемыми встроенными правилами и локальным тестом. Внизу группы — общая кнопка «Сохранить роутинг».</p>
 </section>
 
 <section id="open-q">
   <h2>Открытые вопросы</h2>
   <ul class="qlist">
-    <li>Полный текст regex-паттернов (обрезаны на скриншоте)</li>
-    <li>Что произойдёт при создании новой политики через «+ Политика» — какие поля обязательны?</li>
-    <li>Идентичны ли regex-паттерны <code>код-процедур-шум</code> и <code>процедура-документация-шум</code>?</li>
-    <li>Есть ли отдельный механизм реланирования при ошибке выполнения SQL (в отличие от низкой уверенности retrieval)?</li>
-    <li>Какие ещё категории роутинга существуют помимо Data-вопросов и Структурных вопросов?</li>
-    <li>Что скрыто во «Встроенных правилах (зашиты в код, только просмотр)»?</li>
+    <li>Что означает <code>veai</code> в названии модели — внутренний деплой/прокси или маркировка окружения?</li>
+    <li>Действительно ли выбор OpenAI/gpt-5.4 отправляет данные за периметр компании?</li>
+    <li>Какие ещё модели доступны в этом селекторе?</li>
+    <li>Что именно показывает переключатель «Рассуждения» — реальные шаги инструментов или только текст размышления?</li>
+    <li>Что делает чекбокс со звездой рядом с «Агент»?</li>
+    <li>Полный список доступных агентов/персон.</li>
   </ul>
 
   <h3>См. также</h3>
   <ul class="also-list">
-    <li>docs/glossary/rag-document-ingestion.md</li>
-    <li>docs/glossary/rag-retrieval-tuning.md</li>
     <li>docs/analysis/case-01-d8-014-brief.md</li>
     <li>docs/analysis/case-02-tz-deep-analysis-and-proposals.md</li>
+    <li>docs/platform/kalibrovka-politiki-poiska.md</li>
   </ul>
 </section>
 
 <footer class="page-footer">
   <span>База знаний job-RAG · платформа «Синапс.Инсайт»</span>
-  <span>docs/platform/kalibrovka-politiki-poiska.md</span>
+  <span>docs/platform/chat.md</span>
 </footer>
 
   </main>

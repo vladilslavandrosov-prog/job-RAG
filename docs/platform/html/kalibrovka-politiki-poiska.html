@@ -601,6 +601,20 @@ footer.page-footer {
   display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
 }
 
+/* ---- app menu mirror ---- */
+.app-menu { margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.app-menu-title { font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px; font-weight:600; }
+.app-menu-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1px; }
+.app-menu-section { font-family:'IBM Plex Sans',sans-serif; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; color: var(--ink-soft); opacity:.65; margin:9px 0 2px; font-weight:600; }
+.app-menu-section:first-child { margin-top: 0; }
+.app-menu-item { display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:6px; font-size:.8rem; color: var(--ink-soft); opacity:.45; line-height:1.3; }
+.app-menu-item.sub { padding-left: 18px; }
+.app-menu-item.has-doc { opacity:.9; }
+.app-menu-item .doc-badge { margin-left:auto; flex:none; font-family:'IBM Plex Mono',monospace; font-size:.56rem; letter-spacing:.02em; padding:1px 5px; border-radius:4px; background: var(--keep-soft); color: var(--keep); }
+.app-menu-item.active { opacity:1; color: var(--accent); font-weight:600; background: var(--accent-soft); border-left: 2px solid var(--accent); padding-left:6px; margin-left:-2px;}
+.app-menu-item.active .doc-badge { background: var(--accent); color: #fff; }
+.app-menu-note { font-size:.7rem; line-height:1.45; color: var(--ink-soft); margin-top:10px; }
+
 @media (max-width: 960px) {
   .shell { grid-template-columns: 1fr; }
   .toc { position: static; margin-bottom: 8px; }
@@ -609,6 +623,7 @@ footer.page-footer {
   .toc-mobile summary { cursor:pointer; font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:.85rem; padding:10px 14px; border:1px solid var(--line); border-radius:8px; background: var(--paper-raised); }
   .toc-mobile[open] summary { border-radius: 8px 8px 0 0; }
   .toc-mobile ol { border:1px solid var(--line); border-top:none; border-radius:0 0 8px 8px; padding:8px; background: var(--paper-raised);}
+  .toc-mobile .app-menu { border-bottom: none; padding-bottom: 8px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -629,9 +644,37 @@ footer.page-footer {
   </div>
 </header>
 <div class="shell">
-  <nav class="toc toc-desktop" aria-label="Оглавление">
+  <nav class="toc toc-desktop" aria-label="Навигация">
+    <div class="app-menu">
+      <div class="app-menu-title">Меню платформы «Синапс.Инсайт»</div>
+      <ul class="app-menu-list"><li class="app-menu-item has-doc">Чат<span class="doc-badge">описано</span></li>
+<li class="app-menu-item">Мои шаблоны</li>
+<li class="app-menu-section">Источники</li>
+<li class="app-menu-item sub has-doc">Документы<span class="doc-badge">описано</span></li>
+<li class="app-menu-section">Задачи</li>
+<li class="app-menu-item sub">Предложения</li>
+<li class="app-menu-item sub">Агенты на утверждении</li>
+<li class="app-menu-item sub">Статистика</li>
+<li class="app-menu-item sub">Очередь обработки</li>
+<li class="app-menu-item sub">Промпты персон</li>
+<li class="app-menu-section">Калибровка</li>
+<li class="app-menu-item sub">Калибровка детектора</li>
+<li class="app-menu-item sub has-doc active">Политики поиска</li>
+<li class="app-menu-item sub">Отладка сессий</li>
+<li class="app-menu-section">Управление данными</li>
+<li class="app-menu-item sub">Анализ схем</li>
+<li class="app-menu-item sub">Граф процедур</li>
+<li class="app-menu-item sub">Граф код→таблица</li>
+<li class="app-menu-item sub">Граф доступа</li>
+<li class="app-menu-item">Каталог</li>
+<li class="app-menu-item">Агенты</li>
+<li class="app-menu-item">Администрирование</li>
+<li class="app-menu-item">Мониторинг</li></ul>
+      <p class="app-menu-note">Это карта реального левого меню платформы — показывает, где в нём находится текущая страница. Пункты с меткой «описано» задокументированы отдельно (пока в Markdown, в базе знаний job-RAG); остальные ещё не разобраны.</p>
+    </div>
     <div class="toc-title">На этой странице</div>
-    <ol><li><a href="#naznachenie">Назначение экрана</a></li>
+    <ol><li><a href="#rag-intro">Что такое RAG-агент</a></li>
+<li><a href="#naznachenie">Назначение экрана</a></li>
 <li><a href="#prosto">Совсем просто</a></li>
 <li><a href="#primery">Обзор с примерами</a></li>
 <li><a href="#reference">Детальный референс</a></li>
@@ -640,8 +683,37 @@ footer.page-footer {
 <li><a href="#open-q">Открытые вопросы</a></li></ol>
   </nav>
   <details class="toc-mobile">
-    <summary>Оглавление</summary>
-    <ol><li><a href="#naznachenie">Назначение экрана</a></li>
+    <summary>Меню и оглавление</summary>
+    <div class="app-menu">
+      <div class="app-menu-title">Меню платформы «Синапс.Инсайт»</div>
+      <ul class="app-menu-list"><li class="app-menu-item has-doc">Чат<span class="doc-badge">описано</span></li>
+<li class="app-menu-item">Мои шаблоны</li>
+<li class="app-menu-section">Источники</li>
+<li class="app-menu-item sub has-doc">Документы<span class="doc-badge">описано</span></li>
+<li class="app-menu-section">Задачи</li>
+<li class="app-menu-item sub">Предложения</li>
+<li class="app-menu-item sub">Агенты на утверждении</li>
+<li class="app-menu-item sub">Статистика</li>
+<li class="app-menu-item sub">Очередь обработки</li>
+<li class="app-menu-item sub">Промпты персон</li>
+<li class="app-menu-section">Калибровка</li>
+<li class="app-menu-item sub">Калибровка детектора</li>
+<li class="app-menu-item sub has-doc active">Политики поиска</li>
+<li class="app-menu-item sub">Отладка сессий</li>
+<li class="app-menu-section">Управление данными</li>
+<li class="app-menu-item sub">Анализ схем</li>
+<li class="app-menu-item sub">Граф процедур</li>
+<li class="app-menu-item sub">Граф код→таблица</li>
+<li class="app-menu-item sub">Граф доступа</li>
+<li class="app-menu-item">Каталог</li>
+<li class="app-menu-item">Агенты</li>
+<li class="app-menu-item">Администрирование</li>
+<li class="app-menu-item">Мониторинг</li></ul>
+      <p class="app-menu-note">Это карта реального левого меню платформы — показывает, где в нём находится текущая страница. Пункты с меткой «описано» задокументированы отдельно (пока в Markdown, в базе знаний job-RAG); остальные ещё не разобраны.</p>
+    </div>
+    <div class="toc-title">На этой странице</div>
+    <ol><li><a href="#rag-intro">Что такое RAG-агент</a></li>
+<li><a href="#naznachenie">Назначение экрана</a></li>
 <li><a href="#prosto">Совсем просто</a></li>
 <li><a href="#primery">Обзор с примерами</a></li>
 <li><a href="#reference">Детальный референс</a></li>
@@ -651,6 +723,16 @@ footer.page-footer {
   </details>
   <main id="main">
 
+
+<section id="rag-intro">
+  <h2>Что такое RAG-агент</h2>
+  <div class="prose wide">
+  <p>Если вы впервые видите эту страницу — сначала пара слов о том, что вообще имеется в виду.</p>
+  <p><b>RAG-агент</b> (от англ. <i>Retrieval-Augmented Generation</i> — «генерация, дополненная поиском») — это ИИ-ассистент, который отвечает не «из головы» по общим знаниям, как обычный чат-бот, а сначала ищет подходящие фрагменты в реальных документах и данных компании (договоры, регламенты, CRM, таблицы), и только потом формирует ответ на их основе — с указанием, из какого именно документа взята информация.</p>
+  <p>Аналогия: представьте помощника, который вместо ответа по памяти каждый раз идёт в архив, находит нужные бумаги, читает их и только после этого отвечает — со ссылкой на источник, а не придумывает на ходу. Именно так и работает система «Синапс.Инсайт», о которой эта страница.</p>
+  <p>Страница, которую вы читаете, документирует один конкретный экран такой системы — тот, где настраивается, каким из найденных фрагментов доверять больше, а каким меньше, и когда стоит поискать ещё раз. Если хочется более подробного введения в устройство RAG — см. глоссарий базы знаний (<code>docs/glossary/rag-document-ingestion.md</code>).</p>
+  </div>
+</section>
 
 <section id="naznachenie">
   <h2>Назначение экрана</h2>

@@ -10,3 +10,4 @@
 ## Кейсы
 
 - [`docs/analysis/case-01-d8-014-brief.md`](docs/analysis/case-01-d8-014-brief.md) — приёмочный разбор диалога подготовки брифа к встрече с клиентом D8-014.
+- [`docs/analysis/case-02-tz-deep-analysis-and-proposals.md`](docs/analysis/case-02-tz-deep-analysis-and-proposals.md) — глубокий анализ ТЗ (противоречия, пробелы), предложения по архитектуре и новые кейсы использования агента.

@@ -40,6 +40,7 @@ AI-платформа корпоративных данных. Документ�
 | [`kalibrovka-detektora-i-otladka.md`](kalibrovka-detektora-i-otladka.md) | Калибровка → Калибровка детектора, Отладка сессий |
 | [`upravlenie-dannymi.md`](upravlenie-dannymi.md) | Управление данными → Анализ схем, Граф процедур, Граф код→таблица, Граф доступа |
 | [`agenty.md`](agenty.md) | Агенты |
+| [`otkrytye-voprosy.md`](otkrytye-voprosy.md) | **Сводный реестр всех открытых вопросов** по всем разделам, с вариантами ответов — для сверки с командой платформы |
 
 ## Готовые HTML-версии
 

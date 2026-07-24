@@ -26,3 +26,4 @@
 ## Демо-кейсы для ретейла
 
 - [`docs/demo-retail/scenarios.md`](docs/demo-retail/scenarios.md) — этап 1: 8 сценариев использования платформы на материале ретейла, каждый нацелен на конкретную возможность платформы.
+- [`docs/demo-retail/dataset/README.md`](docs/demo-retail/dataset/README.md) — этап 2: готовый пакет из 15 документов (Word/Excel) для загрузки в платформу и полный сценарий live-демо с ожидаемыми ответами.

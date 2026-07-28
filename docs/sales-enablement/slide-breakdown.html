@@ -335,6 +335,25 @@
     border: 1px solid var(--border);
     padding: 1.1rem 1.2rem 1.3rem;
   }
+  .thread__panel:not([open]) { padding-bottom: 1.1rem; }
+  .thread__summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    cursor: pointer;
+    list-style: none;
+  }
+  .thread__summary::-webkit-details-marker { display: none; }
+  .thread__summary::before {
+    content: "▸";
+    display: inline-block;
+    margin-right: 0.5rem;
+    color: var(--orange);
+    transition: transform 0.15s ease;
+  }
+  .thread__panel[open] .thread__summary::before { transform: rotate(90deg); }
   .thread__label {
     font-family: var(--font-label);
     font-size: 0.72rem;
@@ -342,12 +361,17 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--teal);
-    margin: 0 0 0.5rem;
   }
+  .thread__hint {
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  .thread__panel[open] .thread__summary { margin-bottom: 0.9rem; }
   .thread__text {
     font-size: 0.96rem;
     color: var(--ink);
-    margin: 0 0 1rem;
+    margin: 0.9rem 0 1rem;
   }
   .aud-table {
     width: 100%;
@@ -530,8 +554,11 @@
   <p class="part-lede">На каждый слайд: суть, на чём делать акцент при показе, готовые примеры из самого материала — и два варианта объяснения слайда клиенту: «просто» (для ЛПР среднего уровня погружения) и «очень просто» (для человека, который вообще не в теме ИИ/архитектуры).</p>
 
   <div class="thread">
-    <div class="thread__panel">
-      <p class="thread__label">Сквозная линия презентации</p>
+    <details class="thread__panel">
+      <summary class="thread__summary">
+        <span class="thread__label">Сквозная линия презентации</span>
+        <span class="thread__hint">Таблица: какой слайд для кого — раскрыть / свернуть</span>
+      </summary>
       <p class="thread__text">
         Один и тот же механизм даёт выигрыш и бизнесу, и ИТ/ИБ одновременно — явно сформулировано
         на слайде 7, но заложено уже на слайде 2 и подхвачено на слайдах 8 и 12. Таблица ниже —
@@ -558,7 +585,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </details>
   </div>
 
   <nav class="toc" aria-label="Слайды" style="margin-left:0;margin-right:0;padding:0;max-width:none;">

@@ -16,6 +16,7 @@
 - [`docs/analysis/case-01-d8-014-brief.md`](docs/analysis/case-01-d8-014-brief.md) — приёмочный разбор диалога подготовки брифа к встрече с клиентом D8-014.
 - [`docs/analysis/case-02-tz-deep-analysis-and-proposals.md`](docs/analysis/case-02-tz-deep-analysis-and-proposals.md) — глубокий анализ ТЗ (противоречия, пробелы), предложения по архитектуре и новые кейсы использования агента.
 - [`docs/analysis/case-03-pilot-tz-ai-guard.md`](docs/analysis/case-03-pilot-tz-ai-guard.md) — новое ТЗ оплачиваемого пилота с компонентом AI Guard: скоуп работ, тестовые сценарии и критерии приёмки; закрывает давний открытый вопрос про периметр данных и модель `OpenAI/gpt-5.4 · veai`.
+- [`docs/analysis/case-04-sales-pitch-critique.md`](docs/analysis/case-04-sales-pitch-critique.md) — критический разбор презентации «Единый корпоративный ИИ-слой» для команды продаж: где заявленное не совпадает с реально задокументированным поведением платформы, готовые ответы на возражения покупателя.
 
 ## Глоссарий
 

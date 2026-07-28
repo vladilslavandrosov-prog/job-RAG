@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Разбор по слайдам — «Единый корпоративный ИИ-слой»</title>
+<title>«Единый корпоративный ИИ-слой» — разбор по слайдам и вопросы клиента</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%91%3C/text%3E%3C/svg%3E" />
 <style>
   :root {
@@ -11,6 +11,7 @@
     --navy-deep: #0a1d33;
     --orange: #e87a1e;
     --teal: #1a7a68;
+    --red: #b3401f;
     --bg: #f6f7f9;
     --surface: #ffffff;
     --ink: #17263a;
@@ -20,6 +21,9 @@
     --tag-simple-ink: #9a4e0e;
     --tag-verysimple-bg: #e6f1ee;
     --tag-verysimple-ink: #135b4c;
+    --warn-bg: #fdf1e4;
+    --warn-ink: #9a4e0e;
+    --warn-border: #ecd3ae;
     --focus: #1a7a68;
 
     --font-display: "Helvetica Neue", "Segoe UI", Arial, sans-serif;
@@ -38,10 +42,14 @@
       --navy-deep: #0a1620;
       --orange: #f0954a;
       --teal: #4fb39d;
+      --red: #e08a6c;
       --tag-simple-bg: #2c2115;
       --tag-simple-ink: #f0ac6c;
       --tag-verysimple-bg: #122622;
       --tag-verysimple-ink: #7fd0bd;
+      --warn-bg: #2c2115;
+      --warn-ink: #f0ac6c;
+      --warn-border: #4a3620;
     }
   }
   :root[data-theme="dark"] {
@@ -54,10 +62,14 @@
     --navy-deep: #0a1620;
     --orange: #f0954a;
     --teal: #4fb39d;
+    --red: #e08a6c;
     --tag-simple-bg: #2c2115;
     --tag-simple-ink: #f0ac6c;
     --tag-verysimple-bg: #122622;
     --tag-verysimple-ink: #7fd0bd;
+    --warn-bg: #2c2115;
+    --warn-ink: #f0ac6c;
+    --warn-border: #4a3620;
   }
   :root[data-theme="light"] {
     --bg: #f6f7f9;
@@ -69,10 +81,14 @@
     --navy-deep: #0a1d33;
     --orange: #e87a1e;
     --teal: #1a7a68;
+    --red: #b3401f;
     --tag-simple-bg: #fdf1e4;
     --tag-simple-ink: #9a4e0e;
     --tag-verysimple-bg: #e6f1ee;
     --tag-verysimple-ink: #135b4c;
+    --warn-bg: #fdf1e4;
+    --warn-ink: #9a4e0e;
+    --warn-border: #ecd3ae;
   }
 
   * { box-sizing: border-box; }
@@ -95,10 +111,7 @@
     color: #eef2f7;
     padding: 2.6rem 1.5rem 2.2rem;
   }
-  .masthead__inner {
-    max-width: 46rem;
-    margin: 0 auto;
-  }
+  .masthead__inner { max-width: 46rem; margin: 0 auto; }
   .masthead__eyebrow {
     font-family: var(--font-label);
     font-size: 0.78rem;
@@ -110,7 +123,7 @@
   }
   .masthead__title {
     font-family: var(--font-display);
-    font-size: clamp(1.7rem, 3.4vw, 2.35rem);
+    font-size: clamp(1.6rem, 3.2vw, 2.25rem);
     font-weight: 700;
     letter-spacing: -0.01em;
     margin: 0 0 0.7rem;
@@ -119,7 +132,7 @@
   }
   .masthead__lede {
     font-family: var(--font-body);
-    font-size: 1.02rem;
+    font-size: 1.0rem;
     color: #c3ccd8;
     max-width: 40rem;
     margin: 0 0 1.4rem;
@@ -134,9 +147,36 @@
   }
   .masthead__meta a { color: #cfe0d9; text-decoration-color: #4c6a63; }
 
+  .partnav {
+    max-width: 46rem;
+    margin: -1.1rem auto 0;
+    padding: 0 1.5rem;
+  }
+  .partnav__panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  @media (max-width: 30rem) { .partnav__panel { grid-template-columns: 1fr; } }
+  .partnav__panel a {
+    display: block;
+    padding: 0.7rem 0.9rem;
+    font-family: var(--font-label);
+    font-weight: 700;
+    font-size: 0.92rem;
+    text-decoration: none;
+    color: var(--navy);
+    background: var(--bg);
+  }
+  .partnav__panel a span { display: block; font-weight: 400; font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.15rem; }
+  .partnav__panel a:hover { color: var(--teal); }
+
   nav.toc {
     max-width: 46rem;
-    margin: 1.4rem auto 0;
+    margin: 1.2rem auto 0;
     padding: 0 1.5rem;
   }
   .toc__panel {
@@ -155,7 +195,6 @@
     display: flex;
     gap: 0.5rem;
     padding: 0.32rem 0;
-    border-bottom: 1px solid transparent;
   }
   .toc__panel a:hover { color: var(--teal); }
   .toc__num {
@@ -172,12 +211,31 @@
     padding: 2.4rem 1.5rem 5rem;
   }
 
+  h1.part-title {
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 0.3rem;
+    text-wrap: balance;
+    scroll-margin-top: 1rem;
+  }
+  p.part-lede {
+    font-size: 0.98rem;
+    color: var(--ink-soft);
+    margin: 0 0 1.6rem;
+  }
+  .part-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3.2rem 0 2.6rem;
+  }
+
   .slide {
     padding: 2.1rem 0;
     border-bottom: 1px solid var(--border);
     scroll-margin-top: 1.2rem;
   }
-  .slide:first-of-type { padding-top: 1.4rem; }
   .slide:last-of-type { border-bottom: none; }
 
   .slide__head {
@@ -270,9 +328,7 @@
   .card p { margin: 0; font-size: 0.96rem; color: var(--ink); }
 
   .thread {
-    max-width: 46rem;
-    margin: -1.1rem auto 0;
-    padding: 0 1.5rem;
+    margin: 0 0 1.6rem;
   }
   .thread__panel {
     background: var(--surface);
@@ -328,6 +384,113 @@
   }
   .aud-table-wrap { overflow-x: auto; }
 
+  .warn {
+    margin: 0 0 1.4rem;
+  }
+  .warn__panel {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    color: var(--warn-ink);
+    padding: 0.9rem 1.2rem;
+    font-family: var(--font-label);
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+
+  h2.section-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 2.6rem 0 0.4rem;
+    text-wrap: balance;
+    scroll-margin-top: 1rem;
+  }
+  p.section-note {
+    font-size: 0.94rem;
+    color: var(--ink-soft);
+    margin: 0 0 1.2rem;
+  }
+
+  .quick-wrap { overflow-x: auto; margin-top: 1.4rem; }
+  table.quick {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  table.quick th {
+    font-family: var(--font-label);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: left;
+    padding: 0 0.6rem 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  table.quick td {
+    padding: 0.5rem 0.6rem 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.quick tr:last-child td { border-bottom: none; }
+  table.quick td:first-child {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--orange);
+    width: 1.6rem;
+  }
+  table.quick td:nth-child(2) { color: var(--ink); font-weight: 600; width: 40%; }
+  table.quick td:nth-child(3) { color: var(--ink-soft); }
+
+  .qa-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.1rem 1.3rem 1.2rem;
+    margin: 0 0 1rem;
+    scroll-margin-top: 1rem;
+  }
+  .qa-card__num {
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 0.6rem;
+  }
+  .qa-field { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.8rem; margin: 0 0 0.6rem; }
+  .qa-field:last-of-type { margin-bottom: 0; }
+  .qa-field__label {
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding-top: 0.15rem;
+  }
+  .qa-field--q .qa-field__label { color: var(--red); }
+  .qa-field--a .qa-field__label { color: var(--teal); }
+  .qa-field p { margin: 0; font-size: 0.98rem; color: var(--ink); }
+  .qa-field--q p { font-style: italic; }
+  .qa-why {
+    margin-top: 0.8rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .qa-why b { color: var(--ink); font-weight: 700; }
+
+  @media (max-width: 34rem) {
+    .qa-field { grid-template-columns: 1fr; gap: 0.15rem; }
+  }
+
+  ol.howto, ol.howto li { font-size: 0.96rem; }
+  ol.howto { padding-left: 1.3rem; }
+  ol.howto li { margin-bottom: 0.5rem; }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
   }
@@ -337,75 +500,85 @@
 
 <header class="masthead">
   <div class="masthead__inner">
-    <p class="masthead__eyebrow">Разбор презентации · сейлз-энейблмент</p>
-    <h1 class="masthead__title">«Единый корпоративный ИИ-слой» — разбор по слайдам</h1>
+    <p class="masthead__eyebrow">Сейлз-энейблмент · «Единый корпоративный ИИ-слой»</p>
+    <h1 class="masthead__title">Разбор презентации и подготовка к вопросам клиента</h1>
     <p class="masthead__lede">
-      Постраничный разбор всех 12 слайдов питча: суть, на чём делать акцент на встрече,
-      готовые примеры-реплики — и два варианта объяснения каждого слайда клиенту:
-      попроще и совсем просто.
+      Один документ, два раздела: постраничный разбор всех 12 слайдов питча (суть, акценты,
+      готовые реплики) — и отдельный лист с вопросами, которые реально прозвучат на встрече,
+      и готовыми ответами. Содержание презентации не менялось.
     </p>
     <p class="masthead__meta">
-      <span>12 слайдов</span>
+      <span>12 слайдов · 17 вопросов</span>
       <span>·</span>
-      <span>Содержание презентации не менялось</span>
+      <a href="slide-breakdown.md">md: разбор по слайдам</a>
       <span>·</span>
-      <a href="slide-breakdown.md">markdown-версия</a>
+      <a href="client-qa-prep.md">md: вопросы клиента</a>
     </p>
   </div>
 </header>
 
-<div class="thread">
-  <div class="thread__panel">
-    <p class="thread__label">Сквозная линия презентации</p>
-    <p class="thread__text">
-      Один и тот же механизм даёт выигрыш и бизнесу, и ИТ/ИБ одновременно — явно сформулировано
-      на слайде 7, но заложено уже на слайде 2 и подхвачено на слайдах 8 и 12. Таблица ниже —
-      для быстрой навигации по аудитории перед встречей.
-    </p>
-    <div class="aud-table-wrap">
-      <table class="aud-table">
-        <thead>
-          <tr><th>Слайд</th><th>Для кого в первую очередь</th><th>Суть в одной фразе</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>01</td><td>Оба</td><td>Не бот, а инфраструктурный слой для всей компании</td></tr>
-          <tr><td>02</td><td>Оба — боль бизнеса, риск для ИБ, трение для ИТ</td><td>ИИ уже проникает в компанию хаотично, сразу по трём фронтам</td></tr>
-          <tr><td>03</td><td>ИТ и ИБ</td><td>Каждая идея заново проходит 6 согласований без единого хозяина процесса</td></tr>
-          <tr><td>04</td><td>Оба</td><td>Один слой между данными и бизнес-сценариями</td></tr>
-          <tr><td>05</td><td>ИТ и ИБ</td><td>Четыре готовых компонента: гейтвей, поиск, безопасность, развёртывание</td></tr>
-          <tr><td>06</td><td>Бизнес</td><td>Три типа задач, которые бизнес узнаёт по своим формулировкам</td></tr>
-          <tr><td>07</td><td>Оба (сквозной тезис)</td><td>Один механизм — два результата одновременно</td></tr>
-          <tr><td>08</td><td>Бизнес + ИТ/ИБ</td><td>Падает и цена сценария, и нагрузка на согласование с ИБ</td></tr>
-          <tr><td>09</td><td>Бизнес</td><td>Платформа уже работает у реальных клиентов</td></tr>
-          <tr><td>10</td><td>Бизнес</td><td>×2 — измеримый эффект одного конкретного пилота</td></tr>
-          <tr><td>11</td><td>Оба</td><td>Честная квалификация: не для разовой задачи</td></tr>
-          <tr><td>12</td><td>Оба</td><td>Один проект — два результата, и конкретный следующий шаг</td></tr>
-        </tbody>
-      </table>
-    </div>
+<div class="partnav">
+  <div class="partnav__panel">
+    <a href="#part-slides">Разбор по слайдам<span>Суть, акценты, примеры — по каждому из 12 слайдов</span></a>
+    <a href="#part-qa">Вопросы и ответы клиента<span>17 вопросов, которые прозвучат на встрече, с готовыми ответами</span></a>
   </div>
 </div>
 
-<nav class="toc" aria-label="Слайды">
-  <div class="toc__panel">
-    <a href="#s1"><span class="toc__num">01</span>Обложка</a>
-    <a href="#s2"><span class="toc__num">02</span>Знакомо?</a>
-    <a href="#s3"><span class="toc__num">03</span>Почему так происходит</a>
-    <a href="#s4"><span class="toc__num">04</span>Целевая архитектура</a>
-    <a href="#s5"><span class="toc__num">05</span>Что входит в платформу</a>
-    <a href="#s6"><span class="toc__num">06</span>Что решает платформа</a>
-    <a href="#s7"><span class="toc__num">07</span>Что это даёт</a>
-    <a href="#s8"><span class="toc__num">08</span>Почему это эффективно</a>
-    <a href="#s9"><span class="toc__num">09</span>Наш опыт</a>
-    <a href="#s10"><span class="toc__num">10</span>Результат пилота</a>
-    <a href="#s11"><span class="toc__num">11</span>Кому подходит</a>
-    <a href="#s12"><span class="toc__num">12</span>Следующий шаг</a>
-  </div>
-</nav>
-
 <main>
 
-  <section class="slide" id="s1">
+  <h1 class="part-title" id="part-slides">Часть 1. Разбор по слайдам</h1>
+  <p class="part-lede">На каждый слайд: суть, на чём делать акцент при показе, готовые примеры из самого материала — и два варианта объяснения слайда клиенту: «просто» (для ЛПР среднего уровня погружения) и «очень просто» (для человека, который вообще не в теме ИИ/архитектуры).</p>
+
+  <div class="thread">
+    <div class="thread__panel">
+      <p class="thread__label">Сквозная линия презентации</p>
+      <p class="thread__text">
+        Один и тот же механизм даёт выигрыш и бизнесу, и ИТ/ИБ одновременно — явно сформулировано
+        на слайде 7, но заложено уже на слайде 2 и подхвачено на слайдах 8 и 12. Таблица ниже —
+        для быстрой навигации по аудитории перед встречей.
+      </p>
+      <div class="aud-table-wrap">
+        <table class="aud-table">
+          <thead>
+            <tr><th>Слайд</th><th>Для кого в первую очередь</th><th>Суть в одной фразе</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>01</td><td>Оба</td><td>Не бот, а инфраструктурный слой для всей компании</td></tr>
+            <tr><td>02</td><td>Оба — боль бизнеса, риск для ИБ, трение для ИТ</td><td>ИИ уже проникает в компанию хаотично, сразу по трём фронтам</td></tr>
+            <tr><td>03</td><td>ИТ и ИБ</td><td>Каждая идея заново проходит 6 согласований без единого хозяина процесса</td></tr>
+            <tr><td>04</td><td>Оба</td><td>Один слой между данными и бизнес-сценариями</td></tr>
+            <tr><td>05</td><td>ИТ и ИБ</td><td>Четыре готовых компонента: гейтвей, поиск, безопасность, развёртывание</td></tr>
+            <tr><td>06</td><td>Бизнес</td><td>Три типа задач, которые бизнес узнаёт по своим формулировкам</td></tr>
+            <tr><td>07</td><td>Оба (сквозной тезис)</td><td>Один механизм — два результата одновременно</td></tr>
+            <tr><td>08</td><td>Бизнес + ИТ/ИБ</td><td>Падает и цена сценария, и нагрузка на согласование с ИБ</td></tr>
+            <tr><td>09</td><td>Бизнес</td><td>Платформа уже работает у реальных клиентов</td></tr>
+            <tr><td>10</td><td>Бизнес</td><td>×2 — измеримый эффект одного конкретного пилота</td></tr>
+            <tr><td>11</td><td>Оба</td><td>Честная квалификация: не для разовой задачи</td></tr>
+            <tr><td>12</td><td>Оба</td><td>Один проект — два результата, и конкретный следующий шаг</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <nav class="toc" aria-label="Слайды" style="margin-left:0;margin-right:0;padding:0;max-width:none;">
+    <div class="toc__panel">
+      <a href="#s1"><span class="toc__num">01</span>Обложка</a>
+      <a href="#s2"><span class="toc__num">02</span>Знакомо?</a>
+      <a href="#s3"><span class="toc__num">03</span>Почему так происходит</a>
+      <a href="#s4"><span class="toc__num">04</span>Целевая архитектура</a>
+      <a href="#s5"><span class="toc__num">05</span>Что входит в платформу</a>
+      <a href="#s6"><span class="toc__num">06</span>Что решает платформа</a>
+      <a href="#s7"><span class="toc__num">07</span>Что это даёт</a>
+      <a href="#s8"><span class="toc__num">08</span>Почему это эффективно</a>
+      <a href="#s9"><span class="toc__num">09</span>Наш опыт</a>
+      <a href="#s10"><span class="toc__num">10</span>Результат пилота</a>
+      <a href="#s11"><span class="toc__num">11</span>Кому подходит</a>
+      <a href="#s12"><span class="toc__num">12</span>Следующий шаг</a>
+    </div>
+  </nav>
+
+  <section class="slide" id="s1" style="margin-top:1.6rem;">
     <div class="slide__head">
       <span class="slide__num">01</span>
       <span class="slide__eyebrow">Корпоративная ИИ-платформа</span>
@@ -843,6 +1016,280 @@
       </div>
     </div>
   </section>
+
+  <hr class="part-divider" />
+
+  <h1 class="part-title" id="part-qa">Часть 2. Вопросы и ответы клиента</h1>
+  <p class="part-lede">Вопросы, которые реально могут прозвучать на встрече, и готовые ответы, сверенные с тем, что задокументировано о платформе на самом деле — пилотные ТЗ, разбор скриншотов, кейс 04.</p>
+
+  <div class="warn">
+    <div class="warn__panel">
+      Внутренний лист для команды продаж — не для отправки клиенту. Держите открытым во время звонка или распечатайте перед встречей.
+    </div>
+  </div>
+
+  <nav class="toc" aria-label="Разделы вопросов" style="margin-left:0;margin-right:0;padding:0;max-width:none;">
+    <div class="toc__panel">
+      <a href="#quick">Быстрая шпаргалка</a>
+      <a href="#group-1">Вопросы от усиленного тезиса (1–4)</a>
+      <a href="#group-2">Вопросы по заявлениям презентации (5–8)</a>
+      <a href="#group-3">Общие вопросы о питче (9–17)</a>
+      <a href="#howto">Как пользоваться листом</a>
+    </div>
+  </nav>
+
+  <h2 class="section-title" id="quick">Быстрая шпаргалка</h2>
+  <p class="section-note">Общий принцип: честная, чуть более скромная формулировка убеждает сильнее, чем красивая, но непроверяемая. Ни один ответ ниже не выдумывает цифру или факт — там, где реального ответа пока нет, это сказано прямо, с предложенным следующим шагом.</p>
+
+  <div class="quick-wrap">
+    <table class="quick">
+      <thead><tr><th>#</th><th>Вопрос клиента</th><th>Короткий ответ</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Роли реально наследуются автоматически, или их настраивают вручную?</td><td>Синхронизируются с источниками, финальный состав (до 5 ролей) согласуется на старте — отдельный, предсказуемый этап, не скрытая работа</td></tr>
+        <tr><td>2</td><td>«Одна политика на все сценарии» — она реально работает хоть для одной роли?</td><td>Механизм специфицирован (Граф доступа, AI Guard); точная конфигурация под вашу роль подтверждается на старте пилота, не заранее</td></tr>
+        <tr><td>3</td><td>Какой процент ложноотрицательных срабатываний у маскирования ПДн?</td><td>≥98% в документах, ≥95% в данных из подключённых источников, с прозрачной донастройкой на нетиповых данных</td></tr>
+        <tr><td>4</td><td>Кто такой Veai и что именно он делает?</td><td>Одновременно биллинговый партнёр и соисполнитель части инженерных пилотов — две разные, непротиворечивые роли</td></tr>
+        <tr><td>5</td><td>Покажите клиента, решающего именно наши бизнес-задачи (не разработку)</td><td>Именованные кейсы пока все из инженерной практики; для бизнес-сценариев — предлагаем пилот, архитектура идентична</td></tr>
+        <tr><td>6</td><td>Покажите переключение между несколькими моделями прямо сейчас</td><td>Проверяем состав моделей на демо-стенде заранее — не обещаем прямо на встрече без проверки</td></tr>
+        <tr><td>7</td><td>Откуда цифры на графике падения стоимости (100→72→55…)?</td><td>Иллюстративная модель убывания, не измеренные данные по названным клиентам</td></tr>
+        <tr><td>8</td><td>Сколько это будет стоить всего, включая инфраструктуру?</td><td>Стоимость работ фиксирована по этапу; инфраструктура, GPU и API-токены — отдельно, оплачивает клиент</td></tr>
+        <tr><td>9</td><td>Данные реально не покидают периметр компании?</td><td>Обезличенный текст уходит во внешнюю модель, реальные значения — только внутри контура</td></tr>
+        <tr><td>10</td><td>Чем это лучше, чем просто дать сотрудникам ChatGPT/Copilot?</td><td>Готовый чат-бот не видит внутренние данные и не проходит через контроль ИБ; здесь — то же самое, но с доступом к вашим данным</td></tr>
+        <tr><td>11</td><td>Сколько человек и времени нужно на поддержку?</td><td>4–6 человек из уже существующей ИТ-команды, специально нанимать никого не нужно</td></tr>
+        <tr><td>12</td><td>Платформа не сломает наши текущие системы?</td><td>Только читает данные, не пишет в исходные системы и не меняет их</td></tr>
+        <tr><td>13</td><td>Что если агент ошибается или «галлюцинирует»?</td><td>Ответ строится по найденным фрагментам источников со ссылкой — ошибка проверяема и локализуема</td></tr>
+        <tr><td>14</td><td>Нужны мощные видеокарты (GPU) с нашей стороны?</td><td>Только если разворачивать модель полностью у себя, без облака</td></tr>
+        <tr><td>15</td><td>Не окажемся ли мы привязаны к одному поставщику модели?</td><td>Единая точка входа (AI Gateway) отделяет сценарии от конкретной модели — смена не требует переписывать сценарии</td></tr>
+        <tr><td>16</td><td>Как платить, если поставщик модели зарубежный?</td><td>Через партнёра Veai — единый счёт в рублях, скидка до 40%; данные через него не идут</td></tr>
+        <tr><td>17</td><td>Как не выйти за бюджет по расходам на модели?</td><td>Лимит на сотрудника/отдел/сценарий, расходы видны в реальном времени</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="section-title" id="group-1">Вопросы, спровоцированные усиленным тезисом «выигрывают оба» (слайды 2, 5, 7, 8, 12)</h2>
+  <p class="section-note">Эти вопросы стоит держать в голове именно потому, что новая версия презентации явно и громко говорит про контроль для ИТ/ИБ — а значит, скорее спровоцирует более пристальную проверку утверждения, чем более осторожная старая формулировка.</p>
+
+  <div class="qa-card" id="q1">
+    <p class="qa-card__num">Вопрос 1</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Вы говорите про RBAC (роли) — они реально наследуются автоматически, или их кто-то настраивает вручную?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«RBAC синхронизируется с системами-источниками, но финальный состав ролей — обычно до 5 на пилоте — согласуется на старте проекта вместе с вашей ИБ. Это не скрытая ручная работа „в обход” архитектуры, а отдельный, предсказуемый по срокам этап (в пилотном ТЗ — часть этапа „Интеграция”, около недели). Мы не говорим „подключили ERP — роли появились сами” — согласование состава ролей всегда часть плана, а не сюрприз».</p>
+    </div>
+    <p class="qa-why"><b>Почему это важно проговорить именно так.</b> Формулировка в презентации («RBAC наследуется из систем-источников») звучит как полная автоматика; реальный процесс пилота описывает согласование ролей как отдельную, платную работу этапа интеграции. Если сейлз ответит «да, полностью автоматически» — а клиент на пилоте увидит согласование ролей как отдельный созвон, это подорвёт доверие ко всей презентации задним числом.</p>
+  </div>
+
+  <div class="qa-card" id="q2">
+    <p class="qa-card__num">Вопрос 2</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Слайд 7 говорит „одна политика на все сценарии” — она реально уже работает хоть для одной роли, или это только архитектурная идея?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Механизм полностью специфицирован и тестируется по количественным критериям на каждом пилоте (Граф доступа — row/column-уровень фильтрации; AI Guard — маскирование и восстановление). Точная конфигурация — какие роли, какие фильтры — согласуется и проверяется на старте вашего конкретного проекта, это часть этапа приёмки, а не то, что можно показать „вообще”, без привязки к вашим данным».</p>
+    </div>
+    <p class="qa-why"><b>Почему это важно.</b> Это прямой, честный ответ на пограничный случай: сама платформа задокументирована с этим механизмом, но нет подтверждения, что конкретная демо-конфигурация имеет заполненные политики прямо сейчас. Не утверждайте и не отрицайте состояние демо-стенда без проверки — предложите проверить и показать на пилоте.</p>
+  </div>
+
+  <div class="qa-card" id="q3">
+    <p class="qa-card__num">Вопрос 3</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Какой процент ложноотрицательных срабатываний у маскирования ПДн (AI Guard)?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«По тестовым критериям приёмки: ≥98% целевых сущностей распознаётся и маскируется в документах, ≥95% — в данных из подключённых источников (CRM, БД). Для нестандартных, „грязных” данных — опечатки, нетиповые форматы — заранее согласуется отдельный, более мягкий порог (например, ≥70%), и это официально не считается дефектом, а фиксируется как список пробелов с рекомендациями по донастройке. То есть у нас есть измеримая метрика, а не голое обещание „всё замаскируется”».</p>
+    </div>
+    <p class="qa-why"><b>Почему это важно.</b> Презентация подаёт маскирование как решённый факт без единой оговорки о точности. Комплаенс-специалист клиента почти гарантированно задаст именно этот вопрос — иметь готовую цифру сильнее, чем придумывать ответ на месте.</p>
+  </div>
+
+  <div class="qa-card" id="q4">
+    <p class="qa-card__num">Вопрос 4</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Кто такой Veai и что именно он делает?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Veai — партнёр в двух ролях одновременно: во-первых, биллинговый шлюз, через который платится в рублях за иностранные облачные модели (скидка до 40%, один счёт); во-вторых, соисполнитель части инженерных пилотов, например перформанс-ревью в МКБ и JetBrains-плагин в Сбер НПФ. Это не противоречие — просто один партнёр закрывает две разные задачи для разных клиентов».</p>
+    </div>
+    <p class="qa-why"><b>Почему это важно.</b> В двух материалах вендора (лендинг и презентация) Veai описан по-разному, без явной связки. Если клиент видел оба документа и сверил их — нужен единый, заранее согласованный ответ, а не два независимых объяснения на ходу.</p>
+  </div>
+
+  <h2 class="section-title" id="group-2">Вопросы по конкретным заявлениям презентации</h2>
+
+  <div class="qa-card" id="q5">
+    <p class="qa-card__num">Вопрос 5</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Покажите клиента, который уже делает именно то, что вы предлагаете нам — не разработку, а бизнес-сценарий».</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Честно: все пять именованных кейсов сейчас — из инженерной практики (код-ревью, тесты, анализ логов). Архитектурно бизнес-сценарии (текст-to-SQL, поиск по документам, агенты процессов) — то же самое решение, но подтверждённых именованных внедрений именно в бизнес-функциях у нас пока нет. Что у нас есть — это готовый демо-пакет и сценарии под конкретную отрасль (например, ретейл), которые можно показать вживую на вашей встрече, если ваш профиль ближе к бизнес-сценариям, чем к инженерке».</p>
+    </div>
+    <p class="qa-why"><b>Почему это важно.</b> Это единственный вопрос в списке, где честный ответ реально «не готово» — важно не притворяться, что такой клиент есть, а предложить конкретную альтернативу (демо-пакет), а не оставлять вопрос повисшим.</p>
+  </div>
+
+  <div class="qa-card" id="q6">
+    <p class="qa-card__num">Вопрос 6</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Покажите переключение между несколькими моделями (быстрая / мощная / локальная) прямо сейчас».</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Дайте нам уточнить состав моделей на демо-стенде перед вашей встречей — не хотим обещать переключение вживую, если стенд настроен на одну модель».</p>
+    </div>
+    <p class="qa-why"><b>Почему это важно.</b> Проверка обязательна до демо конкретному клиенту, а не на самой встрече — по всем собранным скриншотам чата в селекторе моделей видна ровно одна опция.</p>
+  </div>
+
+  <div class="qa-card" id="q7">
+    <p class="qa-card__num">Вопрос 7</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Откуда цифры на графике падения стоимости (100 → 72 → 55 → 43 → 36 → 31)?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Это иллюстративная модель убывания стоимости, не измеренные данные по названным пяти клиентам — мы прямо помечаем это как иллюстрацию на слайде. Сам принцип (первый сценарий дороже, потому что строится инфраструктура; дальше — дешевле) подтверждён логикой архитектуры, а не таблицей биллинга».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q8">
+    <p class="qa-card__num">Вопрос 8</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Сколько это будет стоить всего, включая инфраструктуру?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Стоимость работ по пилоту фиксирована и покрывает согласованный объём — но инфраструктура (сервера, GPU под эмбеддеры), лицензии и оплата API облачной модели в эту сумму не входят и оплачиваются отдельно. Готовы сразу проговорить полную структуру затрат, чтобы не было сюрприза на этапе коммерческого предложения».</p>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="group-3">Общие вопросы о питче</h2>
+
+  <div class="qa-card" id="q9">
+    <p class="qa-card__num">Вопрос 9</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Данные реально не покидают периметр компании?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Вызов облачной модели действительно происходит — но перед отправкой AI Guard заменяет чувствительные данные (ФИО, суммы, счета) на метки, а в ответе восстанавливает их обратно уже внутри вашего контура. То есть наружу уходит обезличенный текст, а не «вызовов вовне нет вообще». Если у вас в политике буквально написано «данные не покидают периметр» — эту формулировку стоит явно сверить с вашей ИБ, потому что по букве это не то же самое, что «чувствительные данные не покидают периметр в открытом виде», хотя по сути задача решена».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q10">
+    <p class="qa-card__num">Вопрос 10</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Чем это лучше, чем просто выдать сотрудникам доступ к ChatGPT/Copilot?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Готовый чат-бот не видит ваши внутренние документы и данные, не разграничивает доступ по ролям и не проходит через единую политику безопасности компании. Здесь — тот же принцип общения на естественном языке, но поверх ваших данных, с маскированием чувствительного и с контролем на уровне всей компании, а не отдельной вкладки в браузере у каждого сотрудника».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q11">
+    <p class="qa-card__num">Вопрос 11</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Сколько человек нужно, чтобы поддерживать платформу?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Обычно 4–6 человек из уже существующей ИТ-команды — те, кто и так занимается серверами, данными, интеграциями. Специально нанимать никого не требуется, достаточно обучения».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q12">
+    <p class="qa-card__num">Вопрос 12</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Платформа не сломает наши текущие системы?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Нет — платформа только читает данные, не пишет в исходные системы и не меняет их. Работает с отдельной копией/срезом данных, а не с продовой базой напрямую».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q13">
+    <p class="qa-card__num">Вопрос 13</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Что если агент ошибается или «галлюцинирует»?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Ответ строится на конкретных найденных фрагментах документов или данных со ссылкой на источник — можно всегда проверить, откуда взялся ответ, и локализовать ошибку, а не иметь дело с непрозрачным результатом без источника».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q14">
+    <p class="qa-card__num">Вопрос 14</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Нужны мощные видеокарты (GPU) с нашей стороны?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Только если вы хотите развернуть модель полностью у себя, без облака. Всё остальное — маршрутизация запросов, безопасность, поиск по документам — работает на обычных серверах».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q15">
+    <p class="qa-card__num">Вопрос 15</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Не окажемся ли мы привязаны к одному поставщику модели?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Единая точка входа (AI Gateway) отделяет бизнес-сценарии от конкретной модели — смена модели или добавление ещё одной не требует переписывать сценарии заново. Именно это и даёт гибкость „быстрая/мощная/локальная” модель на выбор под задачу».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q16">
+    <p class="qa-card__num">Вопрос 16</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Как платить, если поставщик модели зарубежный?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«Через партнёра Veai — единый счёт в рублях, скидка до 40%. Veai в этой части — исключительно биллинговый посредник, данные через него не идут».</p>
+    </div>
+  </div>
+
+  <div class="qa-card" id="q17">
+    <p class="qa-card__num">Вопрос 17</p>
+    <div class="qa-field qa-field--q">
+      <p class="qa-field__label">Вопрос</p>
+      <p>«Как не выйти за бюджет по расходам на модели?»</p>
+    </div>
+    <div class="qa-field qa-field--a">
+      <p class="qa-field__label">Ответ</p>
+      <p>«На каждого сотрудника, отдел или сценарий можно задать лимит расходов, и текущие траты видны в реальном времени — не нужно ждать конца месяца, чтобы понять, сколько потрачено».</p>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="howto">Как пользоваться этим листом</h2>
+  <ol class="howto">
+    <li>Перед встречей — решить, к какому профилю ближе клиент (бизнес-сценарии vs инженерные), и заранее продумать ответ на вопрос №5, а не импровизировать.</li>
+    <li>Перед демо конкретному клиенту — проверить фактический список моделей на стенде (вопрос №6) и реальную настройку Графа доступа, если ожидается вопрос №2.</li>
+    <li>Если клиент видел оба материала вендора (лендинг и презентацию) — использовать единую формулировку про Veai (вопрос №4) в обоих случаях.</li>
+    <li>Вопросы 1–4 (спровоцированные усиленным тезисом слайдов 2/5/7/8/12) стоит перечитать в первую очередь именно перед встречами, где вы делаете акцент на контроле для ИТ/ИБ — чем громче звучит этот тезис, тем выше шанс, что его проверят детальным вопросом.</li>
+  </ol>
 
 </main>
 

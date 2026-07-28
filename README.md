@@ -37,5 +37,6 @@
 ## Методика продаж
 
 - [`docs/sales-enablement/README.md`](docs/sales-enablement/README.md) — разбор загруженного лендинга для сейлз-менеджеров: структура питча, кейсы клиентов, инструкции по подготовке демо, разбор возражений; новые факты про партнёра «Veai» и уточнение комплаенс-вопроса про периметр данных.
-- [`docs/sales-enablement/slide-breakdown.md`](docs/sales-enablement/slide-breakdown.md) ([HTML](docs/sales-enablement/slide-breakdown.html)) — постраничный разбор презентации «Единый корпоративный ИИ-слой»: суть, акценты, примеры-реплики и два варианта объяснения каждого слайда клиенту («просто» / «очень просто»).
-- [`docs/sales-enablement/client-qa-prep.md`](docs/sales-enablement/client-qa-prep.md) ([HTML](docs/sales-enablement/client-qa-prep.html)) — лист для команды продаж с ожидаемыми вопросами клиента и готовыми ответами (не часть презентации).
+- [`docs/sales-enablement/slide-breakdown.md`](docs/sales-enablement/slide-breakdown.md) — постраничный разбор презентации «Единый корпоративный ИИ-слой»: суть, акценты, примеры-реплики и два варианта объяснения каждого слайда клиенту («просто» / «очень просто»).
+- [`docs/sales-enablement/client-qa-prep.md`](docs/sales-enablement/client-qa-prep.md) — лист для команды продаж с ожидаемыми вопросами клиента и готовыми ответами (не часть презентации).
+- [`docs/sales-enablement/slide-breakdown.html`](docs/sales-enablement/slide-breakdown.html) — оба материала выше объединены в одну HTML-страницу.

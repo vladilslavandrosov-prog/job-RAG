@@ -1,0 +1,11 @@
+services:
+  torgline-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: torgline_demo
+      POSTGRES_USER: torgline
+      POSTGRES_PASSWORD: torgline_demo_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro

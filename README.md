@@ -32,6 +32,7 @@
 
 - [`docs/demo-retail/scenarios.md`](docs/demo-retail/scenarios.md) — этап 1: 9 сценариев использования платформы на материале ретейла, каждый нацелен на конкретную возможность платформы (сценарий 9 — маскирование договора и доверие сотрудника к ответу ИИ, добавлен по итогам реальной встречи с заказчиком mz-arsenal).
 - [`docs/demo-retail/dataset/README.md`](docs/demo-retail/dataset/README.md) — этап 2: готовый пакет из 16 документов (Word/Excel) для загрузки в платформу и полный сценарий live-демо с ожидаемыми ответами.
+- [`docs/demo-retail/database/README.md`](docs/demo-retail/database/README.md) — этап 3: та же вымышленная сеть «ТоргЛайн» как реальная база Postgres (`init.sql` + `docker-compose.yml`) — живой источник, к которому платформа подключается напрямую, а не через загрузку файлов.
 - [`docs/demo-retail/presentation/README.md`](docs/demo-retail/presentation/README.md) — презентация (pptx) и сопроводительный документ (docx) с вопросами и ответами по всем 8 сценариям.
 - [`docs/demo-retail/admin-setup/README.md`](docs/demo-retail/admin-setup/README.md) — внутренняя инструкция администратора: загрузка документов и настройка «Графа доступа» на примере Сценария 2.
 

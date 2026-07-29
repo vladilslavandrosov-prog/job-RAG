@@ -206,7 +206,8 @@ CREATE TABLE employees (
     store_id     INT REFERENCES stores(store_id),    -- NULL, если роль не привязана к магазину
     region_id    INT REFERENCES regions(region_id),  -- NULL, если роль не привязана к региону
     phone        TEXT,                 -- sensitive: ПДн
-    email        TEXT                  -- sensitive: ПДн
+    email        TEXT,                 -- sensitive: ПДн
+    login        TEXT NOT NULL UNIQUE  -- логин для входа в платформу; НЕ маскировать — на нём строится сама привязка персон Графа доступа
 );
 
 -- =========================================================================
@@ -407,13 +408,13 @@ INSERT INTO supplier_claims (supplier_id, contract_id, claim_date, claim_type, d
      'Повторная просрочка поставки на 5 календарных дней (партия для магазинов Москвы и Санкт-Петербурга). Третье нарушение сроков за 2 квартал 2026.',
      NULL, NULL, 'Категорийному менеджеру поручено подготовить материалы для пересмотра договора (п. 4.3) и направить поставщику уведомление.');
 
-INSERT INTO employees (full_name, role, store_id, region_id, phone, email) VALUES
-    ('Соколов П.А.',   'Директор магазина',       (SELECT store_id FROM stores WHERE store_code = 'Магазин №14'), NULL, '+7 (916) 222-11-00', 'p.sokolov@torgline-demo.ru'),
-    ('Дмитриева Н.В.', 'Региональный директор',   NULL, (SELECT region_id FROM regions WHERE region_name = 'Центральный'), '+7 (916) 333-22-11', 'n.dmitrieva@torgline-demo.ru'),
-    ('Егоров К.С.',    'Финансист HQ',            NULL, NULL, '+7 (916) 444-33-22', 'k.egorov@torgline-demo.ru'),
-    ('Смирнова А.В.',  'Категорийный менеджер',   NULL, NULL, '+7 (916) 555-44-33', 'a.smirnova@torgline-demo.ru'),
-    ('Волошина Е.И.',  'Категорийный менеджер',   NULL, NULL, '+7 (916) 123-45-67', 'e.voloshina@torgline-demo.ru'),
-    ('Петрова Е.И.',   'Маркетинг-аналитик',      NULL, NULL, '+7 (916) 666-55-44', 'e.petrova@torgline-demo.ru');
+INSERT INTO employees (full_name, role, store_id, region_id, phone, email, login) VALUES
+    ('Соколов П.А.',   'Директор магазина',       (SELECT store_id FROM stores WHERE store_code = 'Магазин №14'), NULL, '+7 (916) 222-11-00', 'p.sokolov@torgline-demo.ru',   'sokolov'),
+    ('Дмитриева Н.В.', 'Региональный директор',   NULL, (SELECT region_id FROM regions WHERE region_name = 'Центральный'), '+7 (916) 333-22-11', 'n.dmitrieva@torgline-demo.ru', 'dmitrieva'),
+    ('Егоров К.С.',    'Финансист HQ',            NULL, NULL, '+7 (916) 444-33-22', 'k.egorov@torgline-demo.ru',    'egorov'),
+    ('Смирнова А.В.',  'Категорийный менеджер',   NULL, NULL, '+7 (916) 555-44-33', 'a.smirnova@torgline-demo.ru',  'smirnova'),
+    ('Волошина Е.И.',  'Категорийный менеджер',   NULL, NULL, '+7 (916) 123-45-67', 'e.voloshina@torgline-demo.ru', 'voloshina'),
+    ('Петрова Е.И.',   'Маркетинг-аналитик',      NULL, NULL, '+7 (916) 666-55-44', 'e.petrova@torgline-demo.ru',   'petrova');
 
 INSERT INTO data_sensitivity_catalog (table_name, column_name, sensitivity, note) VALUES
     ('suppliers', 'inn',               'financial', 'ИНН поставщика'),

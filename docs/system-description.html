@@ -1,0 +1,517 @@
+<title>Синапс + AI Guard — итоговое системное описание</title>
+<meta name="description" content="Архитектура, бизнес-портфель и честный список нерешённого — синтез всей базы знаний по корпоративной ИИ-платформе.">
+<style>
+  :root{
+    --bg:#F5F7F8;
+    --surface:#FFFFFF;
+    --surface-2:#EEF1F3;
+    --ink:#14181F;
+    --muted:#5B6570;
+    --faint:#8A939C;
+    --border:#E1E5EA;
+    --accent:#0E6E63;
+    --accent-ink:#0E6E63;
+    --accent-soft:#E4F0EE;
+    --ok:#1E7A4C;
+    --ok-soft:#E3F1E8;
+    --warn:#93630F;
+    --warn-soft:#FBF0DC;
+    --gap:#A8393B;
+    --gap-soft:#FBE7E7;
+    --code-bg:#EEF1F3;
+    --shadow: 0 1px 2px rgba(20,24,31,.04), 0 8px 24px rgba(20,24,31,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0B0F14;
+      --surface:#121821;
+      --surface-2:#182029;
+      --ink:#E8ECF0;
+      --muted:#93A0AC;
+      --faint:#66727D;
+      --border:#232B34;
+      --accent:#3FC4B3;
+      --accent-ink:#3FC4B3;
+      --accent-soft:#122824;
+      --ok:#4FBE7E;
+      --ok-soft:#12261B;
+      --warn:#E0AC49;
+      --warn-soft:#2A2314;
+      --gap:#E27577;
+      --gap-soft:#2A1618;
+      --code-bg:#182029;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0B0F14; --surface:#121821; --surface-2:#182029; --ink:#E8ECF0; --muted:#93A0AC; --faint:#66727D;
+    --border:#232B34; --accent:#3FC4B3; --accent-ink:#3FC4B3; --accent-soft:#122824;
+    --ok:#4FBE7E; --ok-soft:#12261B; --warn:#E0AC49; --warn-soft:#2A2314; --gap:#E27577; --gap-soft:#2A1618;
+    --code-bg:#182029; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#F5F7F8; --surface:#FFFFFF; --surface-2:#EEF1F3; --ink:#14181F; --muted:#5B6570; --faint:#8A939C;
+    --border:#E1E5EA; --accent:#0E6E63; --accent-ink:#0E6E63; --accent-soft:#E4F0EE;
+    --ok:#1E7A4C; --ok-soft:#E3F1E8; --warn:#93630F; --warn-soft:#FBF0DC; --gap:#A8393B; --gap-soft:#FBE7E7;
+    --code-bg:#EEF1F3; --shadow: 0 1px 2px rgba(20,24,31,.04), 0 8px 24px rgba(20,24,31,.05);
+  }
+
+  *{box-sizing:border-box;}
+  html{background:var(--bg);}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:Charter,"Iowan Old Style","Georgia",serif;}
+  h1,h2,h3{text-wrap:balance; color:var(--ink); font-weight:600;}
+  code, .mono, .ref, .pill, table{font-variant-numeric:tabular-nums;}
+  code, .mono{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;}
+  a{color:var(--accent-ink);}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px;}
+
+  .page{max-width:1180px; margin:0 auto; padding:0 24px;}
+  .layout{display:grid; grid-template-columns:240px minmax(0,72ch); gap:56px; align-items:start; padding:0 24px 96px;}
+  @media (max-width:920px){
+    .layout{grid-template-columns:1fr; padding:0 16px 64px;}
+    .toc{position:static !important; order:2;}
+  }
+
+  header.masthead{
+    border-bottom:1px solid var(--border);
+    padding:40px 0 32px;
+  }
+  .eyebrow{
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-ink);
+    display:flex; gap:10px; align-items:center; margin-bottom:14px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  h1.title{font-size:clamp(1.7rem,3.4vw,2.5rem); line-height:1.15; margin:0 0 12px;}
+  .dek{color:var(--muted); font-size:1.05rem; max-width:62ch; margin:0;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+  .tag{
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.74rem;
+    border:1px solid var(--border); color:var(--muted); padding:4px 10px; border-radius:999px;
+    background:var(--surface);
+  }
+
+  nav.toc{
+    position:sticky; top:24px; padding-top:40px; align-self:start;
+  }
+  nav.toc .toc-label{font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); margin-bottom:12px; display:block;}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:1px solid var(--border);}
+  nav.toc li{margin:0;}
+  nav.toc a{
+    display:block; padding:7px 0 7px 16px; margin-left:-1px; border-left:1px solid transparent;
+    color:var(--muted); text-decoration:none; font-size:.9rem; line-height:1.35;
+  }
+  nav.toc a:hover{color:var(--ink);}
+  nav.toc a .n{font-family:ui-monospace,SFMono-Regular,Consolas,monospace; color:var(--faint); margin-right:8px; font-size:.82em;}
+
+  main{padding-top:40px; min-width:0;}
+
+  .lede{font-size:1.05rem; color:var(--muted); margin:0 0 8px;}
+
+  .priority-box{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:22px 24px; margin:28px 0 40px; box-shadow:var(--shadow);
+  }
+  .priority-box h2{margin:0 0 4px; font-size:1.05rem;}
+  .priority-box > p.note{margin:0 0 16px; color:var(--muted); font-size:.92rem;}
+  .priority-list{list-style:none; margin:0; padding:0; counter-reset:pr;}
+  .priority-list li{
+    counter-increment:pr; position:relative; padding:12px 0 12px 40px; border-top:1px solid var(--border);
+  }
+  .priority-list li:first-child{border-top:none;}
+  .priority-list li::before{
+    content:counter(pr); position:absolute; left:0; top:12px;
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.82rem; color:var(--accent-ink);
+    width:24px; height:24px; border-radius:6px; background:var(--accent-soft);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .priority-list b{color:var(--ink);}
+  .priority-list .src{font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.85em; color:var(--muted);}
+
+  section{margin:56px 0;}
+  section > h2{
+    font-size:1.5rem; display:flex; align-items:baseline; gap:12px; margin:0 0 6px; scroll-margin-top:24px;
+  }
+  section > h2 .num{font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.7em; color:var(--accent-ink); font-weight:400;}
+  section > .section-dek{color:var(--muted); margin:0 0 24px; font-size:.98rem;}
+  h3{font-size:1.12rem; margin:32px 0 10px; scroll-margin-top:24px;}
+  h3 .num{font-family:ui-monospace,SFMono-Regular,Consolas,monospace; color:var(--faint); font-weight:400; font-size:.85em; margin-right:6px;}
+  p{margin:0 0 16px;}
+  ul, ol{padding-left:1.3em; margin:0 0 16px;}
+  li{margin:0 0 8px;}
+  li:last-child{margin-bottom:0;}
+  strong{color:var(--ink); font-weight:600;}
+
+  .pill{
+    display:inline-flex; align-items:center; gap:6px; font-size:.74rem; font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    padding:2px 9px; border-radius:999px; white-space:nowrap; line-height:1.6; vertical-align:middle;
+  }
+  .pill.ok{background:var(--ok-soft); color:var(--ok);}
+  .pill.warn{background:var(--warn-soft); color:var(--warn);}
+  .pill.gap{background:var(--gap-soft); color:var(--gap);}
+  .pill.neutral{background:var(--surface-2); color:var(--muted); border:1px solid var(--border);}
+
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px; margin:0 0 20px; background:var(--surface);}
+  table{width:100%; border-collapse:collapse; font-size:.92rem; min-width:480px;}
+  th, td{text-align:left; padding:11px 16px; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{color:var(--muted); font-weight:600; font-size:.78rem; letter-spacing:.03em; text-transform:uppercase; background:var(--surface-2);}
+  tr:last-child td{border-bottom:none;}
+  td code{background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.88em;}
+
+  .route{list-style:none; counter-reset:route; margin:0 0 20px; padding:0; border-left:2px solid var(--border); margin-left:15px;}
+  .route li{
+    counter-increment:route; position:relative; padding:2px 0 22px 30px;
+  }
+  .route li:last-child{padding-bottom:0;}
+  .route li::before{
+    content:counter(route); position:absolute; left:-17px; top:-1px;
+    width:32px; height:32px; border-radius:50%; background:var(--accent); color:var(--bg);
+    display:flex; align-items:center; justify-content:center; font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    font-size:.85rem; font-weight:600;
+  }
+  :root[data-theme="light"] .route li::before, .route li::before{color:#fff;}
+  @media (prefers-color-scheme: dark){ .route li::before{color:#08110F;} }
+  :root[data-theme="dark"] .route li::before{color:#08110F;}
+  .route strong{display:block; margin-bottom:2px;}
+
+  .callout{
+    border:1px solid var(--border); background:var(--surface); border-radius:10px; padding:20px 22px; margin:0 0 20px;
+  }
+  .callout.accent{border-color:var(--accent); background:var(--accent-soft);}
+  .callout h4{margin:0 0 8px; font-size:.95rem;}
+  .callout p:last-child{margin-bottom:0;}
+
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:0 0 20px;}
+  @media (max-width:640px){.split{grid-template-columns:1fr;}}
+  .split .box{border:1px solid var(--border); border-radius:10px; padding:18px 20px; background:var(--surface);}
+  .split .box h4{margin:0 0 10px; font-size:.9rem; text-transform:uppercase; letter-spacing:.03em; color:var(--muted);}
+  .split .box.hi{border-color:var(--accent);}
+  .split .box p, .split .box ul{margin-bottom:0;}
+  .split .box .big{font-family:Charter,Georgia,serif; font-size:1.4rem; color:var(--ink); margin-bottom:6px;}
+
+  .cards5{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:0 0 20px;}
+  .card{border:1px solid var(--border); border-radius:10px; padding:16px 18px; background:var(--surface);}
+  .card h4{margin:0 0 8px; font-size:.98rem; font-family:Charter,Georgia,serif;}
+  .card p{margin:0; font-size:.88rem; color:var(--muted);}
+
+  .meter{margin:8px 0 22px;}
+  .meter .bar{display:flex; height:34px; border-radius:8px; overflow:hidden; border:1px solid var(--border);}
+  .meter .seg{display:flex; align-items:center; justify-content:center; font-size:.74rem; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; color:#fff; white-space:nowrap; overflow:hidden;}
+  .meter .seg.s1{background:var(--accent);}
+  .meter .seg.s2{background:var(--muted);}
+  .meter .seg.s3{background:var(--surface-2); color:var(--muted) !important;}
+  .meter .legend{display:flex; gap:18px; margin-top:10px; flex-wrap:wrap; font-size:.82rem; color:var(--muted);}
+  .meter .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .meter .legend i{width:9px; height:9px; border-radius:2px; display:inline-block;}
+
+  blockquote{
+    margin:0 0 20px; padding:2px 0 2px 20px; border-left:3px solid var(--accent);
+    font-family:Charter,Georgia,serif; font-size:1.08rem; color:var(--ink); font-style:italic;
+  }
+
+  .verdict{
+    border:1px solid var(--accent); border-radius:14px; padding:28px 28px 26px; background:var(--accent-soft); margin:0 0 24px;
+    box-shadow:var(--shadow);
+  }
+  .verdict h4{margin:0 0 10px; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink);}
+  .verdict p.big{font-family:Charter,Georgia,serif; font-size:1.28rem; line-height:1.4; margin:0; color:var(--ink);}
+
+  .checklist{list-style:none; margin:0 0 20px; padding:0;}
+  .checklist li{
+    display:flex; gap:12px; padding:12px 0; border-top:1px solid var(--border);
+  }
+  .checklist li:first-child{border-top:none;}
+  .checklist .pill{flex:none; margin-top:2px;}
+  .checklist .body{min-width:0;}
+  .checklist .body p{margin:4px 0 0;}
+  .checklist .body strong{display:inline;}
+
+  footer{
+    border-top:1px solid var(--border); margin-top:24px; padding:32px 0 56px; color:var(--muted); font-size:.9rem;
+  }
+  footer h3{font-size:.95rem; margin:0 0 12px;}
+  footer ul{list-style:none; padding:0; margin:0;}
+  footer li{margin:0 0 8px; font-size:.9rem;}
+  footer .colophon{margin-top:28px; padding-top:20px; border-top:1px solid var(--border); font-size:.82rem; color:var(--faint);}
+
+  @media (prefers-reduced-motion: reduce){ * {scroll-behavior:auto !important;} }
+  html{scroll-behavior:smooth;}
+</style>
+
+<div class="page">
+  <header class="masthead">
+    <div class="eyebrow"><span class="dot"></span>Итоговый синтез · вся база знаний</div>
+    <h1 class="title">Синапс + AI Guard: итоговое системное описание</h1>
+    <p class="dek">Архитектура, бизнес-портфель и честный список нерешённого — собрано архитектором, аналитиком и критиком, сверено по иерархии приоритета источников.</p>
+    <div class="meta-row">
+      <span class="tag">приоритет: RFI-ответ разработчика</span>
+      <span class="tag">5 разделов</span>
+      <span class="tag">3 роли синтеза</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="toc">
+      <span class="toc-label">Содержание</span>
+      <ol>
+        <li><a href="#priority"><span class="n">·</span>Приоритет источников</a></li>
+        <li><a href="#sec1"><span class="n">01</span>Что это за система</a></li>
+        <li><a href="#sec2"><span class="n">02</span>Архитектура</a></li>
+        <li><a href="#sec3"><span class="n">03</span>Бизнес-портфель</a></li>
+        <li><a href="#sec4"><span class="n">04</span>Что не решено</a></li>
+        <li><a href="#sec5"><span class="n">05</span>Готовность продукта</a></li>
+      </ol>
+    </nav>
+
+    <main>
+      <div id="priority" class="priority-box">
+        <h2>Приоритет источников</h2>
+        <p class="note">При расхождении фактов между материалами — вот кто побеждает.</p>
+        <ol class="priority-list">
+          <li><b>RFI-ответ разработчика</b> <span class="pill ok">наивысший приоритет</span> — инженерная/архитектурная команда вендора, не продажи. При расхождении с чем угодно ещё в базе — верно то, что здесь. <span class="src">docs/rfi-responses/</span></li>
+          <li><b>Пилотное ТЗ</b> — юридическая сила для конкретного пилота, количественные критерии приёмки. <span class="src">case-03</span></li>
+          <li><b>Живые встречи</b> — дословная запись; достоверно как факт «что сказали», но сказано сейлзом/инженером на встрече, не проверено инженерной документацией. <span class="src">docs/accounts/</span></li>
+          <li><b>Презентации</b> — маркетинговый питч, самый низкий приоритет для фактической точности. <span class="src">docs/sales-enablement/</span></li>
+        </ol>
+      </div>
+
+      <section id="sec1">
+        <h2><span class="num">01</span>Что это за система</h2>
+        <p>Корпоративная платформа интеллектуальной аналитики, разворачиваемая целиком в изолированном контуре заказчика (on-premise, офлайн-поставка): каталог метаданных, конвейеры обработки данных, индексация и поиск по документам (RAG), ролевое разграничение доступа, обязательный компонент контроля обращений к языковым моделям (в клиентской терминологии — «AI Guard») и агентная подсистема.</p>
+        <p>Платформа <strong>не включает саму генеративную LLM</strong> — модель всегда внешний по отношению к платформе сервис, единственное жёсткое требование к ней — поддержка вызова инструментов (tool/function calling).</p>
+        <p>Продаётся не как единый монолит, а как <strong>портфель из пяти практик</strong>: сама платформа, AI Guard (позиционируется как отдельный продукт, технически неотделим), шлюз доступа к моделям (Veai Platform), сервис инженерного стаффинга («Внешний офис ИИ») и обучение.</p>
+      </section>
+
+      <section id="sec2">
+        <h2><span class="num">02</span>Архитектура</h2>
+        <p class="section-dek">Самая точная часть всей базы знаний — источник наивысшего приоритета.</p>
+
+        <h3><span class="num">2.1</span>Компоненты продуктового ядра</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Компонент</th><th>Что делает</th></tr></thead>
+            <tbody>
+              <tr><td>Компонент контроля обращений (AI Guard)</td><td>Обязательная часть ядра; пропускает через себя все обращения к моделям из всех каналов</td></tr>
+              <tr><td>Каталог метаданных</td><td>Аннотации полей источников (что — ПДн, какая политика) — основной механизм обезличивания структурированных данных</td></tr>
+              <tr><td>Оркестрация конвейеров данных</td><td>Подключение и обновление источников</td></tr>
+              <tr><td>Индексация и поиск по документам</td><td>Гибридный (векторный + лексический) поиск, RAG-генерация с указанием источников</td></tr>
+              <tr><td>Агентная подсистема</td><td>Сценарии на базе tool calling</td></tr>
+              <tr><td>UI</td><td>Диалоговый интерфейс, «Управление данными» / «Граф доступа», конвейер модерации «Задачи»</td></tr>
+              <tr><td>API</td><td>REST платформы; OpenAI Chat Completions-совместимый; Anthropic Messages-совместимый; MCP; Python-библиотека; LangChain — все каналы проходят те же проверки, что и UI</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Поставка тремя слоями: версионируемое продуктовое ядро (не переписывается под заказчика) → настраиваемая конфигурация контура → проектная интеграционная обвязка (источники, роли, корпус документов). Вендор прямо признаёт: «коробочного» в строгом смысле решения этого класса не бывает — разграничение доступа по определению строится на структуре конкретной организации.</p>
+
+        <h3><span class="num">2.2</span>Полный маршрут данных</h3>
+        <ol class="route">
+          <li><strong>Аутентификация</strong> Учётные данные проверяются в каталоге организации, анонимный доступ отсутствует.</li>
+          <li><strong>Разграничение доступа</strong> До какой-либо обработки ПДн определяется, к каким источникам/объектам/строкам пользователь вправе обращаться.</li>
+          <li><strong>Обнаружение ПДн — три механизма одновременно</strong> Аннотации каталога метаданных (основной для структурированных данных); свыше 250 формальных правил для типизированных идентификаторов (телефон, email, ИНН, СНИЛС, паспорт, банковские реквизиты, ОГРН, IBAN, VIN, IP, госномера — с проверкой контрольных соотношений для 6 типов против ложных срабатываний); NER для свободного текста, раздельно для русского и английского.</li>
+          <li><strong>Применение политик</strong> Замещение типизированными метками (<code>[PERSON_1]</code>, <code>[PHONE_2]</code>) с сохранением соответствия в пределах сессии, либо подавление строки целиком при превышении порога ПДн-полей (по умолчанию — три).</li>
+          <li><strong>Хранение таблицы соответствий</strong> Только внутри контура, привязана к сессии, TTL 60 минут по умолчанию, никогда не передаётся в модель; если хранилище недоступно при старте — компонент <strong>не запускается</strong>.</li>
+          <li><strong>Передача в модель</strong> Политика по поставщику: для локальной модели замещение может быть отключено, для внешней — принудительно; при недоступности механизмов контроля обращение блокируется.</li>
+          <li><strong>Обратное восстановление</strong> Подстановка по таблице соответствий той же сессии; пользователь видит в открытом виде только то, доступ к чему подтверждён на шаге 2.</li>
+          <li><strong>Журналирование</strong> Режим «только добавление»; сырые значения ПДн по умолчанию не пишутся; хранение 90 суток, настраивается.</li>
+        </ol>
+        <div class="callout accent">
+          <h4>Измеренная задержка — не точность</h4>
+          <p>Обнаружение + замещение: не более 2 мс на 95-м перцентиле. Это цифра <strong>задержки</strong>, не точности. Единственный источник цифр точности во всей базе — пилотное ТЗ: ≥98% распознавания в документах, ≥95% анонимизации данных источников, ≥70% — согласуемый порог на «грязных» данных. Это целевые критерии приёмки, а не подтверждённый измеренный результат ни в одном известном отчёте.</p>
+        </div>
+
+        <h3><span class="num">2.3</span>Ролевая модель</h3>
+        <p>Трёхуровневая: предметные области → строки (по атрибутам вроде подразделения/региона) → поля (маскирование). Ключевой архитектурный принцип: <strong>разграничение доступа применяется до обезличивания</strong> — обезличенный ответ о записи, к которой у пользователя нет доступа, всё равно является нарушением, поскольку сам факт существования записи информативен. Маскирование не подменяет контроль доступа.</p>
+
+        <h3><span class="num">2.4</span>Развёртывание и инфраструктура</h3>
+        <p>Только on-premise, офлайн-поставка образов во внутренний реестр, без обращений к внешним репозиториям в рантайме — архитектурное ограничение, не настройка. Kubernetes — для промышленной эксплуатации; Docker Compose — для пилотов и малых инсталляций, без резервирования; функциональность идентична в обоих вариантах.</p>
+        <div class="split">
+          <div class="box hi">
+            <h4>Инфраструктура платформы</h4>
+            <div class="big">8–16 vCPU</div>
+            <p>32–64 ГБ ОЗУ, 200 ГБ диска. <strong>GPU не требуется</strong> — векторизация (bge-m3/jina-code) на CPU.</p>
+          </div>
+          <div class="box">
+            <h4>Инфраструктура самой LLM</h4>
+            <div class="big">80–160 ГБ VRAM</div>
+            <p>2×NVIDIA A100-класс — только если заказчик самостоятельно хостит open-source модель.</p>
+          </div>
+        </div>
+        <p>Смешение этих двух цифр в одном коммерческом предложении — конкретный, уже зафиксированный риск.</p>
+
+        <h3><span class="num">2.5</span>Подключаемость моделей</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Модель</th><th>Статус</th></tr></thead>
+            <tbody>
+              <tr><td>GigaChat</td><td><span class="pill ok">реализовано</span></td></tr>
+              <tr><td>Qwen (локально)</td><td><span class="pill ok">реализовано</span></td></tr>
+              <tr><td>OpenAI</td><td><span class="pill ok">реализовано</span></td></tr>
+              <tr><td>Anthropic</td><td><span class="pill ok">реализовано</span></td></tr>
+              <tr><td>YandexGPT</td><td><span class="pill ok">реализовано</span></td></tr>
+              <tr><td>DeepSeek и другие через OpenAI-совместимый интерфейс</td><td><span class="pill warn">проверяется на пилоте</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Гиперконкретный каталог версий из презентации ITQ («Claude Sonnet 4.6», «GPT-5.5» и т.п.) — маркетинговая аспирация, а не подтверждённый факт; ревизия 2 презентации сама признала риск, свернув список до уровня брендов без номеров версий.</p>
+
+        <h3><span class="num">2.6</span>Явно не поддерживается</h3>
+        <ul>
+          <li><span class="pill gap">нет</span>&nbsp; OCR — документы-сканы без мультимодальной модели помечаются необработанными</li>
+          <li><span class="pill gap">нет</span>&nbsp; интеграция со сторонними DLP — вместо неё собственный автономный механизм контроля передачи ограниченных сведений</li>
+          <li><span class="pill gap">нет</span>&nbsp; Kerberos/SPNEGO</li>
+          <li><span class="pill gap">нет</span>&nbsp; контроль обхода периметра — прямо назван не функцией компонента, задача сетевой команды заказчика</li>
+        </ul>
+
+        <h3><span class="num">2.7</span>Дорожная карта</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Пункт</th><th>Срок</th></tr></thead>
+            <tbody>
+              <tr><td>Криптографическое подтверждение неизменности журнала аудита</td><td>4 кв. 2026</td></tr>
+              <tr><td>Работа через аутентифицирующий прокси-сервер</td><td>4 кв. 2026</td></tr>
+              <tr><td>Интеграция с HashiCorp Vault</td><td>1 кв. 2027</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="sec3">
+        <h2><span class="num">03</span>Бизнес-портфель</h2>
+
+        <h3><span class="num">3.1</span>Кто покупает и почему</h3>
+        <p>Три признака квалифицированной сделки: ИИ нужен как постоянная, а не разовая часть работы; важна предсказуемость поведения/стоимости/соответствия политике; есть потребность в едином ИТ/ИБ-контроле. Платформа сама честно заявляет: для одной изолированной задачи она избыточна.</p>
+
+        <h3><span class="num">3.2</span>Пять практик</h3>
+        <div class="cards5">
+          <div class="card"><h4>«Синапс»</h4><p>Сама платформа: AI Gateway, RAG с учётом прав доступа, ролевая модель, on-premise/гибрид.</p></div>
+          <div class="card"><h4>AI Guard</h4><p>Позиционируется как отдельный продукт, технически не лицензируется отдельно от платформы.</p></div>
+          <div class="card"><h4>Veai Platform</h4><p>Шлюз доступа к моделям и биллинг в рублях. Не поставщик DLP — это нативная функция платформы.</p></div>
+          <div class="card"><h4>Внешний офис ИИ</h4><p>Стаффинг/передача экспертизы, 11 ролей, 4 фазы, позиция «без вендор-локина».</p></div>
+          <div class="card"><h4>Обучение и стратсессии</h4><p>3 уровня зрелости, 7 форматов.</p></div>
+        </div>
+
+        <h3><span class="num">3.3</span>Пилотная экономика — реконциляция</h3>
+        <div class="split">
+          <div class="box hi">
+            <h4>RFI-ответ (приоритет)</h4>
+            <p>Единый пилот, <strong>6 недель</strong>: 2 источника, 2 роли, 2 коллекции документов, одна модель по выбору. Цена «по запросу». Явно исключены: инфраструктура и оплата обращений к внешней модели.</p>
+          </div>
+          <div class="box">
+            <h4>Презентация 2026</h4>
+            <p>Два отдельных пилота: AI Guard — 1 млн ₽ / 4–6 нед.; «Синапс» — 1,5 млн ₽ / 6–8 нед.</p>
+          </div>
+        </div>
+        <p>Не обязательно взаимоисключающие предложения, но одному заказчику нужно показывать одну рамку, а не обе.</p>
+
+        <h3><span class="num">3.4</span>Что реально волнует покупателей</h3>
+        <p>Единственная живая встреча в базе — discovery-звонок с mz-arsenal. Распределение содержательного времени разговора:</p>
+        <div class="meter">
+          <div class="bar">
+            <div class="seg s1" style="flex:38">Маскирование / доверие — ~38%</div>
+            <div class="seg s2" style="flex:24">Инфраструктура / GPU — ~24%</div>
+            <div class="seg s3" style="flex:38">Остальное — ~38%</div>
+          </div>
+          <div class="legend">
+            <span><i style="background:var(--accent)"></i>Доверие к маскированию — доминирующая тема</span>
+            <span><i style="background:var(--muted)"></i>Инфраструктура/GPU — вторая тема</span>
+            <span><i style="background:var(--surface-2);border:1px solid var(--border)"></i>Конкретные бизнес-кейсы — наименьшая доля</span>
+          </div>
+        </div>
+        <p>Заказчик трижды не смог сформулировать, чем будут заниматься 100 планируемых пользователей. Закрывающий сигнал — некритичная сдержанность («много вопросов остаётся»), не отказ. Подготовленный лист возражений совпал с реальным разговором слабо — лист рассчитан на презентацию, а встреча оказалась чистым discovery.</p>
+
+        <h3><span class="num">3.5</span>Разрыв доказательной базы кейсов</h3>
+        <p>Все ~10 именованных клиентов во всех версиях презентации — инструменты для разработчиков и инженерных команд (код-ревью, генерация тестов, контроль зависимостей). Ни один не демонстрирует питчуемые бизнес-персоны (ассистент руководителя, HR-рекрутер, тендерный специалист, поддержка клиентов). Рост числа кейсов в 2026 году не изменил их профиля — разрыв нерешённый.</p>
+
+        <h3><span class="num">3.6</span>Рекомендация по упаковке</h3>
+        <p>Вести продажи единой 6-недельной рамкой пилота, не двумя разнесёнными прайсами презентации; открывать сделку через <strong>AI Guard/маскирование как основной крючок</strong>, а не через бизнес-агентов. До демо, а не на нём — фиксировать конкретный список сценариев по отделам, иметь честную формулировку по метрике точности маскирования, проактивно проговаривать исключение инфраструктуры/API из цены пилота.</p>
+      </section>
+
+      <section id="sec4">
+        <h2><span class="num">04</span>Что до сих пор не решено</h2>
+
+        <h3><span class="num">4.1</span>Реально закрыто документом разработчика</h3>
+        <ul class="checklist">
+          <li><span class="pill ok">закрыто</span><div class="body"><strong>DLP — функция платформы, не Veai.</strong></div></li>
+          <li><span class="pill ok">закрыто</span><div class="body"><strong>Инфраструктура/GPU/API исключены из цены пилота</strong> — явно, в самом документе.</div></li>
+          <li><span class="pill ok">закрыто</span><div class="body"><strong>Разделены два сайзинга</strong> — платформа и LLM.</div></li>
+          <li><span class="pill ok">закрыто</span><div class="body"><strong>Обход периметра прямо назван не-функцией</strong> компонента.</div></li>
+        </ul>
+
+        <h3><span class="num">4.2</span>Не решено даже с учётом нового документа</h3>
+        <ul class="checklist">
+          <li><span class="pill gap">открыто</span><div class="body"><strong>Точность/полнота маскирования.</strong><p>Есть только задержка. Единственные цифры accuracy — целевые критерии приёмки (≥98%/≥95%/≥70%), не измеренный результат. Закрывается только фактическим отчётом.</p></div></li>
+          <li><span class="pill gap">открыто</span><div class="body"><strong>Разрыв кейс-стади vs питчуемые сценарии.</strong><p>Документ разработчика вообще не касается именованных клиентов.</p></div></li>
+          <li><span class="pill gap">открыто</span><div class="body"><strong>Селектор моделей — «работает» ≠ «показан».</strong><p>По всем собранным скриншотам видна ровно одна опция.</p></div></li>
+          <li><span class="pill gap">открыто</span><div class="body"><strong>Граф доступа для реальной персоны.</strong><p>Архитектура реализована в коде; настроены ли маски хоть для одной реальной персоны — не подтверждено.</p></div></li>
+        </ul>
+
+        <h3><span class="num">4.3</span>Непроверенные утверждения — сверить перед клиентом</h3>
+        <ul class="checklist">
+          <li><span class="pill warn">сверить</span><div class="body">Штрафы по ст. 13.11 КоАП РФ (3–15 млн ₽, до 3% выручки повторно) — нужна юридическая сверка.</div></li>
+          <li><span class="pill warn">сверить</span><div class="body">Номер реестра отечественного ПО №33199 — нужна сверка с реестром.</div></li>
+          <li><span class="pill warn">сверить</span><div class="body">Любые оставшиеся гиперточные версии сторонних моделей, если всплывут заново.</div></li>
+        </ul>
+        <div class="callout">
+          <h4>Методологическое правило для всей базы</h4>
+          <p>Ревьюер уже однажды самонадеянно заявил, что конкретная версия модели — фактическая ошибка, и был вынужден откатить это после контрпримера. Правило: помечать как непроверенное, никогда не утверждать «неверно» без независимого подтверждения.</p>
+        </div>
+
+        <h3><span class="num">4.4</span>Один вопрос, который вскроет реальный пробел</h3>
+        <blockquote>«Покажите фактически измеренный процент точности/полноты обнаружения ПДн по результатам реального прогона, а не целевой порог из ТЗ.»</blockquote>
+        <p>Даже самый строгий документ базы отвечает на это только цифрой задержки, оставляя главный вопрос безопасности без единого подтверждённого числа во всей базе знаний.</p>
+      </section>
+
+      <section id="sec5">
+        <h2><span class="num">05</span>Готовность продукта</h2>
+        <p class="section-dek">Не отдельный синтез агентов — прямой вывод по итогам всей работы над этой базой.</p>
+
+        <div class="verdict">
+          <h4>Общий вердикт</h4>
+          <p class="big">Не сырой продукт и не vaporware, но неравномерно созревшая система: инфраструктурный слой (безопасность, доступ, развёртывание) заметно зрелее, чем слой доказательств бизнес-ценности (кейсы, метрики, живая демонстрация).</p>
+        </div>
+
+        <div class="split">
+          <div class="box">
+            <h4>Что реально готово</h4>
+            <ul>
+              <li>Архитектура маскирования и доступа продумана на уровне инженерных решений: fail-closed, доступ проверяется до маскирования, отказ от избыточных заявлений — признаки зрелой инженерной культуры.</li>
+              <li>Реальная эксплуатационная история — Мосбиржа, МКБ, ВТБ и другие не выдуманные логотипы, а содержательные внедрения.</li>
+              <li>Готовность к организационной самокоррекции — две ревизии презентации точечно исправили именно то, что было раскритиковано.</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h4>Где готовности не хватает</h4>
+            <ul>
+              <li>Ключевая метрика — точность обнаружения ПДн — нигде не подтверждена числом, только задержка.</li>
+              <li>Бизнес-сценарии существуют только на слайдах — ни один именованный клиент не подтверждает питчуемые персоны.</li>
+              <li>Разрыв между «закодировано» и «продемонстрировано» — мультимодельность, реальные маски Графа доступа.</li>
+              <li>Коммерческая упаковка ещё не устаканилась — два разных пилотных предложения одновременно.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict">
+          <h4>Итог одной фразой</h4>
+          <p class="big">Фундамент — уровня production-ready корпоративного вендора. Надстройка (доказанная бизнес-ценность конкретных сценариев, подтверждённые метрики точности) — всё ещё «архитектурно готово, эмпирически не подтверждено». Для закрытого контура и compliance-чувствительного покупателя это рабочее сочетание для старта пилота — но не повод пропускать пилот и переходить сразу в прод.</p>
+        </div>
+      </section>
+
+      <footer>
+        <h3>См. также</h3>
+        <ul>
+          <li><code>docs/rfi-responses/README.md</code> — документ разработчика, основной источник архитектурного раздела</li>
+          <li><code>docs/analysis/case-03-pilot-tz-ai-guard.md</code> — единственный источник цифр точности маскирования</li>
+          <li><code>docs/analysis/case-04</code> и <code>case-05</code> — полная история находок по презентациям, версия за версией</li>
+          <li><code>docs/accounts/mz-arsenal/</code> — единственная живая встреча в базе</li>
+          <li><code>docs/platform/otkrytye-voprosy.md</code> — реестр открытых вопросов по наблюдаемому поведению платформы</li>
+        </ul>
+        <p class="colophon">Синтез — job-RAG · итоговая выкладка на основе docs/system-description.md</p>
+      </footer>
+    </main>
+  </div>
+</div>

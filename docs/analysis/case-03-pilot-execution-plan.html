@@ -162,7 +162,7 @@
     <div class="parties">
       <div><span class="p-label">Подрядчик</span><span class="p-value">ООО «АйТиКью Про» · А.Б. Шаронин</span></div>
       <div><span class="p-label">Заказчик</span><span class="p-value">АО «Инвестиционная компания Д8» · В.В. Грицук</span></div>
-      <div><span class="p-label">Срок</span><span class="p-value">6 недель, 30.07–09.09.2026</span></div>
+      <div><span class="p-label">Срок</span><span class="p-value">6 недель, 31.07–10.09.2026</span></div>
     </div>
   </header>
 
@@ -170,7 +170,7 @@
     <nav class="toc">
       <span class="toc-label">Содержание</span>
       <ol>
-        <li><a href="#s0">Статус и находка</a></li>
+        <li><a href="#s0">Статус</a></li>
         <li><a href="#s1">Чек-лист готовности</a></li>
         <li><a href="#s2">Календарь по этапам</a></li>
         <li><a href="#s3">Матрица сценариев</a></li>
@@ -187,12 +187,8 @@
           <p>6 недель отсчитываются от момента, когда заказчик фактически предоставил инфраструктуру и доступы к КХД/ESB — это прямо оговорено в «Организационных условиях» ТЗ, а не с даты подписания договора (15.07.2026).</p>
         </div>
         <div class="callout">
-          <h4>Статус на сейчас <span class="pill gap" style="margin-left:6px">сдвиг 3 дня</span></h4>
-          <p>Номинальное начало работ — <strong>27.07.2026</strong>, но фактический доступ к КХД/ESB получен только <strong>30.07.2026</strong>. По условиям ТЗ официальный День 1 — 30.07, а не 27.07. Весь календарь ниже пересчитан от этой даты; 27–29.07 засчитаны как неблокированная подготовка (провижининг серверов, обсуждение ролей), но не входят в 6-недельный счётчик.</p>
-        </div>
-        <div class="callout">
-          <h4>Находка при сборке плана</h4>
-          <p>Полный текст ТЗ содержит 17 тестовых сценариев с количественными критериями приёмки — заметно больше и детальнее, чем в кратком резюме разбора ТЗ и чем отражено в общем системном описании базы (там утверждается, что цифры точности «нигде не встречаются в клиентских материалах» — для этого конкретного пилота это не так).</p>
+          <h4>Статус на сейчас <span class="pill gap" style="margin-left:6px">сдвиг 4 дня</span></h4>
+          <p>Номинальное начало работ — <strong>27.07.2026</strong>, но фактический доступ к КХД/ESB получен только <strong>31.07.2026</strong>. По условиям ТЗ официальный День 1 — 31.07, а не 27.07. Весь календарь ниже пересчитан от этой даты; 27–30.07 засчитаны как неблокированная подготовка (провижининг серверов, обсуждение ролей), но не входят в 6-недельный счётчик.</p>
         </div>
       </section>
 
@@ -201,10 +197,10 @@
         <p class="section-dek">12 пунктов, закрыть до Дня 1.</p>
         <ul class="checklist">
           <li><span class="pill neutral">1</span><div class="body"><strong>Сервер под СУБД</strong> <span class="meta">≈8 vCPU, 64 ГБ RAM, 200+ ГБ SSD + 1×GPU 32–40 ГБ для эмбеддеров — Д8, блокирует Этап 1</span></div></li>
-          <li><span class="pill neutral">2</span><div class="body"><strong>Сервер под платформу</strong> <span class="meta">≈8 vCPU, 64 ГБ RAM, 200 ГБ SSD — Д8, блокирует Этап 1</span></div></li>
-          <li><span class="pill neutral">3</span><div class="body"><strong>Контейнерная среда</strong> <span class="meta">Docker/Kubernetes, Linux — Д8, блокирует Этап 1</span></div></li>
-          <li><span class="pill ok">4 ✓</span><div class="body"><strong>Доступ к КХД</strong> <span class="meta">read-only, согласованные схемы/таблицы — Д8, получено 30.07.2026, старт часов пилота</span></div></li>
-          <li><span class="pill ok">5 ✓</span><div class="body"><strong>Доступ к ESB-шине</strong> <span class="meta">+ спецификация интерфейса + учётные данные — Д8, получено 30.07.2026</span></div></li>
+          <li><span class="pill ok">2 ✓</span><div class="body"><strong>Сервер под платформу</strong> <span class="meta">≈8 vCPU, 64 ГБ RAM, 200 ГБ SSD — Д8, выполнено</span></div></li>
+          <li><span class="pill ok">3 ✓</span><div class="body"><strong>Контейнерная среда</strong> <span class="meta">Docker/Kubernetes, Linux — Д8, установлено</span></div></li>
+          <li><span class="pill ok">4 ✓</span><div class="body"><strong>Доступ к КХД</strong> <span class="meta">read-only, согласованные схемы/таблицы — Д8, получено 31.07.2026, старт часов пилота</span></div></li>
+          <li><span class="pill ok">5 ✓</span><div class="body"><strong>Доступ к ESB-шине</strong> <span class="meta">+ спецификация интерфейса + учётные данные — Д8, получено 31.07.2026</span></div></li>
           <li><span class="pill neutral">6</span><div class="body"><strong>Доступ к MCP-серверу</strong> <span class="meta">+ спецификация + учётные данные — Д8, блокирует Этап 2</span></div></li>
           <li><span class="pill warn">7</span><div class="body"><strong>Доступ к «RAG-компании»</strong> <span class="meta">Д8, блокирует Этап 2 — см. открытый вопрос</span></div></li>
           <li><span class="pill neutral">8</span><div class="body"><strong>Состав и права 2–5 ролей</strong> <span class="meta">согласовать заранее — совместно, блокирует Этап 1</span></div></li>
@@ -222,10 +218,10 @@
       <section id="s2">
         <h2>Календарь по этапам</h2>
         <div class="timeline">
-          <div class="stage done"><span class="s-n">01</span><span class="s-t">Подготовка</span><span class="s-d">30.07–05.08 · выполнено</span></div>
-          <div class="stage now"><span class="s-n">02</span><span class="s-t">Интеграция</span><span class="s-d">06.08–19.08 · следующий</span></div>
-          <div class="stage"><span class="s-n">03</span><span class="s-t">Опытная эксплуатация</span><span class="s-d">20.08–02.09</span></div>
-          <div class="stage"><span class="s-n">04</span><span class="s-t">Оценка и отчёт</span><span class="s-d">03.09–09.09</span></div>
+          <div class="stage done"><span class="s-n">01</span><span class="s-t">Подготовка</span><span class="s-d">31.07–06.08 · выполнено</span></div>
+          <div class="stage now"><span class="s-n">02</span><span class="s-t">Интеграция</span><span class="s-d">07.08–20.08 · следующий</span></div>
+          <div class="stage"><span class="s-n">03</span><span class="s-t">Опытная эксплуатация</span><span class="s-d">21.08–03.09</span></div>
+          <div class="stage"><span class="s-n">04</span><span class="s-t">Оценка и отчёт</span><span class="s-d">04.09–10.09</span></div>
         </div>
 
         <h3>Этап 1 — Подготовка и развёртывание · ВЫПОЛНЕНО</h3>
@@ -233,8 +229,8 @@
           <table>
             <thead><tr><th>Подзадача</th><th>Ответственный</th><th>Статус</th></tr></thead>
             <tbody>
-              <tr><td>Открытие доступа к КХД</td><td>Д8 — тех. контакт</td><td><span class="pill ok">✓ 30.07</span></td></tr>
-              <tr><td>Открытие доступа к ESB</td><td>Д8 — тех. контакт</td><td><span class="pill ok">✓ 30.07</span></td></tr>
+              <tr><td>Открытие доступа к КХД</td><td>Д8 — тех. контакт</td><td><span class="pill ok">✓ 31.07</span></td></tr>
+              <tr><td>Открытие доступа к ESB</td><td>Д8 — тех. контакт</td><td><span class="pill ok">✓ 31.07</span></td></tr>
               <tr><td>Выделение инфраструктуры</td><td>Д8</td><td><span class="pill ok">✓</span></td></tr>
               <tr><td>Согласование состава/прав ролей (верхнеуровнево)</td><td>Совместно</td><td><span class="pill ok">✓</span></td></tr>
               <tr><td>Согласование состава 2 RAG-коллекций</td><td>Совместно</td><td><span class="pill ok">✓</span></td></tr>
@@ -245,7 +241,7 @@
         </div>
 
         <h3>Этап 2 — Интеграция · 7 дорожек, параллельно</h3>
-        <p>Дни считаются рабочими от начала этапа (06.08 = День 1).</p>
+        <p>Дни считаются рабочими от начала этапа (07.08 = День 1).</p>
         <div class="tracks">
           <div class="track">
             <h4><span class="letter">A</span>КХД</h4>
@@ -309,11 +305,11 @@
         <h3>Этап 3 — Опытная эксплуатация · по неделям</h3>
         <div class="split">
           <div class="box">
-            <h4>Неделя 4 (20–26.08) — основная волна</h4>
+            <h4>Неделя 4 (21–27.08) — основная волна</h4>
             <p>Анонимизатор 2,3,4,5,6 + Платформа 3,4,5,7 — пилотная группа Д8 выполняет сценарии, АйТиКью Про фиксирует результаты.</p>
           </div>
           <div class="box">
-            <h4>Неделя 5 (27.08–02.09) — остаток + обучение</h4>
+            <h4>Неделя 5 (28.08–03.09) — остаток + обучение</h4>
             <p>Анонимизатор 7,8,9 + Платформа 6,8; обучение пилотной группы (1 сессия) — АйТиКью Про проводит; сбор обратной связи — совместно.</p>
           </div>
         </div>
@@ -387,7 +383,7 @@
         <h2>Риски, специфичные для этого пилота</h2>
         <div class="opp p1">
           <h4>Уже реализовался: сдвиг старта на 3 дня</h4>
-          <p>27.07 номинально vs 30.07 фактически. Сам по себе не критичен, но при повторении на Этапе 2 (MCP/RAG-компании — тоже вне контроля подрядчика) накопленный сдвиг может утащить Этап 4 за пределы 03.09 — стоит проговорить с Д8 заранее.</p>
+          <p>27.07 номинально vs 31.07 фактически. Сам по себе не критичен, но при повторении на Этапе 2 (MCP/RAG-компании — тоже вне контроля подрядчика) накопленный сдвиг может утащить Этап 4 за пределы 04.09 — стоит проговорить с Д8 заранее.</p>
         </div>
         <div class="opp">
           <h4>Зависимость от ESB-шины Д8</h4>

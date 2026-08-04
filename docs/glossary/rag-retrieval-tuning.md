@@ -42,5 +42,5 @@
 ## См. также
 
 - [`rag-document-ingestion.md`](rag-document-ingestion.md) — базовый процесс индексации и retrieval, на который эти механизмы надстраиваются.
-- [`../platform/kalibrovka-politiki-poiska.md`](../platform/kalibrovka-politiki-poiska.md) — как это выглядит и настраивается в реальном интерфейсе платформы «Синапс.Инсайт».
+- [`../platform/kalibrovka-politiki-poiska.md`](../platform/kalibrovka-politiki-poiska.md) — как это выглядит и настраивается в реальном интерфейсе платформы.
 - [`../analysis/case-01-d8-014-brief.md`](../analysis/case-01-d8-014-brief.md) — реальный случай сбоя, не покрытого репланом (ошибка выполнения SQL, а не «не нашлось»).

@@ -98,6 +98,7 @@
   .timeline .stage:last-child{border-right:none;}
   .timeline .stage.done{background:var(--ok-soft);}
   .timeline .stage.now{background:var(--accent-soft);}
+  .timeline .stage.warn{background:var(--warn-soft);}
   .timeline .s-n{font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.72rem; color:var(--faint); display:block; margin-bottom:4px;}
   .timeline .s-t{font-weight:600; font-size:.88rem; display:block; margin-bottom:4px;}
   .timeline .s-d{font-size:.74rem; color:var(--muted); font-family:ui-monospace,SFMono-Regular,Consolas,monospace;}
@@ -187,8 +188,8 @@
           <p>6 недель отсчитываются от момента, когда заказчик фактически предоставил инфраструктуру и доступы к КХД/ESB — это прямо оговорено в «Организационных условиях» ТЗ, а не с даты подписания договора (15.07.2026).</p>
         </div>
         <div class="callout">
-          <h4>Статус на сейчас <span class="pill gap" style="margin-left:6px">сдвиг 4 дня</span></h4>
-          <p>Номинальное начало работ — <strong>27.07.2026</strong>, но фактический доступ к КХД/ESB получен только <strong>31.07.2026</strong>. По условиям ТЗ официальный День 1 — 31.07, а не 27.07. Весь календарь ниже пересчитан от этой даты; 27–30.07 засчитаны как неблокированная подготовка (провижининг серверов, обсуждение ролей), но не входят в 6-недельный счётчик.</p>
+          <h4>Статус на сейчас (04.08.2026) <span class="pill warn" style="margin-left:6px">просрочка растёт</span></h4>
+          <p>Номинальное начало работ — <strong>27.07.2026</strong>; целевая дата доступа к КХД/ESB — <strong>31.07.2026</strong>, но по факту доступ <strong>до сих пор не предоставлен</strong> — просрочка уже 4 дня к цели и 8 дней к номинальному старту. Официальный День 1 по ТЗ ещё не наступил — как только доступ откроется, календарь ниже пересчитывается от новой фактической даты. 27.07–04.08 засчитаны как неблокированная подготовка (провижининг серверов, обсуждение ролей), но не входят в 6-недельный счётчик.</p>
         </div>
       </section>
 
@@ -199,8 +200,8 @@
           <li><span class="pill neutral">1</span><div class="body"><strong>Сервер под СУБД</strong> <span class="meta">≈8 vCPU, 64 ГБ RAM, 200+ ГБ SSD + 1×GPU 32–40 ГБ для эмбеддеров — Д8, блокирует Этап 1</span></div></li>
           <li><span class="pill ok">2 ✓</span><div class="body"><strong>Сервер под платформу</strong> <span class="meta">≈8 vCPU, 64 ГБ RAM, 200 ГБ SSD — Д8, выполнено</span></div></li>
           <li><span class="pill ok">3 ✓</span><div class="body"><strong>Контейнерная среда</strong> <span class="meta">Docker/Kubernetes, Linux — Д8, установлено</span></div></li>
-          <li><span class="pill ok">4 ✓</span><div class="body"><strong>Доступ к КХД</strong> <span class="meta">read-only, согласованные схемы/таблицы — Д8, получено 31.07.2026, старт часов пилота</span></div></li>
-          <li><span class="pill ok">5 ✓</span><div class="body"><strong>Доступ к ESB-шине</strong> <span class="meta">+ спецификация интерфейса + учётные данные — Д8, получено 31.07.2026</span></div></li>
+          <li><span class="pill warn">4</span><div class="body"><strong>Доступ к КХД</strong> <span class="meta">read-only, согласованные схемы/таблицы — Д8, не получено, просрочено (цель была 31.07.2026), блокирует старт часов пилота</span></div></li>
+          <li><span class="pill warn">5</span><div class="body"><strong>Доступ к ESB-шине</strong> <span class="meta">+ спецификация интерфейса + учётные данные — Д8, не получено, просрочено (цель была 31.07.2026)</span></div></li>
           <li><span class="pill neutral">6</span><div class="body"><strong>Доступ к MCP-серверу</strong> <span class="meta">+ спецификация + учётные данные — Д8, блокирует Этап 2</span></div></li>
           <li><span class="pill warn">7</span><div class="body"><strong>Доступ к «RAG-компании»</strong> <span class="meta">Д8, блокирует Этап 2 — см. открытый вопрос</span></div></li>
           <li><span class="pill neutral">8</span><div class="body"><strong>Состав и права 2–5 ролей</strong> <span class="meta">согласовать заранее — совместно, блокирует Этап 1</span></div></li>
@@ -218,19 +219,19 @@
       <section id="s2">
         <h2>Календарь по этапам</h2>
         <div class="timeline">
-          <div class="stage done"><span class="s-n">01</span><span class="s-t">Подготовка</span><span class="s-d">31.07–06.08 · выполнено</span></div>
+          <div class="stage warn"><span class="s-n">01</span><span class="s-t">Подготовка</span><span class="s-d">31.07–06.08 · заблокирован</span></div>
           <div class="stage now"><span class="s-n">02</span><span class="s-t">Интеграция</span><span class="s-d">07.08–20.08 · следующий</span></div>
           <div class="stage"><span class="s-n">03</span><span class="s-t">Опытная эксплуатация</span><span class="s-d">21.08–03.09</span></div>
           <div class="stage"><span class="s-n">04</span><span class="s-t">Оценка и отчёт</span><span class="s-d">04.09–10.09</span></div>
         </div>
 
-        <h3>Этап 1 — Подготовка и развёртывание · ВЫПОЛНЕНО</h3>
+        <h3>Этап 1 — Подготовка и развёртывание · В ПРОЦЕССЕ, ЗАБЛОКИРОВАН</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Подзадача</th><th>Ответственный</th><th>Статус</th></tr></thead>
             <tbody>
-              <tr><td>Открытие доступа к КХД</td><td>Д8 — тех. контакт</td><td><span class="pill ok">✓ 31.07</span></td></tr>
-              <tr><td>Открытие доступа к ESB</td><td>Д8 — тех. контакт</td><td><span class="pill ok">✓ 31.07</span></td></tr>
+              <tr><td>Открытие доступа к КХД</td><td>Д8 — тех. контакт</td><td><span class="pill warn">не получено</span></td></tr>
+              <tr><td>Открытие доступа к ESB</td><td>Д8 — тех. контакт</td><td><span class="pill warn">не получено</span></td></tr>
               <tr><td>Выделение инфраструктуры</td><td>Д8</td><td><span class="pill ok">✓</span></td></tr>
               <tr><td>Согласование состава/прав ролей (верхнеуровнево)</td><td>Совместно</td><td><span class="pill ok">✓</span></td></tr>
               <tr><td>Согласование состава 2 RAG-коллекций</td><td>Совместно</td><td><span class="pill ok">✓</span></td></tr>
@@ -382,8 +383,8 @@
       <section id="s5">
         <h2>Риски, специфичные для этого пилота</h2>
         <div class="opp p1">
-          <h4>Уже реализовался: сдвиг старта на 3 дня</h4>
-          <p>27.07 номинально vs 31.07 фактически. Сам по себе не критичен, но при повторении на Этапе 2 (MCP/RAG-компании — тоже вне контроля подрядчика) накопленный сдвиг может утащить Этап 4 за пределы 04.09 — стоит проговорить с Д8 заранее.</p>
+          <h4>Активный риск: доступ к КХД/ESB просрочен и продолжает сдвигаться</h4>
+          <p>27.07 номинально, 31.07 — целевая дата доступа; на 04.08 доступ так и не предоставлен (просрочка растёт день за днём). Пока не эскалировано, но если доступ не откроется в ближайшие дни — стоит поднять вопрос с Д8 напрямую. При повторении такой задержки на Этапе 2 (MCP/RAG-компании — тоже вне контроля подрядчика) накопленный сдвиг может утащить Этап 4 за пределы 04.09 — стоит проговорить с Д8 заранее.</p>
         </div>
         <div class="opp">
           <h4>Зависимость от ESB-шины Д8</h4>

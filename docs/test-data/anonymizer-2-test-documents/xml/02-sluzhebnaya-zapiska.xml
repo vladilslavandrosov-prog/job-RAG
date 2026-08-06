@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ТЕСТОВЫЕ ДАННЫЕ. Синтетические ФИО и реквизиты созданы для проверки сценария «Анонимизатор-2»
+     (обезличивание в документе) из Приложения №1 к Договору № ИКД-1-PRO. Реальные лица не задействованы. -->
+<sluzhebnayaZapiska date="2026-08-03">
+  <from>специалист по работе с клиентами</from>
+  <to>руководитель отдела комплаенса</to>
+  <subjectClient>
+    <fullName>Кузнецова Анна Викторовна</fullName>
+    <inn>500212349087</inn>
+    <snils>234-567-890 11</snils>
+    <phone>+7 903 765-43-21</phone>
+    <email>a.kuznetsova.test@example.ru</email>
+    <registrationAddress>г. Санкт-Петербург, пр. Примерный, д. 8, кв. 44</registrationAddress>
+  </subjectClient>
+  <operation>
+    <contractNumber>ИКД-1-PRO-TEST-002</contractNumber>
+    <accountNumber>40817810900007654321</accountNumber>
+    <amountRub>1250000</amountRub>
+    <status>проведена в штатном режиме</status>
+  </operation>
+</sluzhebnayaZapiska>

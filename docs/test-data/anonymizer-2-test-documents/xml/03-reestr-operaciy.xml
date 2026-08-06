@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ТЕСТОВЫЕ ДАННЫЕ. Синтетические ФИО и реквизиты созданы для проверки сценария «Анонимизатор-2»
+     (обезличивание в документе) из Приложения №1 к Договору № ИКД-1-PRO. Реальные лица не задействованы. -->
+<reestrOperaciy periodFrom="2026-08-01" periodTo="2026-08-05">
+  <operation>
+    <fullName>Воронцов Дмитрий Сергеевич</fullName>
+    <inn>631087654321</inn>
+    <snils>345-678-901 22</snils>
+    <phone>+7 925 555-11-22</phone>
+    <contractNumber>ИКД-1-PRO-TEST-003</contractNumber>
+    <accountNumber>40817810900001112233</accountNumber>
+    <amountRub>458000</amountRub>
+  </operation>
+  <operation>
+    <fullName>Смирнов Пётр Александрович</fullName>
+    <inn>770912345678</inn>
+    <snils>123-456-789 00</snils>
+    <phone>+7 916 123-45-67</phone>
+    <contractNumber>ИКД-1-PRO-TEST-001</contractNumber>
+    <accountNumber>40817810900001234567</accountNumber>
+    <amountRub>1250000</amountRub>
+  </operation>
+  <operation>
+    <fullName>Кузнецова Анна Викторовна</fullName>
+    <inn>500212349087</inn>
+    <snils>234-567-890 11</snils>
+    <phone>+7 903 765-43-21</phone>
+    <contractNumber>ИКД-1-PRO-TEST-002</contractNumber>
+    <accountNumber>40817810900007654321</accountNumber>
+    <amountRub>875500</amountRub>
+  </operation>
+  <operation>
+    <fullName>Егорова Мария Николаевна</fullName>
+    <inn>780345678912</inn>
+    <snils>456-789-012 33</snils>
+    <phone>+7 981 222-33-44</phone>
+    <contractNumber>ИКД-1-PRO-TEST-004</contractNumber>
+    <accountNumber>40817810900009998877</accountNumber>
+    <amountRub>2340000</amountRub>
+  </operation>
+  <operation>
+    <fullName>Павлов Игорь Олегович</fullName>
+    <inn>165098765432</inn>
+    <snils>567-890-123 44</snils>
+    <phone>+7 917 444-55-66</phone>
+    <contractNumber>ИКД-1-PRO-TEST-005</contractNumber>
+    <accountNumber>40817810900005556677</accountNumber>
+    <amountRub>612300</amountRub>
+  </operation>
+  <totalRub>5535800</totalRub>
+</reestrOperaciy>

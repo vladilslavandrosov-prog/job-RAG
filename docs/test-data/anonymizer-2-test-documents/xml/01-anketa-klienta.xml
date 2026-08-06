@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ТЕСТОВЫЕ ДАННЫЕ. Синтетические ФИО и реквизиты созданы для проверки сценария «Анонимизатор-2»
+     (обезличивание в документе) из Приложения №1 к Договору № ИКД-1-PRO. Реальные лица не задействованы. -->
+<anketaKlienta dateFilled="2026-08-05">
+  <personalData>
+    <fullName>Смирнов Пётр Александрович</fullName>
+    <dateOfBirth>1985-03-14</dateOfBirth>
+    <passport series="4510" number="123456" issuedBy="ОВД района Хамовники г. Москвы" issueDate="2010-05-22"/>
+    <inn>770912345678</inn>
+    <snils>123-456-789 00</snils>
+  </personalData>
+  <contactData>
+    <registrationAddress>г. Москва, ул. Тестовая, д. 12, кв. 5</registrationAddress>
+    <phone>+7 916 123-45-67</phone>
+    <email>p.smirnov.test@example.ru</email>
+  </contactData>
+  <contractData>
+    <contractNumber>ИКД-1-PRO-TEST-001</contractNumber>
+    <accountNumber>40817810900001234567</accountNumber>
+    <bankCard>4111 1111 1111 1234</bankCard>
+  </contractData>
+</anketaKlienta>

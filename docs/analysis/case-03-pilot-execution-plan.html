@@ -195,20 +195,19 @@
 
       <section id="s1">
         <h2>Чек-лист готовности к старту</h2>
-        <p class="section-dek">12 пунктов, закрыть до Дня 1.</p>
+        <p class="section-dek">11 пунктов, закрыть до Дня 1.</p>
         <ul class="checklist">
-          <li><span class="pill warn">1</span><div class="body"><strong>Сервер под СУБД</strong> <span class="meta">≈8 vCPU, 64 ГБ RAM, 200+ ГБ SSD + 1×GPU 32–40 ГБ для эмбеддеров — Д8, статус не известен, блокирует Этап 1</span></div></li>
-          <li><span class="pill ok">2 ✓</span><div class="body"><strong>Сервер под платформу</strong> <span class="meta">≈8 vCPU, 64 ГБ RAM, 200 ГБ SSD — Д8, выполнено (по факту 32 ГБ RAM, 100 ГБ SSD — докраивали место по ходу установки)</span></div></li>
-          <li><span class="pill ok">3 ✓</span><div class="body"><strong>Контейнерная среда</strong> <span class="meta">Docker/Kubernetes, Linux — Д8, установлено (Docker развернули собственными силами)</span></div></li>
-          <li><span class="pill warn">4</span><div class="body"><strong>Доступ к КХД</strong> <span class="meta">read-only, согласованные схемы/таблицы — Д8, статус не известен (не получено), цель была 31.07.2026, блокирует старт часов пилота</span></div></li>
-          <li><span class="pill warn">5</span><div class="body"><strong>Доступ к ESB-шине</strong> <span class="meta">+ спецификация интерфейса + учётные данные — Д8, статус не известен (нет доступа), цель была 31.07.2026</span></div></li>
-          <li><span class="pill neutral">6</span><div class="body"><strong>Доступ к MCP-серверу</strong> <span class="meta">+ спецификация + учётные данные — Д8, блокирует Этап 2</span></div></li>
-          <li><span class="pill warn">7</span><div class="body"><strong>Доступ к «RAG-компании»</strong> <span class="meta">Д8, блокирует Этап 2 — см. открытый вопрос</span></div></li>
-          <li><span class="pill neutral">8</span><div class="body"><strong>Состав и права 2–5 ролей</strong> <span class="meta">согласовать заранее — совместно, блокирует Этап 1</span></div></li>
-          <li><span class="pill neutral">9</span><div class="body"><strong>Состав 2 RAG-коллекций документов</strong> <span class="meta">совместно, блокирует Этап 1–2</span></div></li>
-          <li><span class="pill neutral">10</span><div class="body"><strong>Пилотная группа</strong> <span class="meta">до 20 пользователей на 2 роли — Д8, блокирует Этап 3</span></div></li>
-          <li><span class="pill neutral">11</span><div class="body"><strong>Доступ/API-ключ к облачной LLM</strong> <span class="meta">Д8, блокирует Этап 2 — ключи получены 04.08.2026, подключение к AI Guard ещё не выполнено</span></div></li>
-          <li><span class="pill neutral">12</span><div class="body"><strong>Технический контакт со стороны Д8</strong> <span class="meta">все этапы</span></div></li>
+          <li><span class="pill ok">1 ✓</span><div class="body"><strong>Сервер под СУБД + платформу</strong> <span class="meta">≈8 vCPU, 32 ГБ RAM, 100 ГБ SSD, GPU для эмбеддеров — Д8, выполнено. По факту один общий сервер, а не два раздельных, как в ТЗ</span></div></li>
+          <li><span class="pill ok">2 ✓</span><div class="body"><strong>Контейнерная среда</strong> <span class="meta">Docker/Kubernetes, Linux — Д8, установлено (Docker развернули собственными силами)</span></div></li>
+          <li><span class="pill warn">3</span><div class="body"><strong>Доступ к КХД</strong> <span class="meta">read-only, согласованные схемы/таблицы — Д8, статус не известен (не получено), цель была 31.07.2026, блокирует старт часов пилота</span></div></li>
+          <li><span class="pill warn">4</span><div class="body"><strong>Доступ к ESB-шине</strong> <span class="meta">+ спецификация интерфейса + учётные данные — Д8, статус не известен (нет доступа), цель была 31.07.2026</span></div></li>
+          <li><span class="pill neutral">5</span><div class="body"><strong>Доступ к MCP-серверу</strong> <span class="meta">+ спецификация + учётные данные — Д8, блокирует Этап 2</span></div></li>
+          <li><span class="pill warn">6</span><div class="body"><strong>Доступ к «RAG-компании»</strong> <span class="meta">Д8, блокирует Этап 2 — см. открытый вопрос</span></div></li>
+          <li><span class="pill neutral">7</span><div class="body"><strong>Состав и права 2–5 ролей</strong> <span class="meta">согласовать заранее — совместно, блокирует Этап 1</span></div></li>
+          <li><span class="pill ok">8 ✓</span><div class="body"><strong>Состав 2 RAG-коллекций документов</strong> <span class="meta">совместно — загрузка документов идёт, поиск по коллекциям уже работает</span></div></li>
+          <li><span class="pill neutral">9</span><div class="body"><strong>Пилотная группа</strong> <span class="meta">до 20 пользователей на 2 роли — Д8, блокирует Этап 3</span></div></li>
+          <li><span class="pill neutral">10</span><div class="body"><strong>Доступ/API-ключ к облачной LLM</strong> <span class="meta">Д8, блокирует Этап 2 — ключи получены 04.08.2026, подключение к AI Guard ещё не выполнено</span></div></li>
+          <li><span class="pill neutral">11</span><div class="body"><strong>Технический контакт со стороны Д8</strong> <span class="meta">все этапы</span></div></li>
         </ul>
         <div class="callout">
           <h4>Открытый вопрос, не закрытый ТЗ</h4>
@@ -232,9 +231,10 @@
             <tbody>
               <tr><td>Открытие доступа к КХД</td><td>Д8 — тех. контакт</td><td><span class="pill warn">не получено</span></td></tr>
               <tr><td>Открытие доступа к ESB</td><td>Д8 — тех. контакт</td><td><span class="pill warn">нет доступа</span></td></tr>
-              <tr><td>Выделение инфраструктуры</td><td>Д8</td><td><span class="pill warn">частично — сервер под СУБД/GPU не подтверждён</span></td></tr>
+              <tr><td>Выделение инфраструктуры (сервер под СУБД+платформу, GPU, контейнерная среда)</td><td>Д8</td><td><span class="pill ok">✓ подтверждено — один общий сервер вместо двух по ТЗ</span></td></tr>
               <tr><td>Согласование состава/прав ролей (верхнеуровнево)</td><td>Совместно</td><td><span class="pill ok">✓</span></td></tr>
               <tr><td>Согласование состава 2 RAG-коллекций</td><td>Совместно</td><td><span class="pill ok">✓</span></td></tr>
+              <tr><td>Загрузка документов в RAG-коллекции</td><td>АйТиКью Про</td><td><span class="pill ok">✓ идёт, поиск уже работает</span></td></tr>
               <tr><td>Установка и базовая настройка платформы</td><td>АйТиКью Про</td><td><span class="pill ok">✓</span></td></tr>
               <tr><td>Пробный запуск</td><td>АйТиКью Про</td><td><span class="pill ok">✓ подтверждено</span></td></tr>
             </tbody>
@@ -282,10 +282,10 @@
             </ol>
           </div>
           <div class="track support">
-            <h4><span class="letter">F</span>RAG-корпус <span class="pill neutral">зависит от E</span></h4>
+            <h4><span class="letter">F</span>RAG-корпус <span class="pill ok">загрузка идёт</span></h4>
             <ol>
-              <li>Загрузка 2 согласованных коллекций<span class="owner"><span class="who">Д8</span> предоставляет, <span class="who">АйТиКью Про</span> загружает · дни 5–7</span></li>
-              <li>Индексация с учётом разграничения доступа<span class="owner"><span class="who">АйТиКью Про</span> · дни 7–9</span></li>
+              <li>Загрузка 2 согласованных коллекций <span class="pill ok" style="margin-left:4px">✓ идёт</span><span class="owner"><span class="who">Д8</span> предоставляет, <span class="who">АйТиКью Про</span> загружает · стартовало раньше графика, ещё на Этапе 1</span></li>
+              <li>Индексация с учётом разграничения доступа <span class="pill ok" style="margin-left:4px">✓ поиск работает</span><span class="owner"><span class="who">АйТиКью Про</span></span></li>
               <li>Проверка поиска и разграничения между ролями<span class="owner"><span class="who">Совместно</span> · конец нед. 3</span></li>
             </ol>
           </div>

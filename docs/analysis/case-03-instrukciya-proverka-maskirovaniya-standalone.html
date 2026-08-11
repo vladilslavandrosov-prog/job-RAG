@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Инструкция: проверка маскирования ПДн в чате · Д8</title>
+<meta name="description" content="Как отправить тестовый документ и проверить маскирование ПДн через Журнал LLM-сессий — пошаговая инструкция для пилотной группы, сценарий «Анонимизатор-2».">
+<style>
+  :root{
+    --bg:#F5F7F8; --surface:#FFFFFF; --surface-2:#EEF1F3; --ink:#14181F; --muted:#5B6570; --faint:#8A939C;
+    --border:#E1E5EA; --accent:#0E6E63; --accent-soft:#E4F0EE;
+    --ok:#1E7A4C; --ok-soft:#E3F1E8; --warn:#93630F; --warn-soft:#FBF0DC; --gap:#A8393B; --gap-soft:#FBE7E7;
+    --code-bg:#EEF1F3; --shadow: 0 1px 2px rgba(20,24,31,.04), 0 8px 24px rgba(20,24,31,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0B0F14; --surface:#121821; --surface-2:#182029; --ink:#E8ECF0; --muted:#93A0AC; --faint:#66727D;
+      --border:#232B34; --accent:#3FC4B3; --accent-soft:#122824;
+      --ok:#4FBE7E; --ok-soft:#12261B; --warn:#E0AC49; --warn-soft:#2A2314; --gap:#E27577; --gap-soft:#2A1618;
+      --code-bg:#182029; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0B0F14; --surface:#121821; --surface-2:#182029; --ink:#E8ECF0; --muted:#93A0AC; --faint:#66727D;
+    --border:#232B34; --accent:#3FC4B3; --accent-soft:#122824;
+    --ok:#4FBE7E; --ok-soft:#12261B; --warn:#E0AC49; --warn-soft:#2A2314; --gap:#E27577; --gap-soft:#2A1618;
+    --code-bg:#182029; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#F5F7F8; --surface:#FFFFFF; --surface-2:#EEF1F3; --ink:#14181F; --muted:#5B6570; --faint:#8A939C;
+    --border:#E1E5EA; --accent:#0E6E63; --accent-soft:#E4F0EE;
+    --ok:#1E7A4C; --ok-soft:#E3F1E8; --warn:#93630F; --warn-soft:#FBF0DC; --gap:#A8393B; --gap-soft:#FBE7E7;
+    --code-bg:#EEF1F3; --shadow: 0 1px 2px rgba(20,24,31,.04), 0 8px 24px rgba(20,24,31,.05);
+  }
+
+  *{box-sizing:border-box;}
+  html{background:var(--bg);}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:Charter,"Iowan Old Style","Georgia",serif;}
+  h1,h2,h3{text-wrap:balance; color:var(--ink); font-weight:600;}
+  code, .mono, .pill{font-variant-numeric:tabular-nums;}
+  code, .mono{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;}
+  a{color:var(--accent);}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px;}
+
+  .page{max-width:1180px; margin:0 auto; padding:0 24px;}
+  .layout{display:grid; grid-template-columns:230px minmax(0,74ch); gap:56px; align-items:start; padding:0 24px 96px;}
+  @media (max-width:920px){
+    .layout{grid-template-columns:1fr; padding:0 16px 64px;}
+    .toc{position:static !important; order:2;}
+  }
+
+  header.masthead{border-bottom:1px solid var(--border); padding:40px 0 28px;}
+  .eyebrow{
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.76rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--accent); display:flex; gap:10px; align-items:center; margin-bottom:14px; flex-wrap:wrap;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  h1.title{font-size:clamp(1.5rem,3vw,2.2rem); line-height:1.18; margin:0 0 10px;}
+  .dek{color:var(--muted); font-size:1.02rem; max-width:64ch; margin:0;}
+  .parties{display:flex; gap:28px; flex-wrap:wrap; margin-top:20px; font-size:.86rem;}
+  .parties .p-label{color:var(--faint); text-transform:uppercase; letter-spacing:.04em; font-size:.72rem; display:block; margin-bottom:3px;}
+  .parties .p-value{color:var(--ink); font-weight:600;}
+
+  nav.toc{position:sticky; top:24px; padding-top:40px;}
+  nav.toc .toc-label{font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); margin-bottom:12px; display:block;}
+  nav.toc ol{list-style:none; margin:0; padding:0; border-left:1px solid var(--border);}
+  nav.toc a{display:block; padding:6px 0 6px 16px; margin-left:-1px; color:var(--muted); text-decoration:none; font-size:.87rem; line-height:1.3;}
+  nav.toc a:hover{color:var(--ink);}
+
+  main{padding-top:40px; min-width:0;}
+  section{margin:52px 0;}
+  section > h2{font-size:1.4rem; margin:0 0 6px; scroll-margin-top:24px;}
+  section > .section-dek{color:var(--muted); margin:0 0 22px; font-size:.96rem;}
+  h3{font-size:1.06rem; margin:30px 0 10px; scroll-margin-top:24px;}
+  p{margin:0 0 15px;}
+  ul, ol{padding-left:1.25em; margin:0 0 15px;}
+  li{margin:0 0 7px;}
+  strong{color:var(--ink); font-weight:600;}
+
+  .pill{
+    display:inline-flex; align-items:center; gap:5px; font-size:.72rem; font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    padding:2px 9px; border-radius:999px; white-space:nowrap; line-height:1.6;
+  }
+  .pill.ok{background:var(--ok-soft); color:var(--ok);}
+  .pill.warn{background:var(--warn-soft); color:var(--warn);}
+  .pill.gap{background:var(--gap-soft); color:var(--gap);}
+  .pill.neutral{background:var(--surface-2); color:var(--muted); border:1px solid var(--border);}
+  .pill.accent{background:var(--accent-soft); color:var(--accent);}
+
+  .callout{border:1px solid var(--border); background:var(--surface); border-radius:10px; padding:18px 22px; margin:0 0 18px;}
+  .callout.accent{border-color:var(--accent); background:var(--accent-soft);}
+  .callout h4{margin:0 0 8px; font-size:.9rem;}
+  .callout p:last-child{margin-bottom:0;}
+
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px; margin:0 0 20px; background:var(--surface);}
+  table{width:100%; border-collapse:collapse; font-size:.88rem; min-width:460px;}
+  th, td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{color:var(--muted); font-weight:600; font-size:.74rem; letter-spacing:.03em; text-transform:uppercase; background:var(--surface-2);}
+  tr:last-child td{border-bottom:none;}
+
+  .steps{list-style:none; margin:0 0 20px; padding:0; counter-reset:step;}
+  .steps li{display:flex; gap:14px; padding:12px 0; border-top:1px solid var(--border); align-items:flex-start; counter-increment:step;}
+  .steps li:first-child{border-top:none;}
+  .steps li::before{
+    content:counter(step); flex:none; width:24px; height:24px; border-radius:6px; background:var(--accent-soft); color:var(--accent);
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.78rem; font-weight:600;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .steps li .body{font-size:.93rem;}
+  .steps li .body code{background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.85em;}
+
+  .subgroup{margin:0 0 26px;}
+  .subgroup > .label{
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 10px; display:block;
+  }
+
+  /* highlighted worked example */
+  .example{
+    border:1.5px solid var(--accent); border-radius:14px; background:var(--surface); padding:26px 26px 22px;
+    margin:0 0 24px; box-shadow:var(--shadow);
+  }
+  .example .ex-eyebrow{
+    display:inline-flex; align-items:center; gap:7px; background:var(--accent); color:var(--bg); font-weight:600;
+    font-size:.72rem; letter-spacing:.04em; text-transform:uppercase; padding:4px 11px; border-radius:999px; margin-bottom:14px;
+  }
+  .example h3{margin:0 0 6px; font-size:1.15rem;}
+  .example .ex-meta{color:var(--muted); font-size:.86rem; margin:0 0 18px;}
+  .ex-summary{display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin:0 0 18px; padding:14px 16px; background:var(--surface-2); border-radius:10px;}
+  .ex-summary .total{font-family:Charter,Georgia,serif; font-size:1.6rem; font-weight:600; color:var(--ink); line-height:1;}
+  .ex-summary .total-label{color:var(--muted); font-size:.76rem; display:block; margin-top:2px;}
+  .ex-summary .badges{display:flex; flex-wrap:wrap; gap:6px; flex:1;}
+
+  .diff{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:0 0 20px;}
+  @media (max-width:680px){.diff{grid-template-columns:1fr;}}
+  .diff .col{border-radius:10px; padding:14px 16px; font-size:.83rem; line-height:1.7;}
+  .diff .col.original{background:var(--gap-soft); border:1px solid color-mix(in srgb, var(--gap) 30%, transparent);}
+  .diff .col.anon{background:var(--ok-soft); border:1px solid color-mix(in srgb, var(--ok) 30%, transparent);}
+  .diff .col h4{margin:0 0 10px; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; font-family:ui-monospace,SFMono-Regular,Consolas,monospace;}
+  .diff .col.original h4{color:var(--gap);}
+  .diff .col.anon h4{color:var(--ok);}
+  .diff .col pre{margin:0; white-space:pre-wrap; word-break:break-word; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.79rem; color:var(--ink);}
+  .diff .col.anon pre .tok{color:var(--ok); font-weight:600;}
+
+  .mapping-table td:first-child, .mapping-table th:first-child{font-family:ui-monospace,SFMono-Regular,Consolas,monospace; white-space:nowrap;}
+  .mapping-table .flag{color:var(--warn); font-weight:600; font-size:.78rem;}
+
+  footer{border-top:1px solid var(--border); margin-top:24px; padding:30px 0 56px; color:var(--muted); font-size:.88rem;}
+  footer ul{list-style:none; padding:0; margin:0;}
+  footer li{margin:0 0 8px;}
+  footer .colophon{margin-top:24px; padding-top:18px; border-top:1px solid var(--border); font-size:.8rem; color:var(--faint);}
+
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="eyebrow"><span class="dot"></span>case-03</div>
+    <h1 class="title">Инструкция: как проверить маскирование ПДн в чате</h1>
+    <p class="dek">Для участников пилотной группы, проверяющих сценарий «Анонимизатор-2» (обезличивание в документе). Пошагово: что отправить, где смотреть результат, что считать успехом.</p>
+    <div class="parties">
+      <div><span class="p-label">Сценарий</span><span class="p-value">Анонимизатор-2</span></div>
+      <div><span class="p-label">Проверка через</span><span class="p-value">Журнал LLM-сессий</span></div>
+      <div><span class="p-label">Данные</span><span class="p-value">полностью синтетические</span></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="toc">
+      <span class="toc-label">Содержание</span>
+      <ol>
+        <li><a href="#s0">Что вы делаете</a></li>
+        <li><a href="#s1">Документы</a></li>
+        <li><a href="#s2">Процедура</a></li>
+        <li><a href="#example">Первый кейс</a></li>
+        <li><a href="#s3">Все 20 типов</a></li>
+        <li><a href="#s4">Что считается проблемой</a></li>
+        <li><a href="#s5">Если что-то не так</a></li>
+      </ol>
+    </nav>
+
+    <main>
+      <section id="s0">
+        <h2>Что вы делаете</h2>
+        <div class="callout accent">
+          <p>Вы загружаете тестовый документ в чат платформы. Система должна <strong>заменить персональные данные из документа на метки</strong> (например <code>[PERSON_1]</code>, <code>[INN_1]</code>) ещё до того, как что-либо уходит в модель. Проверка того, что и как замаскировалось, делается <strong>не по ответу чата</strong>, а отдельно — в <strong>«Журнале LLM-сессий»</strong>, где по каждой сессии видно и оригинал, и анонимизированную версию, и построчную расшифровку меток.</p>
+        </div>
+        <p>Данные во всех тестовых документах — <strong>синтетические</strong>, реальные клиенты Д8 не задействованы. Можно свободно экспериментировать.</p>
+      </section>
+
+      <section id="s1">
+        <h2>Откуда взять документы</h2>
+        <p>Возьмите тестовые документы из любого удобного источника.</p>
+      </section>
+
+      <section id="s2">
+        <h2>Пошаговая процедура</h2>
+        <p class="section-dek">На каждый тестовый документ.</p>
+        <p>Тестирование проводится под учётной записью: email <code>adm_user@d8.invest</code>, имя <code>adm_user1</code>. Пароль будет выслан дополнительно.</p>
+
+        <div class="subgroup">
+          <span class="label">А · Отправить документ</span>
+          <ol class="steps">
+            <li><div class="body">Откройте платформу и нажмите <strong>«+ Новый чат»</strong>.</div></li>
+            <li><div class="body">В поле <strong>МОДЕЛЬ</strong> выберите модель с пометкой <code>ollama ext</code> (например <code>qwen3.5:35b · ollama ext</code>) — именно она используется в проверке маскирования.</div></li>
+            <li><div class="body">В поле <strong>АГЕНТ</strong> выберите нужного агента (например «Синапс.Инсайт — Closed-book RAG (системный)»).</div></li>
+            <li><div class="body">Перетащите один тестовый файл в окно чата (drag-and-drop) и отправьте запрос — формулировка не важна, например «Опиши содержимое документа».</div></li>
+            <li><div class="body">Дождитесь ответа. Если «Обдумывание» идёт заметно дольше обычного (по нашим замерам — свыше ~20 секунд, иногда доходило до 1–2 минут) — это отдельная известная проблема производительности бэкенда, не связанная с маскированием как таковым. Зафиксируйте время в комментарии к результату теста.</div></li>
+          </ol>
+        </div>
+
+        <div class="subgroup">
+          <span class="label">Б · Проверить результат в Журнале LLM</span>
+          <ol class="steps">
+            <li><div class="body">В левом меню платформы нажмите <strong>«Администрирование»</strong> — откроется раздел с отдельным верхним меню. В нём выберите <strong>«Рабочее место ИБ» → «Журнал LLM-сессий»</strong>.</div></li>
+            <li><div class="body">Найдите свою сессию (по времени отправки или по названию чата) и откройте её.</div></li>
+            <li><div class="body">Наверху страницы сессии — сводка: <strong>«Всего PII-spans»</strong> и разбивка по типам с количеством.</div></li>
+            <li><div class="body">Ниже, в блоке <strong>Turns</strong>, — сам запрос в двух колонках: <strong>«Оригинал»</strong> (что реально было в документе) и <strong>«Анонимизировано»</strong> (что реально ушло в модель). Сравните их визуально.</div></li>
+            <li><div class="body">Ещё ниже — <strong>«Маппинги»</strong>: построчный список каждой метки и что она реально означает. Это самый точный способ проверки.</div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="example">
+        <div class="example">
+          <span class="ex-eyebrow">Первый кейс тестирования · базовый сценарий</span>
+          <h3>Анкета клиента — реальный прогон</h3>
+          <p class="ex-meta">Документ <code>01-anketa-klienta.txt</code> · сессия <code>de7879e7…</code> · провайдер openai · модель ollama ext</p>
+
+          <div class="ex-summary">
+            <div><span class="total">10</span><span class="total-label">Всего PII-spans</span></div>
+            <div class="badges">
+              <span class="pill accent">EMAIL: 1</span>
+              <span class="pill accent">SNILS: 1</span>
+              <span class="pill accent">INN: 1</span>
+              <span class="pill accent">PHONE: 1</span>
+              <span class="pill accent">FULL_NAME: 1</span>
+              <span class="pill accent">PASSPORT: 1</span>
+              <span class="pill accent">DOB: 1</span>
+              <span class="pill warn">PERSON: 1</span>
+              <span class="pill accent">ADDRESS: 2</span>
+            </div>
+          </div>
+
+          <div class="diff">
+            <div class="col original">
+              <h4>Оригинал</h4>
+              <pre>Начало документа:
+АНКЕТА КЛИЕНТА
+АО «Инвестиционная компания Д8»
+
+Дата заполнения: 05.08.2026
+
+1. Персональные данные
+ФИО: Смирнов Пётр Александрович
+Дата рождения: 14.03.1985
+Паспорт: серия 4510 № 123456, выдан
+ОВД района Хамовники г. Москвы, 22.05.2010
+ИНН: 770912345678</pre>
+            </div>
+            <div class="col anon">
+              <h4>Анонимизировано</h4>
+              <pre>Начало документа:
+АНКЕТА КЛИЕНТА
+АО «Инвестиционная компания Д8»
+
+Дата заполнения: 05.08.2026
+
+1. Персональные данные
+ФИО: <span class="tok">[FULL_NAME_1]</span>
+<span class="tok">[DOB_1]</span>
+Паспорт: <span class="tok">[PASSPORT_1]</span>, выдан
+ОВД района <span class="tok">[ADDRESS_2]</span>. Москвы, 22.05.2010
+ИНН: <span class="tok">[INN_1]</span></pre>
+            </div>
+          </div>
+
+          <div class="table-wrap mapping-table">
+            <table>
+              <thead><tr><th>Метка</th><th>Реальное значение</th><th>Тип</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>[FULL_NAME_1]</td><td>Смирнов Пётр Александрович</td><td>FULL_NAME</td><td></td></tr>
+                <tr><td>[INN_1]</td><td>770912345678</td><td>INN</td><td></td></tr>
+                <tr><td>[PHONE_1]</td><td>+7 916 123-45-67</td><td>PHONE</td><td></td></tr>
+                <tr><td>[SNILS_1]</td><td>039-421-199 54</td><td>SNILS</td><td></td></tr>
+                <tr><td>[PERSON_1]</td><td>Номер Ответ</td><td>PERSON</td><td><span class="flag">⚠ ложное срабатывание</span></td></tr>
+                <tr><td>[ADDRESS_1]</td><td>г. Москва, ул. Тестовая, д. 12, кв. 5</td><td>ADDRESS</td><td></td></tr>
+                <tr><td>[DOB_1]</td><td>Дата рождения: 14.03.1985</td><td>DOB</td><td></td></tr>
+                <tr><td>[EMAIL_1]</td><td>p.smirnov.test@example.ru</td><td>EMAIL</td><td></td></tr>
+                <tr><td>[PASSPORT_1]</td><td>серия 4510 № 123456</td><td>PASSPORT</td><td></td></tr>
+                <tr><td>[ADDRESS_2]</td><td>Хамовники г.</td><td>ADDRESS</td><td><span class="flag">⚠ обрезанный спан</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin:0; font-size:.84rem; color:var(--muted);">Из 10 найденных спанов 8 — корректные полные совпадения. <code>[PERSON_1]</code> — ложное срабатывание (замаскирован не человек). <code>[ADDRESS_2]</code> — обрезанный спан: «место выдачи паспорта» (ОВД района Хамовники г. Москвы) замаскировано только частично, фрагментом «Хамовники г.». Оба — примеры находок для трекера, не показатель провала теста.</p>
+        </div>
+      </section>
+
+      <section id="s3">
+        <h2>Полный справочник: 20 встроенных типов</h2>
+        <p class="section-dek">Не только то, что есть в наших тестовых документах — пригодится и при проверке на любых других файлах. В тестовом наборе реально встречаются 9 из 20 (отмечены).</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Что это</th><th>Метка</th></tr></thead>
+            <tbody>
+              <tr><td>ФИО / лицо <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[PERSON_N]</td></tr>
+              <tr><td>Организация</td><td>[ORG_N]</td></tr>
+              <tr><td>Геолокация</td><td>[LOC_N]</td></tr>
+              <tr><td>Телефон <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[PHONE_N]</td></tr>
+              <tr><td>Email <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[EMAIL_N]</td></tr>
+              <tr><td>ИНН <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[INN_N]</td></tr>
+              <tr><td>ОГРН / ОГРНИП</td><td>[OGRN_N]</td></tr>
+              <tr><td>Международный счёт (IBAN)</td><td>[IBAN_N]</td></tr>
+              <tr><td>СНИЛС <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[SNILS_N]</td></tr>
+              <tr><td>Паспорт РФ <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[PASSPORT_N]</td></tr>
+              <tr><td>Банковская карта <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[BANK_CARD_N]</td></tr>
+              <tr><td>Банковский счёт РФ <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[BANK_ACCOUNT_N]</td></tr>
+              <tr><td>Токен сессии / JWT</td><td>[SESSION_TOKEN_N]</td></tr>
+              <tr><td>Логин (username)</td><td>[USERNAME_N]</td></tr>
+              <tr><td>ФИО по ключу («ФИО:», «name=»)</td><td>[FULL_NAME_N]</td></tr>
+              <tr><td>Дата рождения</td><td>[DOB_N]</td></tr>
+              <tr><td>Адрес РФ <span class="pill ok" style="margin-left:6px">в наборе</span></td><td>[ADDRESS_N]</td></tr>
+              <tr><td>IP-адрес</td><td>[IP_N]</td></tr>
+              <tr><td>Госномер автомобиля РФ</td><td>[PLATE_N]</td></tr>
+              <tr><td>Неклассифицированные ПДн</td><td>[UNKNOWN_N]</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>N</strong> — порядковый номер внутри типа в рамках одной сессии: разные ФИО получают разные метки (<code>[PERSON_1]</code>, <code>[PERSON_2]</code>), одинаковое значение дважды — одну и ту же метку.</p>
+      </section>
+
+      <section id="s4">
+        <h2>Что считается проблемой</h2>
+        <p class="section-dek">Нужно зафиксировать как находку.</p>
+        <ul>
+          <li>В колонке «Анонимизировано» видно <strong>настоящее</strong> значение — не заменённое на метку.</li>
+          <li>В «Маппингах» метка ведёт не к тому значению, или перепутана между разными людьми (особенно на «Реестре операций» — там 5 разных клиентов).</li>
+          <li><strong>Ложное срабатывание</strong> — метка стоит там, где ПДн на самом деле нет (см. пример выше, <code>[PERSON_1]</code>).</li>
+          <li><strong>Обрезанный/неполный спан</strong> — в метку попал только фрагмент значения (см. пример выше, <code>[ADDRESS_2]</code>).</li>
+          <li>Ответ пришёл с ошибкой (500, таймаут, «сервис недоступен») — фиксируется отдельно от вопроса маскирования.</li>
+        </ul>
+      </section>
+
+      <section id="s5">
+        <h2>Если что-то пошло не так</h2>
+        <p>Зафиксируйте утечку, перепутанные метки или ошибки в трекере с максимумом деталей (файл, формат, что именно увидели) и сообщите техническому контакту — не пытайтесь диагностировать причину самостоятельно, это задача команды сопровождения.</p>
+      </section>
+
+      <footer>
+        <div class="colophon">case-03 · инструкция для пилотной группы</div>
+      </footer>
+    </main>
+  </div>
+</div>
+</body>
+</html>

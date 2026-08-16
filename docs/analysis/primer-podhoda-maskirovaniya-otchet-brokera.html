@@ -4,93 +4,272 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Пример маскирования: Отчёт брокера · Д8</title>
-<meta name="description" content="Пример маскирования отчёта брокера: исходный документ, отклонённый первый вариант, рабочая схема, применение и остаточный риск.">
+<meta name="description" content="Как маскируется самый распространённый документ (Отчёт брокера) — на реальном примере: исходный документ, отклонённый простой вариант, рабочая схема и как это применяется на практике.">
 <style>
   :root{
-    --bg:#F5F7F8; --surface:#FFFFFF; --ink:#1A1A1A; --muted:#555555; --border:#CCCCCC;
+    --bg:#F5F7F8; --surface:#FFFFFF; --surface-2:#EEF1F3; --ink:#14181F; --muted:#5B6570; --faint:#8A939C;
+    --border:#E1E5EA; --accent:#0E6E63; --accent-soft:#E4F0EE;
+    --ok:#1E7A4C; --ok-soft:#E3F1E8; --warn:#93630F; --warn-soft:#FBF0DC; --gap:#A8393B; --gap-soft:#FBE7E7;
+    --code-bg:#EEF1F3; --shadow: 0 1px 2px rgba(20,24,31,.04), 0 8px 24px rgba(20,24,31,.05);
   }
   @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){ --bg:#14181F; --surface:#1B212B; --ink:#E8ECF0; --muted:#A3ACB8; --border:#3A4250; }
+    :root:not([data-theme="light"]){
+      --bg:#0B0F14; --surface:#121821; --surface-2:#182029; --ink:#E8ECF0; --muted:#93A0AC; --faint:#66727D;
+      --border:#232B34; --accent:#3FC4B3; --accent-soft:#122824;
+      --ok:#4FBE7E; --ok-soft:#12261B; --warn:#E0AC49; --warn-soft:#2A2314; --gap:#E27577; --gap-soft:#2A1618;
+      --code-bg:#182029; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
   }
-  :root[data-theme="dark"]{ --bg:#14181F; --surface:#1B212B; --ink:#E8ECF0; --muted:#A3ACB8; --border:#3A4250; }
-  :root[data-theme="light"]{ --bg:#F5F7F8; --surface:#FFFFFF; --ink:#1A1A1A; --muted:#555555; --border:#CCCCCC; }
+  :root[data-theme="dark"]{
+    --bg:#0B0F14; --surface:#121821; --surface-2:#182029; --ink:#E8ECF0; --muted:#93A0AC; --faint:#66727D;
+    --border:#232B34; --accent:#3FC4B3; --accent-soft:#122824;
+    --ok:#4FBE7E; --ok-soft:#12261B; --warn:#E0AC49; --warn-soft:#2A2314; --gap:#E27577; --gap-soft:#2A1618;
+    --code-bg:#182029; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#F5F7F8; --surface:#FFFFFF; --surface-2:#EEF1F3; --ink:#14181F; --muted:#5B6570; --faint:#8A939C;
+    --border:#E1E5EA; --accent:#0E6E63; --accent-soft:#E4F0EE;
+    --ok:#1E7A4C; --ok-soft:#E3F1E8; --warn:#93630F; --warn-soft:#FBF0DC; --gap:#A8393B; --gap-soft:#FBE7E7;
+    --code-bg:#EEF1F3; --shadow: 0 1px 2px rgba(20,24,31,.04), 0 8px 24px rgba(20,24,31,.05);
+  }
 
   *{box-sizing:border-box;}
   html{background:var(--bg);}
   body{
     margin:0; background:var(--bg); color:var(--ink);
-    font-family:Arial,Helvetica,sans-serif; font-size:16px; line-height:1.65;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
   }
-  .page{max-width:760px; margin:0 auto; padding:56px 24px 96px;}
-  h1{font-size:1.55rem; margin:0 0 6px; font-weight:700;}
-  .subtitle{color:var(--muted); font-size:.95rem; margin:0 0 34px;}
-  h2{font-size:1.12rem; margin:34px 0 10px; font-weight:700; border-bottom:1px solid var(--border); padding-bottom:6px;}
-  p{margin:0 0 14px; max-width:70ch;}
-  table{width:100%; border-collapse:collapse; margin:8px 0 18px; font-size:.92rem;}
-  th, td{text-align:left; padding:9px 12px; border:1px solid var(--border); vertical-align:top;}
-  th{font-weight:700; background:transparent;}
-  td:first-child, th:first-child{width:34%; font-weight:700;}
-  ol{margin:0 0 14px; padding-left:1.3em;}
-  li{margin:0 0 8px;}
-  footer{margin-top:48px; padding-top:16px; border-top:1px solid var(--border); color:var(--muted); font-size:.82rem;}
+  h1,h2,h3,.serif{font-family:Charter,"Iowan Old Style","Georgia",serif;}
+  h1,h2,h3{text-wrap:balance; color:var(--ink); font-weight:600;}
+  code, .mono{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;}
+  a{color:var(--accent);}
+
+  .page{max-width:880px; margin:0 auto; padding:0 24px 96px;}
+
+  header.masthead{border-bottom:1px solid var(--border); padding:40px 0 28px;}
+  .eyebrow{
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.76rem; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--accent); display:flex; gap:10px; align-items:center; margin-bottom:14px; flex-wrap:wrap;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  h1.title{font-size:clamp(1.6rem,3.4vw,2.3rem); line-height:1.18; margin:0 0 10px;}
+  .dek{color:var(--muted); font-size:1.04rem; max-width:64ch; margin:0;}
+  .parties{display:flex; gap:28px; flex-wrap:wrap; margin-top:22px; font-size:.86rem;}
+  .parties .p-label{color:var(--faint); text-transform:uppercase; letter-spacing:.04em; font-size:.72rem; display:block; margin-bottom:3px;}
+  .parties .p-value{color:var(--ink); font-weight:600;}
+
+  main{padding-top:8px;}
+  section{margin:56px 0;}
+  section.page-break{padding-top:16px; border-top:2px solid var(--border);}
+  .section-kicker{font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); margin:0 0 8px;}
+  section > h2{font-size:1.5rem; margin:0 0 6px;}
+  section > .section-dek{color:var(--muted); margin:0 0 26px; font-size:.98rem; max-width:66ch;}
+  h3{font-size:1.08rem; margin:0 0 12px;}
+  p{margin:0 0 15px;}
+  strong{color:var(--ink); font-weight:600;}
+
+  .doc-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow);
+    padding:26px 28px; margin:0 0 20px;
+  }
+  .doc-card .doc-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:18px; padding-bottom:16px; border-bottom:1px dashed var(--border);}
+  .doc-card .doc-head .broker{font-weight:700; font-size:1.02rem;}
+  .doc-card .doc-head .lic{color:var(--faint); font-size:.78rem; margin-top:4px;}
+  .doc-card .doc-title{font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; color:var(--faint);}
+
+  .field-row{display:grid; grid-template-columns:190px 1fr; gap:10px 16px; padding:7px 0; border-bottom:1px solid var(--border); font-size:.92rem; align-items:baseline;}
+  .field-row:last-child{border-bottom:none;}
+  .field-row .f-label{color:var(--muted); font-size:.82rem;}
+  .field-row .f-value{font-weight:600; font-variant-numeric:tabular-nums;}
+  .field-row .f-value.masked{
+    background:var(--gap-soft); color:var(--gap); border-radius:5px; padding:2px 8px; font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    font-size:.82rem; font-weight:600; display:inline-block;
+  }
+  .field-row .f-value.masked.ok{background:var(--ok-soft); color:var(--ok);}
+  .field-row .f-value.masked.accent{background:var(--accent-soft); color:var(--accent);}
+  .field-row .f-value.kept{color:var(--ink);}
+  .portfolio-list{margin:2px 0 0; padding:0; list-style:none; font-size:.88rem;}
+  .portfolio-list li{padding:3px 0; color:var(--ink); display:flex; justify-content:space-between; gap:12px;}
+  .portfolio-list li .isin{color:var(--faint); font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.78rem;}
+
+  .stage-label{
+    display:inline-flex; align-items:center; gap:8px; font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    font-size:.74rem; letter-spacing:.05em; text-transform:uppercase; padding:5px 12px; border-radius:999px; margin-bottom:14px;
+  }
+  .stage-label.gap{background:var(--gap-soft); color:var(--gap);}
+  .stage-label.warn{background:var(--warn-soft); color:var(--warn);}
+  .stage-label.ok{background:var(--ok-soft); color:var(--ok);}
+
+  .callout{border:1px solid var(--border); background:var(--surface); border-radius:12px; padding:20px 24px; margin:18px 0;}
+  .callout.gap{border-color:var(--gap); background:var(--gap-soft);}
+  .callout.warn{border-color:var(--warn); background:var(--warn-soft);}
+  .callout.ok{border-color:var(--ok); background:var(--ok-soft);}
+  .callout.accent{border-color:var(--accent); background:var(--accent-soft);}
+  .callout h4{margin:0 0 8px; font-size:.94rem;}
+  .callout p:last-child{margin-bottom:0;}
+
+  .legend-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:0 0 8px;}
+  @media (max-width:640px){.legend-grid{grid-template-columns:1fr;}}
+  .legend-card{border:1px solid var(--border); border-radius:12px; padding:16px 18px; background:var(--surface);}
+  .legend-card .dot{width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:8px;}
+  .legend-card h4{margin:0 0 6px; font-size:.92rem; display:flex; align-items:center;}
+  .legend-card p{margin:0; font-size:.85rem; color:var(--muted);}
+
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:12px; margin:0 0 20px; background:var(--surface);}
+  table{width:100%; border-collapse:collapse; font-size:.9rem; min-width:480px;}
+  th, td{text-align:left; padding:13px 16px; border-bottom:1px solid var(--border); vertical-align:top;}
+  th{color:var(--muted); font-weight:600; font-size:.74rem; letter-spacing:.03em; text-transform:uppercase; background:var(--surface-2);}
+  tr:last-child td{border-bottom:none;}
+  td.channel{font-weight:700;}
+
+  ol.next-steps{list-style:none; margin:0; padding:0; counter-reset:step;}
+  ol.next-steps li{display:flex; gap:14px; padding:12px 0; border-top:1px solid var(--border); counter-increment:step; font-size:.94rem;}
+  ol.next-steps li:first-child{border-top:none;}
+  ol.next-steps li::before{
+    content:counter(step); flex:none; width:26px; height:26px; border-radius:7px; background:var(--accent-soft); color:var(--accent);
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.8rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+
+  footer{border-top:1px solid var(--border); margin-top:24px; padding:30px 0 10px; color:var(--faint); font-size:.82rem;}
 </style>
 </head>
 <body>
 
 <div class="page">
-  <h1>Пример маскирования: отчёт брокера</h1>
-  <p class="subtitle">АО «Инвестиционная компания Д8» — практический пример на самом распространённом документе</p>
+  <header class="masthead">
+    <div class="eyebrow"><span class="dot"></span>AI Guard · пример маскирования</div>
+    <h1 class="title">Как маскируется отчёт брокера</h1>
+    <p class="dek">Отчёт брокера — самый частый документ в работе с клиентами Д8. Ниже — исходный документ, вариант, который пришлось отклонить, и итоговая схема.</p>
+    <div class="parties">
+      <div><span class="p-label">Документ</span><span class="p-value">Отчёт брокера</span></div>
+      <div><span class="p-label">Полей защищено</span><span class="p-value">7 из 8</span></div>
+    </div>
+  </header>
 
-  <p>Отчёт брокера — документ, который чаще всего встречается в работе с клиентами. Ниже показано, как он выглядит до обработки, какой вариант маскирования мы рассмотрели и отклонили, и какая схема используется в итоге.</p>
+  <main>
+    <section id="original">
+      <div class="section-kicker">Лист 1</div>
+      <h2>Исходный документ</h2>
+      <p class="section-dek">Так выглядит отчёт брокера без обработки — в этом виде его сегодня можно вставить в чат с ИИ.</p>
 
-  <h2>1. Исходный документ</h2>
-  <p>Так выглядит отчёт брокера без какой-либо обработки.</p>
-  <table>
-    <tr><th>Поле</th><th>Значение</th></tr>
-    <tr><td>Клиент</td><td>Ожигихин Юрий Юрьевич</td></tr>
-    <tr><td>Договор №</td><td>ВР33431 от 24.09.2019</td></tr>
-    <tr><td>Брокерский счёт / лицевой счёт</td><td>ВР33431 / ВР33431-МО-01</td></tr>
-    <tr><td>Баланс счёта</td><td>16 634,88 → 16 623,07 ₽</td></tr>
-    <tr><td>Портфель</td><td>ОФЗ-ПД225 (RU000A0ZYUB7) — 1 шт; ВТБ ПАО ао07 (RU000A0JP5V6) — 13 шт; Сбербанк ПАО ао03 (RU0009029540) — 6 шт; паи БПИФ — 1 шт; USD — 4</td></tr>
-    <tr><td>Подписи</td><td>Корчагин В.В., Губарева С.А.</td></tr>
-    <tr><td>Брокер</td><td>АО «Инвестиционная компания Д8», лицензия № 045-0751…, г. Москва, Пресненский р-н</td></tr>
-  </table>
+      <div class="doc-card">
+        <div class="doc-head">
+          <div>
+            <div class="broker">АО «Инвестиционная компания Д8»</div>
+            <div class="lic">Лицензия проф. участника РЦБ № 045-0751… · г. Москва, вн. тер. г. муниципальный округ Пресненский</div>
+          </div>
+          <div class="doc-title">Отчёт брокера<br>26.06.2026</div>
+        </div>
+        <div class="field-row"><div class="f-label">Клиент</div><div class="f-value kept">Ожигихин Юрий Юрьевич</div></div>
+        <div class="field-row"><div class="f-label">Договор №</div><div class="f-value kept">ВР33431 от 24.09.2019</div></div>
+        <div class="field-row"><div class="f-label">Брокерский / лицевой счёт</div><div class="f-value kept">ВР33431 / ВР33431-МО-01</div></div>
+        <div class="field-row"><div class="f-label">Баланс счёта</div><div class="f-value kept">16 634,88 → 16 623,07 ₽</div></div>
+        <div class="field-row">
+          <div class="f-label">Портфель</div>
+          <div>
+            <ul class="portfolio-list">
+              <li>ОФЗ-ПД225 <span class="isin">RU000A0ZYUB7</span> — 1 шт</li>
+              <li>ВТБ ПАО ао07 <span class="isin">RU000A0JP5V6</span> — 13 шт</li>
+              <li>Сбербанк ПАО ао03 <span class="isin">RU0009029540</span> — 6 шт</li>
+              <li>+ паи БПИФ, USD</li>
+            </ul>
+          </div>
+        </div>
+        <div class="field-row"><div class="f-label">Подписи</div><div class="f-value kept">Корчагин В.В., Губарева С.А.</div></div>
+      </div>
+    </section>
 
-  <h2>2. Первый вариант — не подошёл</h2>
-  <p>Первый рассмотренный вариант — скрывать только ФИО клиента и название компании, остальные данные оставлять без изменений. При проверке выяснилось, что этого недостаточно.</p>
-  <p>Номер договора и точный состав портфеля сами по себе позволяют определить, о каком клиенте идёт речь, даже без имени: сочетание конкретных бумаг, их количества и остатка на конкретную дату — редкое и легко узнаваемое. Номер лицензии брокера, если он остаётся открытым, также позволяет установить компанию — он находится в открытом реестре Банка России — независимо от того, скрыто название компании в тексте или нет.</p>
-  <p>Поэтому список того, что нужно скрывать, был расширен.</p>
+    <section id="stages" class="page-break">
+      <div class="section-kicker">Лист 2</div>
+      <h2>Три этапа маскирования</h2>
+      <p class="section-dek">Первый вариант не защищал данные — показываем, почему, и что делает рабочая схема.</p>
 
-  <h2>3. Рабочая схема</h2>
-  <table>
-    <tr><th>Поле</th><th>Что происходит</th></tr>
-    <tr><td>Клиент (ФИО)</td><td>Скрывается</td></tr>
-    <tr><td>Подписи сотрудников</td><td>Скрывается</td></tr>
-    <tr><td>Номер договора, брокерский и лицевой счёт</td><td>Скрывается — заменяется меткой</td></tr>
-    <tr><td>Название, лицензия и адрес брокера</td><td>Скрывается</td></tr>
-    <tr><td>Баланс счёта и состав портфеля</td><td>Не скрывается — нужен для анализа</td></tr>
-    <tr><td>Код ценной бумаги (ISIN)</td><td>Не скрывается — общедоступный биржевой код, к клиенту или компании не привязан</td></tr>
-  </table>
+      <h3>Этап 1 · Первая попытка — отклонена</h3>
+      <span class="stage-label gap">Скрыты только ФИО и название компании</span>
+      <div class="doc-card">
+        <div class="doc-head">
+          <div>
+            <div class="broker f-value masked">[ОРГАНИЗАЦИЯ]</div>
+            <div class="lic">Лицензия проф. участника РЦБ № <span class="kept">045-0751…</span> · г. Москва, Пресненский р-н</div>
+          </div>
+          <div class="doc-title">Отчёт брокера<br>26.06.2026</div>
+        </div>
+        <div class="field-row"><div class="f-label">Клиент</div><div class="f-value masked">[PERSON_1]</div></div>
+        <div class="field-row"><div class="f-label">Договор №</div><div class="f-value kept">ВР33431 от 24.09.2019</div></div>
+        <div class="field-row"><div class="f-label">Брокерский / лицевой счёт</div><div class="f-value kept">ВР33431 / ВР33431-МО-01</div></div>
+        <div class="field-row"><div class="f-label">Баланс счёта</div><div class="f-value kept">16 634,88 → 16 623,07 ₽</div></div>
+        <div class="field-row"><div class="f-label">Портфель</div><div class="f-value kept">без изменений — 5 бумаг, точные количества</div></div>
+      </div>
+      <div class="callout gap">
+        <h4>Этот вариант не защищает данные</h4>
+        <p>Номер договора и точный состав портфеля сами по себе достаточны, чтобы опознать клиента, даже без имени. Номер лицензии брокера, оставшийся открытым, устанавливает компанию за секунды через реестр Банка России — маскирование одного названия ничего не даёт.</p>
+      </div>
 
-  <h2>4. Как это применяется</h2>
-  <p>Баланс счёта и состав портфеля намеренно не скрываются — эти данные нужны для анализа в исходном виде. Поэтому решение — не в том, что скрывать в самом документе, а в том, куда документ может уходить.</p>
-  <table>
-    <tr><th>Канал</th><th>Что происходит</th></tr>
-    <tr><td>Внутренняя система (данные не покидают периметр)</td><td>Документ используется полностью, без ограничений</td></tr>
-    <tr><td>Внешние ИИ-сервисы (например, OpenAI, Anthropic)</td><td>Используется только после маскирования по схеме выше; если документ одновременно содержит номер счёта и таблицу портфеля — не передаётся вообще</td></tr>
-  </table>
+      <h3 style="margin-top:36px;">Этап 2 · Рабочая схема</h3>
+      <span class="stage-label ok">Защищено 7 полей из 8 — с сохранением аналитической ценности</span>
+      <div class="doc-card">
+        <div class="doc-head">
+          <div>
+            <div class="broker f-value masked">[ОРГАНИЗАЦИЯ]</div>
+            <div class="lic"><span class="f-value masked accent" style="font-size:.72rem;">[ЛИЦЕНЗИЯ]</span> · <span class="f-value masked accent" style="font-size:.72rem;">[АДРЕС]</span></div>
+          </div>
+          <div class="doc-title">Отчёт брокера<br>26.06.2026</div>
+        </div>
+        <div class="field-row"><div class="f-label">Клиент</div><div class="f-value masked">[PERSON_1]</div></div>
+        <div class="field-row"><div class="f-label">Договор №</div><div class="f-value masked ok">[ACCOUNT_ID_1]</div></div>
+        <div class="field-row"><div class="f-label">Брокерский / лицевой счёт</div><div class="f-value masked ok">[ACCOUNT_ID_1] / [ACCOUNT_ID_2]</div></div>
+        <div class="field-row"><div class="f-label">Баланс счёта</div><div class="f-value kept">16 634,88 → 16 623,07 ₽</div></div>
+        <div class="field-row">
+          <div class="f-label">Портфель</div>
+          <div>
+            <ul class="portfolio-list">
+              <li>ОФЗ-ПД225 <span class="isin">RU000A0ZYUB7</span> — 1 шт</li>
+              <li>ВТБ ПАО ао07 <span class="isin">RU000A0JP5V6</span> — 13 шт</li>
+              <li>Сбербанк ПАО ао03 <span class="isin">RU0009029540</span> — 6 шт</li>
+            </ul>
+          </div>
+        </div>
+        <div class="field-row"><div class="f-label">Подписи</div><div class="f-value masked">[PERSON_2], [PERSON_3]</div></div>
+      </div>
+      <div class="callout ok">
+        <h4>ISIN не скрыт</h4>
+        <p>Это публичный биржевой код ценной бумаги — не привязан к клиенту или компании и не создаёт риска сам по себе. Скрывается то, что идентифицирует человека или организацию.</p>
+      </div>
 
-  <h2>5. Что остаётся риском</h2>
-  <p>Полностью исключить риск маскированием одних только текстовых полей невозможно. Точный состав портфеля на конкретную дату — сам по себе редкое, узнаваемое сочетание данных: при пересечении с другой утечкой (не обязательно из этой системы) документ теоретически можно сопоставить с конкретным клиентом даже без прямых идентификаторов. По этой причине для документов с портфелем и счетами по умолчанию рекомендуется внутренний канал, а не внешний.</p>
+      <h3 style="margin-top:36px;">Этап 3 · Как это применяется на практике</h3>
+      <p>Баланс счёта и состав портфеля остаются в исходном виде — для анализа нужны реальные цифры. Поэтому защита строится не только на полях документа, а на том, куда он попадает:</p>
 
-  <h2>6. Дальнейшие шаги</h2>
-  <ol>
-    <li>Согласовать, в каких случаях документ передаётся во внешний сервис, а в каких — используется только внутри.</li>
-    <li>Согласовать с разработчиком платформы техническую реализацию новых типов данных — номер договора, номер лицензии.</li>
-    <li>Проверить результат на реальном документе в рамках пилота.</li>
-  </ol>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Канал</th><th>Что происходит</th></tr></thead>
+          <tbody>
+            <tr><td class="channel">Внутренний контур<br><span style="color:var(--muted); font-weight:400; font-size:.82rem;">(своя модель, данные не покидают периметр)</span></td>
+                <td>Документ целиком, без ограничений — точные цифры доступны для полноценного анализа портфеля</td></tr>
+            <tr><td class="channel">Внешняя модель<br><span style="color:var(--muted); font-weight:400; font-size:.82rem;">(OpenAI, Anthropic и т.п.)</span></td>
+                <td>Только после маскирования (Этап 2) — а если документ одновременно содержит номер счёта и таблицу портфеля, передача блокируется целиком, а не отдаётся точечно</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-  <footer>Платформа · AI Guard · пример для заказчика</footer>
+      <div class="callout warn">
+        <h4>Остаточный риск</h4>
+        <p>Риск снижается с прямой деанонимизации по открытым данным до управляемого уровня — сценарий с инсайдером или совпадением с другой утечкой остаётся, хоть и маловероятен. Нулевой риск есть только во внутреннем контуре, поэтому для документов такого типа это канал по умолчанию.</p>
+      </div>
+
+      <h3 style="margin-top:36px;">Следующие шаги</h3>
+      <ol class="next-steps">
+        <li>Согласовать: маскировать ли счета/договор всегда, или только при передаче во внешнюю модель.</li>
+        <li>Согласовать с вендором платформы реализацию новых типов (номер договора, номер лицензии).</li>
+        <li>Прогнать этот же отчёт через пилотную проверку и показать реальный результат маскирования.</li>
+      </ol>
+    </section>
+
+    <footer>
+      Платформа · AI Guard · пример для заказчика
+    </footer>
+  </main>
 </div>
 
 </body>

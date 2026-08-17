@@ -36,7 +36,7 @@ AI-платформа корпоративных данных. Документ�
 | [`agenty.md`](agenty.md) | Агенты |
 | [`administrirovanie-polzovateli.md`](administrirovanie-polzovateli.md) | Администрирование → Рабочее место ИБ: «Сотрудники ИБ» (доступ в админку) и «Пользователи и доступ» (роли/LLM-провайдеры, лимиты токенов, API-ключи) — плюс Каталог как источник identity |
 | [`baza-sekretov.md`](baza-sekretov.md) | База секретов → Провайдеры, Добавить, Поиск, Тест детекции, Реранкинг, Ключевые слова, Блэклист ОМ, Политики синхронизации, Regex-паттерны, Управление базой, Интеграция (частично — 3 экрана без скриншота) |
-| [`instrukciya-novye-atributy-maskirovaniya-otchet-brokera.md`](instrukciya-novye-atributy-maskirovaniya-otchet-brokera.md) | Практическая инструкция: экран База секретов → Regex-паттерны — конкретные regex/названия для номера договора, счёта и лицензии брокера из примера «Вариант 2» отчёта брокера |
+| [`instrukciya-novye-atributy-maskirovaniya-otchet-brokera.md`](instrukciya-novye-atributy-maskirovaniya-otchet-brokera.md) | Практическая инструкция: экран База секретов → Regex-паттерны — конкретные regex/названия для номера договора, счёта и лицензии брокера из примера «Вариант 2» отчёта брокера. Плюс [`.docx`-версия](../analysis/instrukciya-novye-atributy-maskirovaniya-otchet-brokera.docx) для печати/пересылки |
 | [`otkrytye-voprosy.md`](otkrytye-voprosy.md) | Сводный реестр открытых вопросов по всем разделам, с вариантами ответа — для сверки с командой платформы |
 
 ## Готовые HTML-версии

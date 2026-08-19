@@ -39,6 +39,7 @@ AI-платформа корпоративных данных. Документ�
 | [`instrukciya-novye-atributy-maskirovaniya-otchet-brokera.md`](instrukciya-novye-atributy-maskirovaniya-otchet-brokera.md) | Практическая инструкция: экран База секретов → Regex-паттерны — конкретные regex/названия для номера договора, счёта и лицензии брокера из примера «Вариант 2» отчёта брокера. Плюс [`.docx`-версия](../analysis/instrukciya-novye-atributy-maskirovaniya-otchet-brokera.docx) для печати/пересылки |
 | [`instrukciya-rabota-s-rag.md`](instrukciya-rabota-s-rag.md) | Практическая инструкция: ответ на клиентский вопрос «можно ли уже пробовать RAG» — что нужно для старта, как загрузить источники, два подтверждённых на практике примера из чата. Плюс [`.docx`-версия](../analysis/instrukciya-rabota-s-rag.docx) для печати/пересылки и [`.html`-версия](instrukciya-rabota-s-rag-standalone.html) без предварительных условий, с примерами на отчёте брокера Д8 |
 | [`otkrytye-voprosy.md`](otkrytye-voprosy.md) | Сводный реестр открытых вопросов по всем разделам, с вариантами ответа — для сверки с командой платформы |
+| [`rukovodstvo-administratora.md`](rukovodstvo-administratora.md) | Руководство администратора платформы — синтез 17 документов разработчика (`docs/sources/synaps-insight/`) и находок по скриншотам: роли и доступ, коллекции, провайдеры/модели, защита данных, инциденты, бюджеты; техническая часть для DevOps вынесена в приложение. Плюс [`.html`-версия со схемами](rukovodstvo-administratora-standalone.html) |
 
 ## Готовые HTML-версии
 

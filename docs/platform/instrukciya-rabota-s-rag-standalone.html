@@ -1,0 +1,357 @@
+<title>Как уже сейчас пробовать RAG</title>
+<style>
+  :root {
+    --bg: #F5F7F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F3;
+    --ink: #17212B;
+    --muted: #5C6B7A;
+    --muted-2: #8695A3;
+    --line: #E1E7EB;
+    --line-2: #D2DADF;
+    --accent: #0E6E63;
+    --accent-ink: #0B564D;
+    --accent-tint: #E4F0EE;
+    --ok: #1E7A4C;
+    --ok-tint: #E3F1E8;
+    --warn: #93630F;
+    --warn-tint: #FBF0DC;
+    --bad: #A8393B;
+    --bad-tint: #FBE7E7;
+    --open: #5B4B93;
+    --open-tint: #ECE8F7;
+    --code-bg: #EDF1F3;
+    --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519;
+      --surface: #161E24;
+      --surface-2: #1C252C;
+      --ink: #E7ECEF;
+      --muted: #93A2AF;
+      --muted-2: #6D7C8A;
+      --line: #263039;
+      --line-2: #2E3941;
+      --accent: #4FC3B4;
+      --accent-ink: #7CD9CC;
+      --accent-tint: #16302C;
+      --ok: #58B983;
+      --ok-tint: #16301F;
+      --warn: #E0AC4E;
+      --warn-tint: #362808;
+      --bad: #E6787A;
+      --bad-tint: #3A1618;
+      --open: #B29EE8;
+      --open-tint: #251F3A;
+      --code-bg: #1C252C;
+      --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0F1519;
+    --surface: #161E24;
+    --surface-2: #1C252C;
+    --ink: #E7ECEF;
+    --muted: #93A2AF;
+    --muted-2: #6D7C8A;
+    --line: #263039;
+    --line-2: #2E3941;
+    --accent: #4FC3B4;
+    --accent-ink: #7CD9CC;
+    --accent-tint: #16302C;
+    --ok: #58B983;
+    --ok-tint: #16301F;
+    --warn: #E0AC4E;
+    --warn-tint: #362808;
+    --bad: #E6787A;
+    --bad-tint: #3A1618;
+    --open: #B29EE8;
+    --open-tint: #251F3A;
+    --code-bg: #1C252C;
+    --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .mono { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 760px);
+    justify-content: center;
+    gap: 56px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; }
+    .nav-rail { display: none; }
+  }
+
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow {
+    font-size: 11px; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--muted-2); font-weight: 600; margin: 0 0 14px;
+  }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list li { margin: 0; }
+  .nav-list a {
+    display: flex; gap: 10px; align-items: baseline;
+    padding: 7px 0 7px 16px; margin-left: -1px;
+    border-left: 2px solid transparent;
+    color: var(--muted); text-decoration: none; font-size: 13.5px;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 14px; }
+  .nav-status {
+    margin-top: 28px; padding: 14px 16px; border-radius: 8px;
+    background: var(--ok-tint);
+    border: 1px solid color-mix(in srgb, var(--ok) 30%, transparent);
+  }
+  .nav-status .label {
+    font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase;
+    font-weight: 700; color: var(--ok); margin: 0 0 6px;
+  }
+  .nav-status p { margin: 0; font-size: 12.5px; color: var(--ink); line-height: 1.5; }
+  .nav-status .date { color: var(--muted); }
+
+  header.doc-head { margin-bottom: 44px; }
+  .eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--accent-ink); font-weight: 700; margin: 0 0 16px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title {
+    font-size: 30px; line-height: 1.22; letter-spacing: -.01em;
+    font-weight: 700; margin: 0 0 12px; text-wrap: balance;
+  }
+  .subtitle { font-size: 16px; color: var(--muted); margin: 0 0 22px; max-width: 62ch; }
+  .lede {
+    font-size: 16px; color: var(--ink); max-width: 68ch; margin: 0;
+    padding-top: 22px; border-top: 1px solid var(--line);
+  }
+
+  section { margin-top: 52px; scroll-margin-top: 32px; }
+  h2.sec {
+    display: flex; align-items: baseline; gap: 10px;
+    font-size: 21px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 16px;
+  }
+  h2.sec .n { font-size: 14px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  h3.sub { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: var(--ink); }
+  p { margin: 0 0 14px; max-width: 68ch; }
+  section > p:last-child { margin-bottom: 0; }
+
+  code {
+    font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+    font-size: .89em; background: var(--code-bg); color: var(--code-ink);
+    padding: .12em .38em; border-radius: 4px; word-break: break-word;
+  }
+
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 14px; background: var(--surface); }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    background: var(--surface-2); font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); white-space: nowrap; font-weight: 600; width: 1%; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 700; padding: 3px 9px 3px 7px;
+    border-radius: 100px; line-height: 1.4; white-space: nowrap;
+  }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+  .pill.ok { background: var(--ok-tint); color: var(--ok); }
+  .pill.ok::before { background: var(--ok); }
+
+  .tag {
+    display: inline-block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase;
+    font-weight: 700; padding: 3px 8px; border-radius: 5px; margin-bottom: 10px;
+  }
+  .tag.ok { background: var(--ok-tint); color: var(--ok); }
+  .tag.note { background: var(--accent-tint); color: var(--accent-ink); }
+
+  .callout {
+    border-radius: 10px; padding: 16px 18px; margin: 0 0 18px;
+    border: 1px solid var(--line); border-left: 3px solid var(--line-2);
+    background: var(--surface); box-shadow: var(--shadow);
+  }
+  .callout .head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14.5px; max-width: none; }
+  .callout p + p { margin-top: 8px; }
+  .callout.note { border-left-color: var(--accent); }
+  .callout.note .head { color: var(--accent-ink); }
+  .callout.ok { border-left-color: var(--ok); background: var(--ok-tint); }
+  .callout.ok .head { color: var(--ok); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-tint); }
+  .callout.warn .head { color: var(--warn); }
+
+  ol.steps { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: step; }
+  ol.steps li { counter-increment: step; position: relative; padding: 0 0 16px 34px; font-size: 15px; max-width: 66ch; }
+  ol.steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 1px;
+    width: 22px; height: 22px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink);
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps li:last-child { padding-bottom: 0; }
+
+  ul.plain { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.plain li { position: relative; padding: 0 0 14px 20px; font-size: 15px; max-width: 66ch; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  ul.plain li:last-child { padding-bottom: 0; }
+
+  .qa-card {
+    border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+    box-shadow: var(--shadow); padding: 18px 20px; margin: 0 0 16px;
+  }
+  .qa-card .q { font-weight: 700; font-size: 14.5px; margin: 0 0 10px; display: flex; gap: 8px; }
+  .qa-card .q .qmark {
+    flex: none; width: 20px; height: 20px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink);
+    font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+  .qa-card .a { font-size: 14px; color: var(--muted); margin: 0 0 10px; padding-left: 28px; }
+  .qa-card .src { display: flex; gap: 8px; flex-wrap: wrap; padding-left: 28px; }
+  .src-pill {
+    font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: var(--accent-ink);
+    background: var(--accent-tint); border-radius: 100px; padding: 3px 10px;
+  }
+
+  .see-also { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .see-also li { display: flex; gap: 10px; align-items: baseline; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .see-also .path { font-family: "SF Mono", Consolas, monospace; font-size: 12.5px; color: var(--accent-ink); flex: none; }
+  .see-also .desc { color: var(--muted); }
+
+  footer.doc-foot {
+    margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted-2); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s1"><span class="nav-num tabular">1</span> Загрузка документов</a></li>
+      <li><a href="#s2"><span class="nav-num tabular">2</span> Вопросы в чате</a></li>
+      <li><a href="#s3"><span class="nav-num tabular">3</span> Примеры на отчёте брокера</a></li>
+      <li><a href="#s4"><span class="nav-num tabular">4</span> Качество результата</a></li>
+      <li><a href="#s5"><span class="nav-num tabular">5</span> На что обратить внимание</a></li>
+      <li><a href="#see-also"><span class="nav-num tabular">·</span> См. также</a></li>
+    </ul>
+    <div class="nav-status">
+      <p class="label">Короткий ответ</p>
+      <p><strong>Да</strong>, можно начинать прямо сейчас — RAG-поиск уже работает.</p>
+      <p class="date tabular">17.08.2026</p>
+    </div>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Инструкция · Работа с RAG</p>
+      <h1 class="title">Как уже сейчас пробовать работу с RAG-ами</h1>
+      <p class="subtitle">Ответ на клиентский вопрос «Мы уже сейчас можем пробовать работу с RAG-ами?»</p>
+      <p class="lede"><strong>Да, можно начинать прямо сейчас.</strong> RAG-поиск по загруженным документам в чате платформы уже работает и подтверждён на практике (раздел 3). Ниже — как загрузить документы, как задавать вопросы и как получить более качественный результат.</p>
+    </header>
+
+    <section id="s1">
+      <h2 class="sec"><span class="n tabular">01</span> Как загрузить документы как источники</h2>
+      <p>Экран «Источники» → «Документы»:</p>
+      <ul class="plain">
+        <li><strong>+ Загрузить файл</strong> — один документ вручную.</li>
+        <li><strong>+ Директорию</strong> — целая папка сразу, с пакетной загрузкой и синхронизацией.</li>
+      </ul>
+      <p>После загрузки экран показывает статус обработки и число фрагментов (чанков), на которые документ разбился при индексации — это то, чем RAG будет пользоваться при поиске. Число фрагментов зависит от количества смысловых разделов в тексте, а не от размера файла в байтах.</p>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec"><span class="n tabular">02</span> Как задавать вопросы в чате</h2>
+      <p>«Чат» → «+ Новый чат» → вопрос обычным языком. RAG сам находит релевантные фрагменты по загруженным документам и отвечает, указывая источники и процент релевантности по каждому. Модель и «Агент» (роль/персона, задающая стиль и фокус ответа) выбираются в шапке диалога.</p>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec"><span class="n tabular">03</span> Примеры на отчёте брокера</h2>
+      <span class="tag note">Иллюстрация на знакомых вам данных</span>
+      <p>Ниже — тот же отчёт брокера АО «Инвестиционная компания Д8» из разбора маскирования (клиент Ожигихин Ю.Ю., договор № ВР33431 от 24.09.2019). Так выглядели бы вопросы к нему в чате и то, какого рода ответ и источники вернул бы RAG.</p>
+
+      <div class="qa-card">
+        <p class="q"><span class="qmark">?</span>Какой номер договора и брокерского счёта у клиента Ожигихина?</p>
+        <p class="a">Договор № ВР33431 от 24.09.2019; брокерский / лицевой счёт ВР33431 / ВР33431-МО-01.</p>
+        <div class="src"><span class="src-pill">Отчёт брокера · Д8</span></div>
+      </div>
+
+      <div class="qa-card">
+        <p class="q"><span class="qmark">?</span>Как изменился баланс счёта за отчётный период?</p>
+        <p class="a">16 634,88 ₽ → 16 623,07 ₽.</p>
+        <div class="src"><span class="src-pill">Отчёт брокера · Д8</span></div>
+      </div>
+
+      <div class="qa-card">
+        <p class="q"><span class="qmark">?</span>Что в портфеле клиента, кроме ОФЗ-ПД225?</p>
+        <p class="a">ВТБ ПАО ао07 (RU000A0JP5V6) — 13 шт; Сбербанк ПАО ао03 (RU0009029540) — 6 шт; плюс паи БПИФ в USD.</p>
+        <div class="src"><span class="src-pill">Отчёт брокера · Д8</span></div>
+      </div>
+
+      <p>Так же, как и с реальными документами клиента, RAG отвечает с указанием источника — здесь это сам отчёт, а не общий шаблон ответа.</p>
+    </section>
+
+    <section id="s4">
+      <h2 class="sec"><span class="n tabular">04</span> Как получить более качественный результат</h2>
+      <ul class="plain">
+        <li>Формулировать вопрос ближе к терминологии документа: поиск находит «похожее по смыслу», но система дополнительно фильтрует нерелевантный шум по интенту вопроса — точная формулировка всё равно помогает.</li>
+        <li>Если вопрос типовой и повторяется у разных пользователей — завести образец в «Мои шаблоны», чтобы ответ на него всегда шёл по одной и той же проверенной структуре, но с пересчитанными на момент вопроса данными.</li>
+        <li>Готовый ответ можно сразу экспортировать в PDF или сохранить как шаблон прямо из чата.</li>
+      </ul>
+    </section>
+
+    <section id="s5">
+      <h2 class="sec"><span class="n tabular">05</span> На что обратить внимание уже сейчас</h2>
+      <div class="callout note">
+        <p class="head">Данные не покидают периметр в открытом виде</p>
+        <p>Вызовы во внешние модели идут через AI Guard: ПДн и реквизиты маскируются на лету перед отправкой и восстанавливаются только в ответе внутри контура.</p>
+      </div>
+      <div class="callout warn">
+        <p class="head">Детальный разбор диалогов пока вручную</p>
+        <p>«Отладка сессий» в текущем окружении не подключена — Аудит-БД не сконфигурирована.</p>
+      </div>
+      <p>Несколько открытых вопросов и мелких замечаний по интерфейсу уже зафиксированы отдельно и переданы команде платформы.</p>
+    </section>
+
+    <section id="see-also">
+      <h2 class="sec"><span class="n tabular">·</span> См. также</h2>
+      <ul class="see-also">
+        <li><span class="path">chat.md</span><span class="desc">Сам интерфейс чата, модель, AI Guard</span></li>
+        <li><span class="path">istochniki-dokumenty.md</span><span class="desc">Загрузка и статус источников</span></li>
+        <li><span class="path">moi-shablony.md</span><span class="desc">Курируемые образцы ответов на повторяющиеся вопросы</span></li>
+        <li><span class="path">otkrytye-voprosy.md</span><span class="desc">Сводный реестр открытых вопросов по платформе</span></li>
+      </ul>
+    </section>
+
+    <footer class="doc-foot">
+      <span>Платформа · Инструкция для клиента</span>
+      <span class="tabular">17.08.2026</span>
+    </footer>
+  </main>
+</div>

@@ -1,0 +1,323 @@
+<title>Домены и распределение доступа</title>
+<style>
+  :root {
+    --bg: #F5F7F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F3;
+    --ink: #17212B;
+    --muted: #5C6B7A;
+    --muted-2: #8695A3;
+    --line: #E1E7EB;
+    --line-2: #D2DADF;
+    --accent: #0E6E63;
+    --accent-ink: #0B564D;
+    --accent-tint: #E4F0EE;
+    --ok: #1E7A4C;
+    --ok-tint: #E3F1E8;
+    --warn: #93630F;
+    --warn-tint: #FBF0DC;
+    --bad: #A8393B;
+    --bad-tint: #FBE7E7;
+    --open: #5B4B93;
+    --open-tint: #ECE8F7;
+    --code-bg: #EDF1F3;
+    --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+      --code-bg: #1C252C; --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+    --code-bg: #1C252C; --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  .mono { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .shell { display: grid; grid-template-columns: 220px minmax(0, 780px); justify-content: center; gap: 56px; max-width: 1180px; margin: 0 auto; padding: 56px 24px 96px; }
+  @media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; } .nav-rail { display: none; } }
+
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-2); font-weight: 600; margin: 0 0 14px; }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list a { display: flex; gap: 10px; align-items: baseline; padding: 6px 0 6px 16px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; font-size: 12.5px; transition: color .15s ease, border-color .15s ease; }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 16px; }
+
+  header.doc-head { margin-bottom: 44px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title { font-size: 32px; line-height: 1.15; letter-spacing: -.01em; font-weight: 700; margin: 0 0 14px; text-wrap: balance; }
+  .subtitle { font-size: 16px; color: var(--muted); margin: 0; max-width: 62ch; }
+
+  section { margin-top: 48px; scroll-margin-top: 32px; }
+  h2.sec { display: flex; align-items: baseline; gap: 10px; font-size: 21px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 14px; }
+  h2.sec .n { font-size: 13px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  h3.sub { font-size: 15px; font-weight: 700; margin: 22px 0 10px; color: var(--ink); }
+  p { margin: 0 0 14px; max-width: 70ch; }
+  section > p:last-child { margin-bottom: 0; }
+
+  code { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; font-size: .89em; background: var(--code-bg); color: var(--code-ink); padding: .12em .38em; border-radius: 4px; word-break: break-word; }
+
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 13.5px; background: var(--surface); }
+  th, td { text-align: left; padding: 10px 13px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); white-space: nowrap; font-weight: 600; width: 1%; }
+
+  .tag { display: inline-block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; padding: 3px 8px; border-radius: 5px; margin-bottom: 10px; }
+  .tag.ok { background: var(--ok-tint); color: var(--ok); }
+  .tag.note { background: var(--accent-tint); color: var(--accent-ink); }
+  .tag.warn { background: var(--warn-tint); color: var(--warn); }
+  .tag.bad { background: var(--bad-tint); color: var(--bad); }
+
+  .callout { border-radius: 10px; padding: 15px 18px; margin: 0 0 18px; border: 1px solid var(--line); border-left: 3px solid var(--line-2); background: var(--surface); box-shadow: var(--shadow); }
+  .callout .head { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14px; max-width: none; }
+  .callout p + p { margin-top: 8px; }
+  .callout.note { border-left-color: var(--accent); }
+  .callout.note .head { color: var(--accent-ink); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-tint); }
+  .callout.warn .head { color: var(--warn); }
+  .callout.ok { border-left-color: var(--ok); background: var(--ok-tint); }
+  .callout.ok .head { color: var(--ok); }
+  .callout.bad { border-left-color: var(--bad); background: var(--bad-tint); }
+  .callout.bad .head { color: var(--bad); }
+
+  ul.plain { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.plain li { position: relative; padding: 0 0 12px 20px; font-size: 14.5px; max-width: 68ch; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  ul.plain li:last-child { padding-bottom: 0; }
+
+  figure.diagram { margin: 0 0 20px; padding: 18px 16px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); }
+  figure.diagram svg { display: block; width: 100%; height: auto; max-width: 700px; margin: 0 auto; color: var(--ink); }
+  figure.diagram figcaption { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 10px; }
+  .dg-text { font-size: 11.5px; fill: currentColor; font-family: "Segoe UI", -apple-system, Arial, sans-serif; }
+  .dg-label { font-size: 10px; fill: var(--muted-2); }
+  .dg-line { stroke: currentColor; stroke-width: 1.4; opacity: .55; fill: none; }
+
+  ol.steps { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: cstep; }
+  ol.steps li { counter-increment: cstep; position: relative; padding: 0 0 12px 32px; font-size: 14.5px; max-width: 66ch; }
+  ol.steps li::before {
+    content: counter(cstep); position: absolute; left: 0; top: -1px;
+    width: 22px; height: 22px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink);
+    font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    font-variant-numeric: tabular-nums; border: 1px solid var(--accent);
+  }
+
+  .case { border: 1px solid var(--accent); border-radius: 12px; background: var(--accent-tint); padding: 18px 20px; margin: 0 0 20px; }
+  .case .case-label { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent-ink); margin: 0 0 10px; }
+  .case h4 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--ink); }
+  .case h4:first-of-type { margin-top: 4px; }
+  .case p, .case li { background: transparent; }
+  .case .table-scroll, .case table { background: var(--surface); }
+  .case ol.steps li::before { background: var(--surface); }
+
+  .glossary { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 0 0 18px; }
+  .g-item { display: grid; grid-template-columns: 220px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .g-item:last-child { border-bottom: none; }
+  .g-term { font-weight: 700; font-size: 13.5px; }
+  .g-def { font-size: 13.5px; color: var(--muted); }
+  @media (max-width: 640px) { .g-item { grid-template-columns: 1fr; gap: 2px; } }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s1"><span class="nav-num tabular">1</span> Что такое домен</a></li>
+      <li><a href="#s2"><span class="nav-num tabular">2</span> Как создать домен</a></li>
+      <li><a href="#s3"><span class="nav-num tabular">3</span> Коллекция + домен</a></li>
+      <li><a href="#s4"><span class="nav-num tabular">4</span> Доступ команде/пользователю</a></li>
+      <li><a href="#s5"><span class="nav-num tabular">5</span> Частые заблуждения</a></li>
+      <li><a href="#s6"><span class="nav-num tabular">·</span> Глоссарий</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Практическая инструкция</p>
+      <h1 class="title">Домены и распределение доступа</h1>
+      <p class="subtitle">Как создать домен, привязать к нему коллекцию документов и реально дать команде или пользователю доступ по нужному уровню — проверено на живом интерфейсе платформы.</p>
+    </header>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 760 190" role="img" aria-label="Схема действий: сначала создаётся домен в Каталоге, затем к нему привязывается коллекция документов, затем домен и роль Domain Only Access Role назначаются пользователю или команде, и в результате пользователь видит только данные своего домена">
+        <defs>
+          <marker id="darr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="currentColor" opacity=".6"/>
+          </marker>
+        </defs>
+
+        <rect x="10" y="55" width="150" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="85" y="85" text-anchor="middle" class="dg-text" font-weight="700">1 · Домен</text>
+        <text x="85" y="101" text-anchor="middle" class="dg-label">создать в Каталоге</text>
+        <text x="85" y="114" text-anchor="middle" class="dg-label">(раздел 2)</text>
+
+        <line x1="160" y1="90" x2="198" y2="90" marker-end="url(#darr)" class="dg-line"/>
+
+        <rect x="200" y="55" width="150" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="275" y="85" text-anchor="middle" class="dg-text" font-weight="700">2 · Коллекция</text>
+        <text x="275" y="101" text-anchor="middle" class="dg-label">привязать к домену</text>
+        <text x="275" y="114" text-anchor="middle" class="dg-label">(раздел 3)</text>
+
+        <line x1="350" y1="90" x2="388" y2="90" marker-end="url(#darr)" class="dg-line"/>
+
+        <rect x="390" y="55" width="180" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="480" y="79" text-anchor="middle" class="dg-text" font-weight="700">3 · Пользователь / команда</text>
+        <text x="480" y="97" text-anchor="middle" class="dg-label">домен + роль</text>
+        <text x="480" y="110" text-anchor="middle" class="dg-label">Domain Only Access Role (раздел 4)</text>
+
+        <line x1="570" y1="90" x2="608" y2="90" marker-end="url(#darr)" class="dg-line"/>
+
+        <rect x="610" y="45" width="150" height="90" rx="8" fill="var(--ok-tint)" stroke="var(--ok)" stroke-width="1.4"/>
+        <text x="685" y="75" text-anchor="middle" class="dg-text" font-weight="700" fill="var(--ok)">Результат</text>
+        <text x="685" y="92" text-anchor="middle" class="dg-label">видит только данные</text>
+        <text x="685" y="105" text-anchor="middle" class="dg-label">своего домена</text>
+        <text x="685" y="120" text-anchor="middle" class="dg-label">(без домена — только</text>
+        <text x="685" y="132" text-anchor="middle" class="dg-label">объекты без домена)</text>
+
+        <text x="380" y="25" text-anchor="middle" class="dg-label">Владельцы/Эксперты домена, Персона, Роли «Контроль доступа» — governance, не эта цепочка (раздел 5)</text>
+        <line x1="10" y1="165" x2="760" y2="165" class="dg-line" stroke-dasharray="3 4"/>
+        <text x="380" y="182" text-anchor="middle" class="dg-label">Шаги 1–3 выполняет администратор; шаг «Результат» проверяется от лица пользователя</text>
+      </svg>
+      <figcaption>Общая последовательность: домен → коллекция → назначение домену пользователя/команды + роли Domain Only Access Role → ограниченный доступ.</figcaption>
+    </figure>
+
+    <section id="s1">
+      <h2 class="sec"><span class="n tabular">01</span> Что такое домен</h2>
+      <p><strong>Домен</strong> — тематическая область данных компании (например, «Инвестиции», «Производство», «Кадры»). Домен решает две задачи одновременно:</p>
+      <ul class="plain">
+        <li>группирует данные и документы по смыслу — какие таблицы, отчёты и коллекции относятся к этой области;</li>
+        <li>служит границей доступа — определяет, каким командам и пользователям эта область данных видна.</li>
+      </ul>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec"><span class="n tabular">02</span> Как создать домен</h2>
+      <p>Путь: Каталог → <strong>Data Marketplace</strong> → <strong>Домены</strong> → «+ Добавить Домен».</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Поле</th><th>Обязательно</th><th>Что это</th></tr></thead>
+          <tbody>
+            <tr><td>Наименование</td><td class="k">Да</td><td>Название домена</td></tr>
+            <tr><td>Отображаемое имя</td><td class="k">Нет</td><td>Как домен называется в интерфейсе, если отличается</td></tr>
+            <tr><td>Описание</td><td class="k">Да</td><td>Форматированный текст — назначение домена</td></tr>
+            <tr><td>Теги</td><td class="k">Нет</td><td>Произвольные метки</td></tr>
+            <tr><td>Термины глоссария</td><td class="k">Нет</td><td>Связь домена с деловыми терминами компании</td></tr>
+            <tr><td>Тип домена</td><td class="k">Да</td><td>Source-aligned / Consumer-aligned / Aggregate — см. ниже</td></tr>
+            <tr><td>Владельцы</td><td class="k">Нет</td><td>Пользователи <strong>или целая команда</strong> — кто отвечает за домен</td></tr>
+            <tr><td>Эксперты</td><td class="k">Нет</td><td>Пользователи — к кому обращаться по содержанию домена</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="sub">Тип домена — три варианта</h3>
+      <ul class="plain">
+        <li><strong>Source-aligned</strong> — домен привязан к конкретному источнику данных (например, к одной учётной системе).</li>
+        <li><strong>Consumer-aligned</strong> — домен ориентирован на конкретного потребителя данных (подразделение, направление бизнеса).</li>
+        <li><strong>Aggregate</strong> — домен объединяет данные нескольких источников или направлений.</li>
+      </ul>
+      <div class="callout warn">
+        <p class="head">Важно</p>
+        <p>Поля «Владельцы» и «Эксперты» на этом шаге — <strong>не выдача доступа к данным</strong>, а организационная информация (кто отвечает за домен, к кому обращаться). Реальный доступ настраивается отдельно — раздел 4.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec"><span class="n tabular">03</span> Коллекция документов + домен</h2>
+      <p>Путь: База секретов → Коллекции → «Новая коллекция».</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Поле</th><th>Обязательно</th><th>Что это</th></tr></thead>
+          <tbody>
+            <tr><td>Идентификатор коллекции</td><td class="k">Да</td><td>Технический код <code>namespace_doc_type</code>, только латиница/цифры/<code>_</code>/<code>-</code>. Нельзя изменить после создания.</td></tr>
+            <tr><td>Отображаемое название</td><td class="k">Да</td><td>Название в интерфейсе</td></tr>
+            <tr><td>Домен</td><td class="k">Да</td><td>Текстовая метка (например, <code>hr</code>, <code>finance</code>). Нельзя изменить после создания.</td></tr>
+            <tr><td>Бизнес-домен(ы) ОМ</td><td class="k">Нет</td><td>Привязка к домену из раздела 2, можно несколько. Нельзя изменить после создания.</td></tr>
+            <tr><td>Тип документа</td><td class="k">Да</td><td>Например, «Регламент»</td></tr>
+            <tr><td>Тип коллекции</td><td class="k">Да</td><td>Текстовые документы / кодовая коллекция. Нельзя изменить после создания.</td></tr>
+            <tr><td>Назначение</td><td class="k">Нет</td><td>«Обычные документы» или «Библиотека шаблонов»</td></tr>
+            <tr><td>Описание</td><td class="k">Нет</td><td>Свободный текст</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout bad">
+        <p class="head">Частая ошибка</p>
+        <p>«Домен» и «Бизнес-домен(ы) ОМ» — два независимых поля, оба нужно заполнить по отдельности. Выбор из списка «Бизнес-домен(ы) ОМ» <strong>не заполняет</strong> текстовое поле «Домен» автоматически — форма не сохранится, если оно пустое.</p>
+      </div>
+      <p>Выбранный «Бизнес-домен ОМ» становится частью технического идентификатора коллекции в поиске (например, домен «Инвестиции» → идентификатор коллекции вида <code>ns_Инвестиции.&lt;код коллекции&gt;</code>).</p>
+      <p>Технические поля (эмбеддинги, разбивка на чанки, параметры поиска) в норме не требуют ручной настройки — платформа подставляет рабочие значения по умолчанию; их смена после создания требует переиндексации коллекции.</p>
+    </section>
+
+    <section id="s4">
+      <h2 class="sec"><span class="n tabular">04</span> Как реально дать доступ команде или пользователю</h2>
+      <p>Это ключевой раздел — рабочий, проверенный на практике механизм.</p>
+
+      <div class="case">
+        <p class="case-label">Кейс</p>
+        <h4>Шаг 1 — назначить домен</h4>
+        <p>Домен можно назначить двумя способами — выбирайте по ситуации:</p>
+        <ul class="plain">
+          <li><strong>Пользователю индивидуально:</strong> Настройки → Команды и пользователи → Пользователи → карточка пользователя → блок «Домены» → выбрать домен(ы) из списка.</li>
+          <li><strong>Команде целиком:</strong> Настройки → Команды и пользователи → Команды → карточка команды → блок «Домены» → выбрать домен(ы) из списка. Все участники команды наследуют назначенные домены автоматически.</li>
+        </ul>
+        <h4>Шаг 2 — назначить роль «Domain Only Access Role»</h4>
+        <p>Одного домена на шаге 1 <strong>недостаточно</strong>. Чтобы домен реально ограничивал видимые данные, пользователю (или его команде) дополнительно нужна роль <strong>«Domain Only Access Role»</strong> — тот же блок «Роли» на карточке пользователя или команды.</p>
+        <p>Без этой роли пользователь продолжает работать по своей базовой роли (например, «Data Consumer»), а назначенный домен ничего не ограничивает и не расширяет сам по себе.</p>
+        <div class="callout note" style="margin:12px 0 0;">
+          <p class="head">Точная логика роли</p>
+          <p>Техническое имя — <code>DomainOnlyAccessRole</code>, через политику <code>Domain Only Access Policy</code>. Дословно: «Если у пользователя назначен домен — он получает доступ только к данным этого домена. Если пользователю не назначен ни один домен — он получает доступ только к тем объектам, у которых тоже не задан домен». То есть без домена доступны только объекты без домена, а не общий доступ ко всему.</p>
+        </div>
+      </div>
+
+      <div class="callout ok">
+        <p class="head">Практический пример</p>
+        <p>Пользователю назначен домен «Инвестиции» и роли «Data Consumer» + «Domain Only Access Role». Результат: пользователь видит только данные и коллекции, отнесённые к домену «Инвестиции» — данные других доменов (например, «Производство») ему не видны.</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <h2 class="sec"><span class="n tabular">05</span> Что НЕ даёт доступа — частые заблуждения</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Механизм</th><th>Где находится</th><th>Что реально делает</th></tr></thead>
+          <tbody>
+            <tr><td>Владельцы / Эксперты домена</td><td>Карточка домена (раздел 2)</td><td>Организационная информация — кто отвечает за домен. Доступа не даёт.</td></tr>
+            <tr><td>Персона пользователя</td><td>Карточка пользователя</td><td>Настраивает стиль и тон ответов ассистента в чате. К доступу отношения не имеет.</td></tr>
+            <tr><td>Роли и политики в «Контроль доступа»</td><td>Настройки → Контроль доступа → Роли / Политики</td><td>Права на редактирование метаданных каталога (описания, теги, владельцы) — то есть кто может курировать сам каталог, а не кто что видит в чате.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Реальный доступ к данным домена в чате и поиске задаётся только связкой «Домен на профиле/команде» + «Роль Domain Only Access Role» (раздел 4).</p>
+    </section>
+
+    <section id="s6">
+      <h2 class="sec"><span class="n tabular">·</span> Глоссарий</h2>
+      <div class="glossary">
+        <div class="g-item"><span class="g-term">Домен</span><span class="g-def">Тематическая область данных; одновременно граница доступа.</span></div>
+        <div class="g-item"><span class="g-term">Бизнес-домен ОМ</span><span class="g-def">Привязка коллекции документов к домену каталога.</span></div>
+        <div class="g-item"><span class="g-term">Data Marketplace</span><span class="g-def">Раздел меню Каталога, где находятся Домены и Дата-продукты.</span></div>
+        <div class="g-item"><span class="g-term">Domain Only Access Role</span><span class="g-def">Роль (техническое имя <code>DomainOnlyAccessRole</code>), которая вместе с назначенным доменом ограничивает видимые пользователю данные только этим доменом; без домена — только объектами без домена.</span></div>
+        <div class="g-item"><span class="g-term">Владелец / Эксперт домена</span><span class="g-def">Организационная роль (кто отвечает / к кому обращаться), не связана с техническим доступом.</span></div>
+      </div>
+    </section>
+  </main>
+</div>

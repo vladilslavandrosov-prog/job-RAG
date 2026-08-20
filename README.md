@@ -48,7 +48,9 @@
 ## Платформа
 
 - [`docs/platform/README.md`](docs/platform/README.md) — оглавление разделов платформы, разобранных по скриншотам.
-- [`docs/platform/html/user-guide.html`](docs/platform/html/user-guide.html) и [`docs/platform/html/admin-guide.html`](docs/platform/html/admin-guide.html) — руководство пользователя и руководство администратора отдельными HTML-страницами, по ролям, а не по экранам меню.
+- [`docs/platform/rukovodstvo-administratora.md`](docs/platform/rukovodstvo-administratora.md), [`rukovodstvo-polzovatelya.md`](docs/platform/rukovodstvo-polzovatelya.md), [`rukovodstvo-administratora-ib.md`](docs/platform/rukovodstvo-administratora-ib.md) — актуальные руководства (администратор / пользователь / администратор ИБ), каждое в трёх версиях: `.md`, самодостаточный `.html`, `.docx` для печати.
+- [`docs/platform/obshee-opisanie-sistemy-standalone.html`](docs/platform/obshee-opisanie-sistemy-standalone.html) — короткое яркое описание платформы для первого знакомства.
+- [`docs/platform/html/user-guide.html`](docs/platform/html/user-guide.html) и [`docs/platform/html/admin-guide.html`](docs/platform/html/admin-guide.html) — более ранняя версия того же материала, переупакованная по ролям; вытеснена документами выше, оставлена как есть.
 
 ## Демо-кейсы для ретейла
 

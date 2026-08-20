@@ -1,0 +1,287 @@
+<title>Камерата</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Golos+Text:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --bg: #0E1016;
+    --bg-2: #14171F;
+    --surface: #171A23;
+    --surface-2: #1D212C;
+    --ink: #F2EEE4;
+    --muted: #A7ACBC;
+    --muted-2: #767C8E;
+    --line: #2A2E3A;
+    --line-2: #363B4A;
+    --gold: #C9A868;
+    --gold-soft: #E4CE9C;
+    --ember: #B3623C;
+    --ember-soft: #D98F63;
+    --shadow: 0 1px 2px rgba(0,0,0,.45), 0 20px 48px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Golos Text", "PT Sans", "Segoe UI", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.62;
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  .display { font-family: "Cormorant Garamond", "PT Serif", Georgia, serif; }
+
+  ::selection { background: var(--gold); color: #0E1016; }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; padding: 96px 0 72px; overflow: hidden;
+    background:
+      radial-gradient(ellipse 900px 480px at 50% -10%, rgba(201,168,104,.14), transparent 60%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .staff { position: absolute; inset: 0; pointer-events: none; opacity: .5; }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--gold-soft); font-weight: 600; margin: 0 0 22px;
+  }
+  .kicker .ln { width: 26px; height: 1px; background: var(--gold); }
+  h1.name {
+    font-size: clamp(56px, 11vw, 96px); line-height: .96; font-weight: 500;
+    margin: 0 0 20px; letter-spacing: -.01em; text-wrap: balance;
+    background: linear-gradient(115deg, var(--ink) 35%, var(--gold-soft) 85%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede {
+    font-size: 19px; color: var(--muted); max-width: 56ch; margin: 0 0 30px;
+  }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .etymology {
+    display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start;
+    max-width: 62ch; margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line);
+  }
+  .etymology .mark {
+    font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 46px;
+    color: var(--gold); line-height: 1; opacity: .85;
+  }
+  .etymology p { margin: 0; font-size: 15.5px; color: var(--muted); }
+  .etymology .cap { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); margin: 10px 0 0; }
+
+  /* ---------- Sections ---------- */
+  section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-soft);
+    font-weight: 600; margin: 0 0 14px;
+  }
+  h2 {
+    font-family: "Cormorant Garamond", serif; font-weight: 500; font-size: clamp(30px, 4.4vw, 40px);
+    line-height: 1.12; margin: 0 0 20px; text-wrap: balance; letter-spacing: -.005em;
+  }
+  p { margin: 0 0 15px; max-width: 66ch; color: var(--ink); }
+  section > p:last-child { margin-bottom: 0; }
+  .sub { color: var(--muted); }
+
+  /* contrast pair */
+  .contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
+  @media (max-width: 640px) { .contrast { grid-template-columns: 1fr; } }
+  .cpane { border: 1px solid var(--line); border-radius: 4px; padding: 24px 26px; background: var(--surface); }
+  .cpane.no { border-top: 2px solid var(--muted-2); }
+  .cpane.yes { border-top: 2px solid var(--gold); box-shadow: var(--shadow); }
+  .cpane .clabel { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; margin: 0 0 12px; }
+  .cpane.no .clabel { color: var(--muted-2); }
+  .cpane.yes .clabel { color: var(--gold-soft); }
+  .cpane p { font-size: 14.5px; color: var(--muted); margin: 0 0 8px; max-width: none; }
+  .cpane.yes p { color: var(--ink); }
+
+  /* Five parts — programme listing */
+  .programme { margin-top: 34px; }
+  .part {
+    display: grid; grid-template-columns: 130px 1fr; gap: 24px;
+    padding: 22px 0; border-top: 1px solid var(--line);
+  }
+  .part:last-child { border-bottom: 1px solid var(--line); }
+  @media (max-width: 620px) { .part { grid-template-columns: 1fr; gap: 6px; } }
+  .part .role {
+    font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 17px; color: var(--gold-soft);
+    padding-top: 2px;
+  }
+  .part h3 { margin: 0 0 6px; font-size: 16.5px; font-weight: 700; letter-spacing: -.005em; }
+  .part p { margin: 0; font-size: 14.5px; color: var(--muted); max-width: 58ch; }
+
+  /* delivery modes */
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
+  @media (max-width: 640px) { .modes { grid-template-columns: 1fr; } }
+  .mode { border-radius: 4px; padding: 24px 26px; background: var(--surface); border: 1px solid var(--line); }
+  .mode .mlabel { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 10px; }
+  .mode h4 { margin: 0 0 12px; font-size: 20px; font-family: "Cormorant Garamond", serif; font-weight: 600; color: var(--ink); }
+  .mode ul { list-style: none; margin: 0; padding: 0; }
+  .mode li { font-size: 13.5px; color: var(--muted); padding: 7px 0; border-top: 1px solid var(--line); }
+  .mode li:first-child { border-top: none; }
+  .mode li strong { color: var(--ink); font-weight: 600; }
+  .mode.locked { border-left: 2px solid var(--gold); }
+
+  /* two column lists */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 8px; }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; gap: 28px; } }
+  .split h3 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 16px; }
+  ul.dash { list-style: none; margin: 0; padding: 0; }
+  ul.dash li { position: relative; padding: 0 0 13px 18px; font-size: 14.5px; color: var(--muted); max-width: 44ch; }
+  ul.dash li::before { content: "—"; position: absolute; left: 0; color: var(--gold); }
+  ul.dash li:last-child { padding-bottom: 0; }
+  ul.dash strong { color: var(--ink); font-weight: 600; }
+
+  /* footer */
+  footer { padding: 56px 0 72px; }
+  footer .fnote { font-size: 13px; color: var(--muted-2); max-width: 54ch; }
+  footer .fname { font-family: "Cormorant Garamond", serif; font-size: 22px; color: var(--gold-soft); margin: 0 0 10px; }
+</style>
+
+<header class="hero">
+  <svg class="staff" viewBox="0 0 860 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g stroke="#C9A868" stroke-width="0.6" opacity="0.35">
+      <line x1="0" y1="60" x2="860" y2="30"/>
+      <line x1="0" y1="96" x2="860" y2="70"/>
+      <line x1="0" y1="132" x2="860" y2="110"/>
+    </g>
+    <g fill="#C9A868" opacity="0.5">
+      <circle cx="620" cy="46" r="3.2"/>
+      <circle cx="700" cy="58" r="3.2"/>
+      <circle cx="760" cy="42" r="3.2"/>
+      <circle cx="820" cy="66" r="3.2"/>
+    </g>
+  </svg>
+  <div class="wrap">
+    <p class="kicker"><span class="ln"></span>Единое рабочее пространство с данными</p>
+    <h1 class="name display">Камерата</h1>
+    <p class="lede">Сотрудник задаёт вопрос обычным языком — и получает число, таблицу, график или ссылку на документ. <strong>Работает в вашем контуре, отвечает только по вашим данным</strong> и никогда не показывает лишнего.</p>
+
+    <div class="etymology">
+      <span class="mark display">«</span>
+      <div>
+        <p>Камератой во Флоренции конца XVI века называли собрание музыкантов, поэтов и учёных, из опытов которого выросла опера — не один солист, а общество исполнителей: у каждого своя партия, звучат они вместе. За каждым ответом платформы стоит не одна модель, а несколько узких исполнителей — и «дирижёр», сводящий их партии в единый ответ.</p>
+        <p class="cap">О названии</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">Отличие от чат-бота</p>
+      <h2>Не «отвечает из головы» — отвечает по вашим документам</h2>
+      <p class="sub">Публичный чат-бот обучен на текстах интернета: не знает ваших регламентов и может уверенно сформулировать неверный ответ, который нечем проверить. Камерата устроена наоборот.</p>
+      <div class="contrast">
+        <div class="cpane no">
+          <p class="clabel">Обычный чат-бот</p>
+          <p>Отвечает по общей эрудиции модели</p>
+          <p>Не видит внутренние документы компании</p>
+          <p>Может уверенно выдумать неверный ответ</p>
+          <p>Не знает, кому отвечает</p>
+        </div>
+        <div class="cpane yes">
+          <p class="clabel">Камерата</p>
+          <p>Сначала ищет в ваших данных, потом отвечает</p>
+          <p>Каждый ответ — со ссылкой на источник</p>
+          <p>Честно говорит «не найдено», если ответа нет</p>
+          <p>Знает права каждого — отвечает в их границах</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">Устройство</p>
+      <h2>Пять партий одного ансамбля</h2>
+      <p class="sub">Внутри понятий больше — для встреч и решений достаточно этих пяти.</p>
+      <div class="programme">
+        <div class="part">
+          <p class="role">первая скрипка</p>
+          <div><h3>Каталог данных</h3><p>Оглавление всего, что есть в компании — какие таблицы, отчёты и документы, где лежат, кто имеет доступ. Единый источник правды: ни один компонент не работает в обход него.</p></div>
+        </div>
+        <div class="part">
+          <p class="role">партитура</p>
+          <div><h3>Глоссарий</h3><p>Словарь делового языка компании — связывает «выручку» и «объём» с конкретными полями в базах, отдельно для каждого подразделения, где слово значит своё.</p></div>
+        </div>
+        <div class="part">
+          <p class="role">рассадка</p>
+          <div><h3>Домен и персона</h3><p>Тематическая область данных и то, «в роли кого» сейчас работает человек. Определяет, что видно и каким языком система понимает вопрос. Права можно только сузить, никогда не расширить.</p></div>
+        </div>
+        <div class="part">
+          <p class="role">дирижёр</p>
+          <div><h3>Агенты и оркестратор</h3><p>Узкие исполнители под задачу — один обращается к данным, другой ищет по документам, третий строит график — и диспетчер, который распределяет вопрос и собирает единый ответ.</p></div>
+        </div>
+        <div class="part">
+          <p class="role">единственный выход</p>
+          <div><h3>Защитный слой</h3><p>Весь обмен с ИИ-моделями идёт через него: проверяет права, маскирует чувствительное, ведёт аудит. Дверь наружу одна — и она всегда под присмотром.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">Периметр</p>
+      <h2>Данные не покидают контур без спроса</h2>
+      <p class="sub">Что сотрудник вправе прочитать и куда прочитанное можно отправить — два независимых правила. Режим поставки определяет вторую ось.</p>
+      <div class="modes">
+        <div class="mode locked">
+          <p class="mlabel">Изолированный контур</p>
+          <h4 class="display">Ничего наружу</h4>
+          <ul>
+            <li>Выход в интернет — <strong>отсутствует</strong></li>
+            <li>Модели — только локальные, внутри периметра</li>
+            <li>Наружу не уходит ничего, ни в каком виде</li>
+          </ul>
+        </div>
+        <div class="mode">
+          <p class="mlabel">Гибридный контур</p>
+          <h4 class="display">Только через шлюз</h4>
+          <ul>
+            <li>Выход — <strong>только через защитный шлюз</strong></li>
+            <li>Модели — локальные и внешние, по классу данных</li>
+            <li>Наружу — разрешённый класс, персональные поля замаскированы</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">Честно</p>
+      <h2>Что нужно от вас и чего платформа не делает</h2>
+      <div class="split">
+        <div>
+          <h3>Требуется на старте</h3>
+          <ul class="dash">
+            <li><strong>Готовность каталога</strong> — понятные имена и связи между источниками; есть отдельная проверка, показывающая объём работ заранее</li>
+            <li><strong>Дисциплина документов</strong> — устаревшие версии помечаются неактуальными, иначе платформа честно найдёт и уверенно ответит по ним неверно</li>
+            <li><strong>Люди</strong> — куратор смысла данных и представитель ИБ; платформа даёт им рабочие места, решения принимают они</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Границы платформы</h3>
+          <ul class="dash">
+            <li><strong>Не наводит порядок в данных сама</strong> — работает поверх того, что есть</li>
+            <li><strong>Не даёт доступ к тому, чего нет в каталоге</strong> — скажет об этом прямо</li>
+            <li><strong>Не принимает решений за человека</strong> — там, где нужен контроль, срабатывает пауза на проверку</li>
+            <li><strong>Не дообучается на ваших данных</strong> — модели не переносят корпус за пределы контура</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="fname display">Камерата</p>
+    <p class="fnote">Общее описание системы — для первого знакомства с платформой. Подробности по ролям, экранам и практическим кейсам — в руководствах пользователя и администратора.</p>
+  </div>
+</footer>

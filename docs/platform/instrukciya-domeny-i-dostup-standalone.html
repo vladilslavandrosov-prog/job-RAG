@@ -168,46 +168,54 @@
     </header>
 
     <figure class="diagram">
-      <svg viewBox="0 0 760 190" role="img" aria-label="Схема действий: сначала создаётся домен в Каталоге, затем к нему привязывается коллекция документов, затем домен и роль Domain Only Access Role назначаются пользователю или команде, и в результате пользователь видит только данные своего домена">
+      <svg viewBox="0 0 760 270" role="img" aria-label="Схема действий: сначала создаётся домен в Каталоге, затем к нему привязывается коллекция документов, затем домен назначается пользователю или команде через один из двух способов — домен на профиле плюс роль Domain Only Access Role, либо через Персону на экране Граф доступа — и в результате пользователь видит только данные своего домена">
         <defs>
           <marker id="darr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <polygon points="0,0 10,5 0,10" fill="currentColor" opacity=".6"/>
           </marker>
         </defs>
 
-        <rect x="10" y="55" width="150" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
-        <text x="85" y="85" text-anchor="middle" class="dg-text" font-weight="700">1 · Домен</text>
-        <text x="85" y="101" text-anchor="middle" class="dg-label">создать в Каталоге</text>
-        <text x="85" y="114" text-anchor="middle" class="dg-label">(раздел 2)</text>
+        <text x="380" y="10" text-anchor="middle" class="dg-label">Владельцы/Эксперты домена, Роли «Контроль доступа» — governance, не входят в эту цепочку (раздел 5)</text>
 
-        <line x1="160" y1="90" x2="198" y2="90" marker-end="url(#darr)" class="dg-line"/>
+        <rect x="10" y="95" width="130" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="75" y="125" text-anchor="middle" class="dg-text" font-weight="700">1 · Домен</text>
+        <text x="75" y="141" text-anchor="middle" class="dg-label">создать в Каталоге</text>
+        <text x="75" y="154" text-anchor="middle" class="dg-label">(раздел 2)</text>
 
-        <rect x="200" y="55" width="150" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
-        <text x="275" y="85" text-anchor="middle" class="dg-text" font-weight="700">2 · Коллекция</text>
-        <text x="275" y="101" text-anchor="middle" class="dg-label">привязать к домену</text>
-        <text x="275" y="114" text-anchor="middle" class="dg-label">(раздел 3)</text>
+        <line x1="140" y1="130" x2="173" y2="130" marker-end="url(#darr)" class="dg-line"/>
 
-        <line x1="350" y1="90" x2="388" y2="90" marker-end="url(#darr)" class="dg-line"/>
+        <rect x="175" y="95" width="130" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="240" y="125" text-anchor="middle" class="dg-text" font-weight="700">2 · Коллекция</text>
+        <text x="240" y="141" text-anchor="middle" class="dg-label">привязать к домену</text>
+        <text x="240" y="154" text-anchor="middle" class="dg-label">(раздел 3)</text>
 
-        <rect x="390" y="55" width="180" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
-        <text x="480" y="79" text-anchor="middle" class="dg-text" font-weight="700">3 · Пользователь / команда</text>
-        <text x="480" y="97" text-anchor="middle" class="dg-label">домен + роль</text>
-        <text x="480" y="110" text-anchor="middle" class="dg-label">Domain Only Access Role (раздел 4)</text>
+        <line x1="305" y1="130" x2="337" y2="50" marker-end="url(#darr)" class="dg-line"/>
+        <line x1="305" y1="130" x2="337" y2="210" marker-end="url(#darr)" class="dg-line"/>
 
-        <line x1="570" y1="90" x2="608" y2="90" marker-end="url(#darr)" class="dg-line"/>
+        <rect x="340" y="15" width="195" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="437" y="39" text-anchor="middle" class="dg-text" font-weight="700">3a · Пользователь / команда</text>
+        <text x="437" y="57" text-anchor="middle" class="dg-label">способ 1 — домен + роль</text>
+        <text x="437" y="70" text-anchor="middle" class="dg-label">Domain Only Access Role</text>
 
-        <rect x="610" y="45" width="150" height="90" rx="8" fill="var(--ok-tint)" stroke="var(--ok)" stroke-width="1.4"/>
-        <text x="685" y="75" text-anchor="middle" class="dg-text" font-weight="700" fill="var(--ok)">Результат</text>
-        <text x="685" y="92" text-anchor="middle" class="dg-label">видит только данные</text>
-        <text x="685" y="105" text-anchor="middle" class="dg-label">своего домена</text>
-        <text x="685" y="120" text-anchor="middle" class="dg-label">(без домена — только</text>
-        <text x="685" y="132" text-anchor="middle" class="dg-label">объекты без домена)</text>
+        <rect x="340" y="185" width="195" height="70" rx="8" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="437" y="209" text-anchor="middle" class="dg-text" font-weight="700">3b · Персона</text>
+        <text x="437" y="227" text-anchor="middle" class="dg-label">способ 2 — Разрешённые</text>
+        <text x="437" y="240" text-anchor="middle" class="dg-label">домены (Граф доступа)</text>
 
-        <text x="380" y="25" text-anchor="middle" class="dg-label">Владельцы/Эксперты домена, Персона, Роли «Контроль доступа» — governance, не эта цепочка (раздел 5)</text>
-        <line x1="10" y1="165" x2="760" y2="165" class="dg-line" stroke-dasharray="3 4"/>
-        <text x="380" y="182" text-anchor="middle" class="dg-label">Шаги 1–3 выполняет администратор; шаг «Результат» проверяется от лица пользователя</text>
+        <line x1="535" y1="50" x2="573" y2="130" marker-end="url(#darr)" class="dg-line"/>
+        <line x1="535" y1="220" x2="573" y2="130" marker-end="url(#darr)" class="dg-line"/>
+
+        <rect x="575" y="85" width="175" height="90" rx="8" fill="var(--ok-tint)" stroke="var(--ok)" stroke-width="1.4"/>
+        <text x="662" y="115" text-anchor="middle" class="dg-text" font-weight="700" fill="var(--ok)">Результат</text>
+        <text x="662" y="132" text-anchor="middle" class="dg-label">видит только данные</text>
+        <text x="662" y="145" text-anchor="middle" class="dg-label">своего домена</text>
+        <text x="662" y="160" text-anchor="middle" class="dg-label">(без домена — только</text>
+        <text x="662" y="172" text-anchor="middle" class="dg-label">объекты без домена)</text>
+
+        <line x1="10" y1="255" x2="760" y2="255" class="dg-line" stroke-dasharray="3 4"/>
+        <text x="380" y="267" text-anchor="middle" class="dg-label">Шаги 1–3 (один из способов 3a/3b) выполняет администратор; шаг «Результат» проверяется от лица пользователя</text>
       </svg>
-      <figcaption>Общая последовательность: домен → коллекция → назначение домену пользователя/команды + роли Domain Only Access Role → ограниченный доступ.</figcaption>
+      <figcaption>Общая последовательность: домен → коллекция → назначение домена пользователю/команде (способ 1) или через Персону (способ 2) → ограниченный доступ.</figcaption>
     </figure>
 
     <section id="s1">
@@ -277,7 +285,9 @@
 
     <section id="s4">
       <h2 class="sec"><span class="n tabular">04</span> Как реально дать доступ команде или пользователю</h2>
-      <p>Это ключевой раздел — рабочий, проверенный на практике механизм.</p>
+      <p>Это ключевой раздел — здесь описаны два рабочих, проверенных на практике механизма.</p>
+
+      <h3 class="sub">Способ 1 — домен на профиле пользователя или команды</h3>
 
       <div class="case">
         <p class="case-label">Кейс</p>
@@ -294,11 +304,26 @@
           <p class="head">Точная логика роли</p>
           <p>Техническое имя — <code>DomainOnlyAccessRole</code>, через политику <code>Domain Only Access Policy</code>. Дословно: «Если у пользователя назначен домен — он получает доступ только к данным этого домена. Если пользователю не назначен ни один домен — он получает доступ только к тем объектам, у которых тоже не задан домен». То есть без домена доступны только объекты без домена, а не общий доступ ко всему.</p>
         </div>
+        <h4>Практический пример</h4>
+        <p>Пользователю назначен домен «Инвестиции» и роли «Data Consumer» + «Domain Only Access Role». Результат: пользователь видит только данные и коллекции, отнесённые к домену «Инвестиции» — данные других доменов (например, «Производство») ему не видны.</p>
       </div>
 
-      <div class="callout ok">
-        <p class="head">Практический пример</p>
-        <p>Пользователю назначен домен «Инвестиции» и роли «Data Consumer» + «Domain Only Access Role». Результат: пользователь видит только данные и коллекции, отнесённые к домену «Инвестиции» — данные других доменов (например, «Производство») ему не видны.</p>
+      <h3 class="sub">Способ 2 — через Персону (Граф доступа)</h3>
+      <p>Альтернативный путь: домены назначаются не пользователю напрямую, а <strong>Персоне</strong>, привязанной к пользователю, через отдельный административный экран.</p>
+
+      <div class="case">
+        <p class="case-label">Кейс</p>
+        <p><strong>Путь:</strong> Управление данными → Граф доступа → Политики доступа.</p>
+        <ol class="steps">
+          <li>На вкладке «Политики доступа» выбрать Тип — «Персона» (доступен и вариант «Пользователь» — для точечных исключений) и саму персону (например, «Менеджер»).</li>
+          <li>В блоке «Разрешённые домены» добавить нужный домен(ы) — так же, как теги.</li>
+          <li>Сохранить.</li>
+        </ol>
+        <p>Выбранные домены записываются в поле <code>allowedDomains</code> персоны и объединяются с доменами команд пользователя в общем JWT-токене — то есть действуют по тому же принципу ограничения, что и «Домены» на профиле пользователя/команды (способ 1), но назначаются через Персону, а не напрямую.</p>
+        <div class="callout note" style="margin:12px 0 0;">
+          <p class="head">Важно</p>
+          <p>Этот же экран одновременно позволяет задать для персоны row-фильтры (JSON-шаблон вида <code>{"схема.таблица": "выражение с :param из юзера"}</code>) и маскируемые колонки (<code>схема.таблица.колонка</code>) по ключам <code>catalog.schema.table</code>, которые различает механизм OPA. Это уже про доступ к данным на уровне SQL-запросов (Trino), а не про RAG-поиск по документам — отдельная тема от коллекций из раздела 3.</p>
+        </div>
       </div>
     </section>
 
@@ -309,20 +334,15 @@
           <thead><tr><th>Механизм</th><th>Где находится</th><th>Что реально делает</th></tr></thead>
           <tbody>
             <tr><td>Владельцы / Эксперты домена</td><td>Карточка домена (раздел 2)</td><td>Организационная информация — кто отвечает за домен. Доступа не даёт.</td></tr>
-            <tr><td>Персона пользователя</td><td>Карточка пользователя</td><td>Настраивает стиль и тон ответов ассистента в чате. К доступу отношения не имеет.</td></tr>
+            <tr><td>Настройка интерфейса Персоны</td><td>Настройки → Персоны → карточка → «Настроить интерфейс»</td><td>Настраивает шаблон страниц и стиль ответов ассистента в чате. К домену/доступу отношения не имеет.</td></tr>
             <tr><td>Роли и политики в «Контроль доступа»</td><td>Настройки → Контроль доступа → Роли / Политики</td><td>Права на редактирование метаданных каталога (описания, теги, владельцы) — то есть кто может курировать сам каталог, а не кто что видит в чате.</td></tr>
           </tbody>
         </table>
       </div>
-      <p>Реальный доступ к данным домена в чате и поиске задаётся только связкой «Домен на профиле/команде» + «Роль Domain Only Access Role» (раздел 4).</p>
+      <p>Реальный доступ к данным домена в чате и поиске задаётся связкой «Домен на профиле/команде» + «Роль Domain Only Access Role» (способ 1) либо «Разрешённые домены» Персоны через Граф доступа (способ 2) — раздел 4.</p>
       <div class="callout warn">
-        <p class="head">Персону нельзя привязать к домену вообще</p>
-        <p>Ни на форме создания, ни в дальнейших настройках. У Персоны (Настройки → Персоны → карточка → «Настроить интерфейс») есть только настройка <strong>шаблона страниц</strong> — Навигация, Главная страница, Marketplace, «Руководство» (внутри — Data Product, Domain, Glossary, Glossary Term), Объекты данных. Пункт «Domain» там означает не связь с конкретным доменом, а вид общей карточки <strong>любого</strong> домена (какие вкладки и виджеты видны) для пользователей с этой персоной — не про доступ к данным и не про конкретный домен.</p>
-      </div>
-
-      <div class="callout note">
-        <p class="head">Уточнение в процессе (заглушка)</p>
-        <p>Отдельно от вышесказанного — на экране <strong>Управление данными → Граф доступа → Политики доступа</strong> у Персоны действительно есть поле <strong>«Разрешённые домены»</strong>: оно пишется в <code>allowedDomains</code> персоны и объединяется с доменами команд пользователя в JWT. Это отдельный от Каталога механизм row-фильтров/масок. Как именно он соотносится с доступом в чате — раздел будет дополнен отдельно.</p>
+        <p class="head">Персону саму по себе нельзя привязать к домену</p>
+        <p>На карточке персоны (→ «Настроить интерфейс») есть только настройка <strong>шаблона страниц</strong> — Навигация, Главная страница, Marketplace, «Руководство» (внутри — Data Product, Domain, Glossary, Glossary Term), Объекты данных. Пункт «Domain» там означает не связь с конкретным доменом, а вид общей карточки <strong>любого</strong> домена (какие вкладки и виджеты видны) для пользователей с этой персоной. Реальная привязка Персоны к домену делается <strong>на другом экране</strong> — Управление данными → Граф доступа → Политики доступа, поле «Разрешённые домены» (способ 2 выше).</p>
       </div>
     </section>
 
@@ -334,6 +354,8 @@
         <div class="g-item"><span class="g-term">Data Marketplace</span><span class="g-def">Раздел меню Каталога, где находятся Домены и Дата-продукты.</span></div>
         <div class="g-item"><span class="g-term">Domain Only Access Role</span><span class="g-def">Роль (техническое имя <code>DomainOnlyAccessRole</code>), которая вместе с назначенным доменом ограничивает видимые пользователю данные только этим доменом; без домена — только объектами без домена.</span></div>
         <div class="g-item"><span class="g-term">Владелец / Эксперт домена</span><span class="g-def">Организационная роль (кто отвечает / к кому обращаться), не связана с техническим доступом.</span></div>
+        <div class="g-item"><span class="g-term">Граф доступа</span><span class="g-def">Раздел «Управление данными», где настраиваются row-фильтры, маскирование колонок и «Разрешённые домены» для Персон и пользователей (способ 2, раздел 4).</span></div>
+        <div class="g-item"><span class="g-term">Разрешённые домены (Персоны)</span><span class="g-def">Поле на экране Граф доступа → Политики доступа; пишется в <code>allowedDomains</code> персоны и объединяется с доменами команд пользователя в JWT.</span></div>
       </div>
     </section>
 

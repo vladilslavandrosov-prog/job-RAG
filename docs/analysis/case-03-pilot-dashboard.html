@@ -1,0 +1,196 @@
+<title>Дашборд пилота Д8</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --cat-a: #0E8C7C; --cat-b: #7A4FBF;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --cat-a: #38A896; --cat-b: #9A82D4;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --cat-a: #38A896; --cat-b: #9A82D4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 40px 24px 72px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 26px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; }
+  .sub { font-size: 14px; color: var(--muted); margin: 0; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 14px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  @media (max-width: 760px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 16px 14px; box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
+  .tile.ok { border-top-color: var(--ok); }
+  .tile.warn { border-top-color: var(--warn); }
+  .tile.bad { border-top-color: var(--bad); }
+  .tile .label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 8px; }
+  .tile .num { font-size: 26px; font-weight: 700; margin: 0 0 4px; letter-spacing: -.01em; }
+  .tile .meta { font-size: 12.5px; color: var(--muted); margin: 0; }
+
+  section { margin-top: 30px; }
+  h2 { font-size: 15px; font-weight: 700; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 11px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); }
+
+  /* stage stepper */
+  .stages { display: flex; gap: 8px; }
+  .stage { flex: 1; border-radius: 10px; padding: 12px 14px; border: 1px solid var(--line); position: relative; }
+  .stage .st-n { font-size: 10.5px; color: var(--muted-2); font-weight: 700; }
+  .stage .st-t { font-size: 13.5px; font-weight: 700; margin: 3px 0 5px; }
+  .stage .st-s { font-size: 11.5px; font-weight: 600; }
+  .stage.done { background: var(--ok-tint); border-color: var(--ok); }
+  .stage.done .st-s { color: var(--ok); }
+  .stage.active { background: var(--warn-tint); border-color: var(--warn); }
+  .stage.active .st-s { color: var(--warn); }
+  .stage.pending { background: var(--surface-2); color: var(--muted); }
+  .stage.pending .st-s { color: var(--muted-2); }
+
+  /* checklist proportional bar */
+  .propbar { display: flex; height: 30px; border-radius: 8px; overflow: hidden; margin-bottom: 12px; border: 1px solid var(--line); }
+  .propbar span { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+  .propbar .p-ok { background: var(--ok); }
+  .propbar .p-bad { background: var(--bad); }
+  .propbar .p-pending { background: var(--muted-2); }
+  .propbar .p-ongoing { background: var(--accent); }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
+  .legend .sw { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+  /* scenario bars */
+  .barrow { display: grid; grid-template-columns: 120px 1fr 70px; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .barrow:last-child { margin-bottom: 0; }
+  .barrow .rl { font-size: 12.5px; color: var(--muted); text-align: right; }
+  .barrow .bb { display: flex; height: 20px; border-radius: 5px; overflow: hidden; background: var(--surface-2); }
+  .barrow .bb .seg { display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; color: #fff; }
+  .barrow .rt { font-size: 12.5px; color: var(--muted-2); font-variant-numeric: tabular-nums; }
+  .chart-legend { display: flex; gap: 18px; margin-top: 14px; font-size: 12.5px; color: var(--muted); }
+  .chart-legend .sw { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+  /* risk chips */
+  .chips { display: flex; flex-direction: column; gap: 8px; }
+  .chip { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 9px; font-size: 13px; border: 1px solid var(--line); }
+  .chip.bad { background: var(--bad-tint); border-color: var(--bad); color: var(--bad); }
+  .chip.warn { background: var(--warn-tint); border-color: var(--warn); color: var(--warn); }
+  .chip b { color: var(--ink); font-weight: 700; }
+  .chip .ic { flex: none; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  footer.note { margin-top: 32px; font-size: 12px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 14px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Пилот «Платформа» + AI Guard · Д8</h1>
+      <p class="sub">Приложение №1 к Договору № ИКД-1-PRO · Подрядчик АйТиКью Про</p>
+    </div>
+    <span class="snap"><span class="dot"></span>Срез на 25.08.2026</span>
+  </header>
+
+  <div class="tiles">
+    <div class="tile ok">
+      <p class="label">Этап 1</p>
+      <p class="num">Завершён</p>
+      <p class="meta">Инфраструктура + доступ к КХД/ESB готовы</p>
+    </div>
+    <div class="tile">
+      <p class="label">Прогон по ИБ</p>
+      <p class="num tabular">93%</p>
+      <p class="meta">Устный апдейт · трекер xlsx не синхронизирован</p>
+    </div>
+    <div class="tile">
+      <p class="label">Чек-лист готовности</p>
+      <p class="num tabular">7 / 11</p>
+      <p class="meta">Готово · 1 заблокирован · 2 в очереди · 1 сквозной</p>
+    </div>
+    <div class="tile bad">
+      <p class="label">Активный блокер</p>
+      <p class="num" style="font-size:19px;">MCP-сервер</p>
+      <p class="meta">Ждём учётные данные от Д8</p>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="n">Этапы</span> Календарь пилота</h2>
+    <div class="stages">
+      <div class="stage done"><div class="st-n">01</div><div class="st-t">Подготовка</div><div class="st-s">✓ Завершён</div></div>
+      <div class="stage active"><div class="st-n">02</div><div class="st-t">Интеграция</div><div class="st-s">В процессе</div></div>
+      <div class="stage active"><div class="st-n">03</div><div class="st-t">Опытная эксплуатация</div><div class="st-s">Тестирование идёт</div></div>
+      <div class="stage pending"><div class="st-n">04</div><div class="st-t">Оценка и отчёт</div><div class="st-s">Не начат</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">11 пунктов</span> Чек-лист готовности</h2>
+    <div class="panel">
+      <div class="propbar" title="7 готово · 1 заблокирован · 2 в очереди · 1 сквозной">
+        <span class="p-ok" style="width:63.6%">7</span><span class="p-bad" style="width:9.1%">1</span><span class="p-pending" style="width:18.2%">2</span><span class="p-ongoing" style="width:9.1%">1</span>
+      </div>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--ok)"></span>Готово (7)</span>
+        <span><span class="sw" style="background:var(--bad)"></span>Заблокировано — MCP (1)</span>
+        <span><span class="sw" style="background:var(--muted-2)"></span>В очереди — пилотная группа, RAG-компании (2)</span>
+        <span><span class="sw" style="background:var(--accent)"></span>Сквозной — тех. контакт (1)</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">17 сценариев</span> Распределение тестовой матрицы по этапам</h2>
+    <div class="panel">
+      <div class="barrow">
+        <span class="rl">Этап 2</span>
+        <span class="bb"><span class="seg" style="width:50%; background:var(--cat-a)" title="Анонимизатор: 1">1</span><span class="seg" style="width:50%; background:var(--cat-b)" title="Платформа: 1">1</span></span>
+        <span class="rt">2 / 17</span>
+      </div>
+      <div class="barrow">
+        <span class="rl">Переходные</span>
+        <span class="bb"><span class="seg" style="width:50%; background:var(--cat-a)" title="Анонимизатор: 1">1</span><span class="seg" style="width:50%; background:var(--cat-b)" title="Платформа: 1">1</span></span>
+        <span class="rt">2 / 17</span>
+      </div>
+      <div class="barrow">
+        <span class="rl">Этап 3</span>
+        <span class="bb"><span class="seg" style="width:53.8%; background:var(--cat-a)" title="Анонимизатор: 7">7</span><span class="seg" style="width:46.2%; background:var(--cat-b)" title="Платформа: 6">6</span></span>
+        <span class="rt">13 / 17</span>
+      </div>
+      <div class="chart-legend">
+        <span><span class="sw" style="background:var(--cat-a)"></span>Блок «Анонимизатор» (AI Guard)</span>
+        <span><span class="sw" style="background:var(--cat-b)"></span>Блок «Платформа»</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Риски</span> Что держать на контроле</h2>
+    <div class="chips">
+      <div class="chip bad"><span class="ic"></span><span><b>MCP-сервер заблокирован</b> — ждём учётные данные от Д8, та же категория риска, что ранее была с КХД/ESB</span></div>
+      <div class="chip warn"><span class="ic"></span><span><b>«RAG-компании»</b> — источник не уточнён, риск стать блокером интеграции в последний момент</span></div>
+      <div class="chip warn"><span class="ic"></span><span><b>13 из 17 сценариев</b> — сконцентрированы на 2 неделях Этапа 3, распределить нагрузку заранее</span></div>
+    </div>
+  </section>
+
+  <footer class="note">job-RAG · docs/analysis/case-03-pilot-execution-plan.md — полный план и обоснования</footer>
+</div>

@@ -1,0 +1,256 @@
+<title>Анализ хода пилота Д8</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --code-bg: #EDF1F3; --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --code-bg: #1C252C; --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --code-bg: #1C252C; --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .shell { display: grid; grid-template-columns: 220px minmax(0, 780px); justify-content: center; gap: 56px; max-width: 1180px; margin: 0 auto; padding: 56px 24px 96px; }
+  @media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; } .nav-rail { display: none; } }
+
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-2); font-weight: 600; margin: 0 0 14px; }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list a { display: flex; gap: 10px; align-items: baseline; padding: 6px 0 6px 16px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; font-size: 12.5px; }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 16px; }
+
+  header.doc-head { margin-bottom: 32px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title { font-size: 30px; line-height: 1.18; letter-spacing: -.01em; font-weight: 700; margin: 0 0 14px; text-wrap: balance; }
+  .subtitle { font-size: 15.5px; color: var(--muted); margin: 0; max-width: 66ch; }
+
+  .headline { border-radius: 12px; padding: 18px 20px; margin-bottom: 8px; border: 1px solid var(--accent); background: var(--accent-tint); }
+  .headline p { margin: 0; font-size: 15px; color: var(--ink); }
+  .headline .head { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent-ink); margin: 0 0 8px; }
+
+  section { margin-top: 44px; scroll-margin-top: 32px; }
+  h2.sec { display: flex; align-items: baseline; gap: 10px; font-size: 20px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 14px; }
+  h2.sec .n { font-size: 12.5px; color: var(--accent); font-weight: 700; }
+  h3.sub { font-size: 15px; font-weight: 700; margin: 22px 0 8px; }
+  p { margin: 0 0 14px; max-width: 72ch; }
+  section > p:last-child { margin-bottom: 0; }
+  code { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; font-size: .88em; background: var(--code-bg); color: var(--code-ink); padding: .12em .38em; border-radius: 4px; }
+
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 13.5px; background: var(--surface); }
+  th, td { text-align: left; padding: 10px 13px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); white-space: nowrap; font-weight: 600; width: 1%; }
+
+  .pill { display: inline-block; font-size: 11px; letter-spacing: .02em; font-weight: 700; padding: 3px 9px; border-radius: 100px; white-space: nowrap; }
+  .pill.ok { background: var(--ok-tint); color: var(--ok); }
+  .pill.warn { background: var(--warn-tint); color: var(--warn); }
+  .pill.bad { background: var(--bad-tint); color: var(--bad); }
+
+  .callout { border-radius: 10px; padding: 15px 18px; margin: 0 0 18px; border: 1px solid var(--line); border-left: 3px solid var(--line-2); background: var(--surface); box-shadow: var(--shadow); }
+  .callout .head { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14px; max-width: none; }
+  .callout p + p { margin-top: 8px; }
+  .callout.note { border-left-color: var(--accent); }
+  .callout.note .head { color: var(--accent-ink); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-tint); }
+  .callout.warn .head { color: var(--warn); }
+  .callout.bad { border-left-color: var(--bad); background: var(--bad-tint); }
+  .callout.bad .head { color: var(--bad); }
+
+  .risk { border: 1px solid var(--line); border-left: 4px solid var(--line-2); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); padding: 16px 20px; margin: 0 0 16px; }
+  .risk.bad { border-left-color: var(--bad); }
+  .risk.warn { border-left-color: var(--warn); }
+  .risk.note { border-left-color: var(--accent); }
+  .risk .r-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .risk h4 { font-size: 15px; font-weight: 700; margin: 0; }
+  .risk p { margin: 0 0 8px; font-size: 14px; }
+  .risk p:last-child { margin-bottom: 0; }
+  .risk .rec { font-size: 13px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 8px; }
+  .risk .rec b { color: var(--ink); }
+
+  ul.plain { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.plain li { position: relative; padding: 0 0 12px 20px; font-size: 14.5px; max-width: 70ch; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  ul.plain li:last-child { padding-bottom: 0; }
+
+  ol.steps { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: cstep; }
+  ol.steps li { counter-increment: cstep; position: relative; padding: 0 0 12px 32px; font-size: 14.5px; max-width: 68ch; }
+  ol.steps li::before {
+    content: counter(cstep); position: absolute; left: 0; top: -1px;
+    width: 22px; height: 22px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink);
+    font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--accent);
+  }
+
+  .sources { border-top: 1px solid var(--line); margin-top: 44px; padding-top: 16px; font-size: 12.5px; color: var(--muted); }
+  .sources code { font-size: .95em; }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s1"><span class="nav-num tabular">1</span> Календарь</a></li>
+      <li><a href="#s2"><span class="nav-num tabular">2</span> Хронология</a></li>
+      <li><a href="#s3"><span class="nav-num tabular">3</span> Дорожки Этапа 2</a></li>
+      <li><a href="#s4"><span class="nav-num tabular">4</span> Риски</a></li>
+      <li><a href="#s5"><span class="nav-num tabular">5</span> Сильные стороны</a></li>
+      <li><a href="#s6"><span class="nav-num tabular">6</span> Рекомендации</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Кейс 06 · Анализ хода проекта</p>
+      <h1 class="title">Анализ хода пилота Д8</h1>
+      <p class="subtitle">«Платформа» + AI Guard в контуре АО «Инвестиционная компания Д8» — срез на 26.08.2026.</p>
+    </header>
+
+    <div class="headline">
+      <p class="head">Итог одной строкой</p>
+      <p>Проект вышел из полуторанедельного простоя по вине доступа к КХД/ESB и за последние три дня резко ускорился — Этап 1 закрыт, 4 из 5 внешних интеграционных каналов Этапа 2 подтверждённо работают, но один структурный вопрос (источник «RAG-компании») остаётся открытым с самого начала работ, а свежий прогресс по тестированию (93% по ИБ) пока подтверждён только устно, без синхронизации с реальным трекером результатов.</p>
+    </div>
+
+    <section id="s1">
+      <h2 class="sec"><span class="n">01</span> Где мы по календарю</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Этап</th><th>План (от целевого Дня 1 = 31.07)</th><th>Факт на 26.08.2026</th></tr></thead>
+          <tbody>
+            <tr><td>1. Подготовка и развёртывание</td><td>31.07–06.08 (7 дней)</td><td><span class="pill ok">Завершён</span></td></tr>
+            <tr><td>2. Интеграция</td><td>07.08–20.08 (14 дней)</td><td><span class="pill warn">В процессе</span> — 5/7 дорожек работают, 1 в процессе, 1 не начата</td></tr>
+            <tr><td>3. Опытная эксплуатация</td><td>21.08–03.09 (14 дней)</td><td><span class="pill warn">Тестирование идёт</span> — 93% по ИБ (устно), формально раньше срока</td></tr>
+            <tr><td>4. Оценка и отчёт</td><td>04.09–10.09 (7 дней)</td><td>Не начат</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn">
+        <p class="head">Ключевая неопределённость через весь план</p>
+        <p>Точная дата фактического закрытия доступа к КХД/ESB (новый «День 1», от которого считаются 6 недель пилота по ТЗ) так и не зафиксирована ни разу за всю сессию обновлений. Весь календарь выше и итоговая дата Этапа 4 (04.09) — по-прежнему целевые ориентиры, а не подтверждённые даты.</p>
+      </div>
+      <p>Отдельно бросается в глаза: тестирование по ИБ уже идёт на 93%, при том что «Условие перехода к Этапу 3» из плана (все 4 источника интегрированы, ролевая модель подтверждена сценариями «Платформа-1,2», RAG-корпус проиндексирован, канал к LLM проверен «Анонимизатором-1») ещё не выполнено полностью — минимум 4 контрольных сценария не подтверждены (раздел 3). Формально тестирование стартовало с недоделанным по плану фундаментом Этапа 2 — стоит явно сверить с Д8, что это осознанное решение, а не расхождение с ТЗ.</p>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec"><span class="n">02</span> Хронология: что изменилось за сессию</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Дата</th><th>Событие</th></tr></thead>
+          <tbody>
+            <tr><td class="k">05.08.2026</td><td>Последний официально зафиксированный статус до этой сессии: доступ к КХД/ESB в процессе, просрочка 5–9 дней, официальный День 1 не наступил</td></tr>
+            <tr><td class="k">25.08.2026</td><td>Инфраструктура и доступ к КХД/ESB закрыты — Этап 1 завершён; канал к облачной LLM через AI Guard подтверждён — Дорожка G работает; тестирование по ИБ идёт, 93% (устно; трекер не синхронизирован — 0/24); новый блокер — MCP-сервер, ждём креды от Д8; уточнено, что идёт проверка разделения области видимости, методика уже задокументирована</td></tr>
+            <tr><td class="k">26.08.2026</td><td>Блокер по MCP снят — сервер подключён и работает, подтверждено вызовом инструмента <code>n8n_getCurrentTime</code> (журнал LLM-сессий) и корректным ответом агента на вопрос об операционной дате</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>За три дня закрыты два из трёх активных блокеров — заметно быстрее, чем девять дней, которые ушли на один и тот же блокер доступа в период 27.07–05.08.</p>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec"><span class="n">03</span> Дорожки Этапа 2 — детальная оценка</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Дорожка</th><th>Статус</th><th>Подтверждено</th><th>Не подтверждено</th></tr></thead>
+          <tbody>
+            <tr><td>A — КХД</td><td><span class="pill ok">Работает</span></td><td>Коннектор, тестовые выборки</td><td>Сценарий «Платформа-1»</td></tr>
+            <tr><td>B — ESB</td><td><span class="pill ok">Работает</span></td><td>Интеграция реализована</td><td>B3 — сверка данных клиента</td></tr>
+            <tr><td>C — MCP</td><td><span class="pill ok">Работает</span></td><td>Вызов инструмента (<code>n8n_getCurrentTime</code>)</td><td>Полная проверка всех инструментов</td></tr>
+            <tr><td>D — «RAG-компании»</td><td><span class="pill bad">Не начата</span></td><td>—</td><td>D0 — что это за источник, вообще не уточнено</td></tr>
+            <tr><td>E — Ролевая модель</td><td><span class="pill warn">В процессе</span></td><td>Проверка видимости идёт, методика есть</td><td>Сценарий «Платформа-2»</td></tr>
+            <tr><td>F — RAG-корпус</td><td><span class="pill warn">Почти готово</span></td><td>Загрузка, индексация, поиск (с опережением)</td><td>F3 — проверка по ролям</td></tr>
+            <tr><td>G — AI Guard → LLM</td><td><span class="pill ok">Работает</span></td><td>Ключи, маршрутизация</td><td>Сценарий «Анонимизатор-1»</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Наблюдение.</strong> 5 из 7 дорожек имеют рабочее подключение, но ни по одной ни один привязанный контрольный сценарий формально не подтверждён — сейчас закрыт только уровень подключения, не уровень приёмки.</p>
+    </section>
+
+    <section id="s4">
+      <h2 class="sec"><span class="n">04</span> Пробелы и риски — по убыванию значимости</h2>
+
+      <div class="risk bad">
+        <div class="r-top"><h4>4.1 · «RAG-компании» — единственный полностью неподвинувшийся вопрос</h4><span class="pill bad">Критично</span></div>
+        <p>Вопрос стоит в плане с первой версии документа — что вообще означает этот источник. За всю сессию активного прогресса по остальным дорожкам по нему не появилось ни одного факта. Дорожка D — единственная из семи, где не сделано вообще ничего.</p>
+        <p>Риск: если не закрыть заблаговременно, вопрос может стать блокером в последний момент — уже без запаса времени, как было с КХД/ESB и MCP.</p>
+        <p class="rec"><b>Рекомендация.</b> Эскалировать явно и приоритетно, с конкретным сроком ответа от Д8.</p>
+      </div>
+
+      <div class="risk bad">
+        <div class="r-top"><h4>4.2 · Устный прогресс опережает документальное подтверждение</h4><span class="pill bad">Существенно</span></div>
+        <p>«93% по ИБ» — единственная метрика прогресса тестирования, и она пришла только текстом. Реальный трекер результатов (<code>test-tracker.xlsx</code>, 24 строки) на момент проверки пуст (0/24). Это не значит, что тестирование не идёт, но означает отсутствие независимо проверяемого артефакта.</p>
+        <p>Риск: для пилота с количественными критериями приёмки (≥98%/≥95%/≥90%) это разрыв между тем, что говорится, и тем, что можно предъявить на Этапе 4.</p>
+        <p class="rec"><b>Рекомендация.</b> Синхронизировать трекеры с реальным прогрессом сейчас, не откладывать до Этапа 4.</p>
+      </div>
+
+      <div class="risk warn">
+        <div class="r-top"><h4>4.3 · У NER нет метрики точности — только задержка</h4><span class="pill warn">Существенно</span></div>
+        <p>Задержка NER задокументирована точно (медиана 1,08 мс, p95 1,56 мс), но ни в одном источнике нет цифры точности/полноты обнаружения, аналогичной ≥98%/≥95% из ТЗ. Сценарий «Анонимизатор-2» — 9 из 17 сценариев тестовой матрицы — частично зависит именно от NER (свободный текст).</p>
+        <p class="rec"><b>Последствие.</b> Сложно заранее оценить, реалистичен ли порог ≥98% на специфичных для Д8 документах без первых прогонов.</p>
+      </div>
+
+      <div class="risk warn">
+        <div class="r-top"><h4>4.4 · Дообучение NER под терминологию Д8 не готово</h4><span class="pill warn">Существенно</span></div>
+        <p>Со слов разработчика: NER построен на GLiNER, архитектурно дообучаем через LoRA, но в системе — только предварительные заготовки, функция не доведена до готовой к использованию. Связано с риском 4.3: быстрого пути донастройки под терминологию Д8 на момент пилота нет.</p>
+        <p class="rec"><b>Рекомендация.</b> Не обещать Д8 дообучение NER как доступную опцию сейчас.</p>
+      </div>
+
+      <div class="risk note">
+        <div class="r-top"><h4>4.5 · 13 из 17 сценариев сконцентрированы на двух неделях Этапа 3</h4><span class="pill ok">Организационно</span></div>
+        <p>Унаследованный из ТЗ риск. С учётом того, что тестирование по ИБ уже стартовало параллельно с Этапом 2, у команды, возможно, уже есть запас, чтобы сгладить эту перегрузку.</p>
+        <p class="rec"><b>Рекомендация.</b> Явно спланировать распределение оставшихся сценариев по дням/трекам, раз возможность начать раньше уже используется.</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <h2 class="sec"><span class="n">05</span> Что сделано хорошо</h2>
+      <ul class="plain">
+        <li><strong>Темп закрытия блокеров вырос на порядок.</strong> КХД/ESB — 9 дней простоя с одним и тем же блокером; MCP — закрыт менее чем за сутки после эскалации.</li>
+        <li><strong>MCP подтверждён конкретным, проверяемым фактом</strong>, а не общей формулировкой — вызов инструмента виден в журнале LLM-сессий с номерами и меткой <code>egress</code>. Стоит держать этот уровень доказательности стандартом для остальных дорожек.</li>
+        <li><strong>RAG-корпус стартовал раньше графика</strong> — загрузка и индексация шли ещё на Этапе 1.</li>
+        <li><strong>Методика для Дорожки E была готова заранее</strong> — рабочий механизм и тест-кейс для проверки разделения видимости существовали до того, как проверка реально понадобилась.</li>
+        <li><strong>Честность про незрелые возможности зафиксирована документально</strong> (GLiNER/LoRA), а не оставлена как умолчание — тот же принцип, что уже применялся при разборе презентаций.</li>
+      </ul>
+    </section>
+
+    <section id="s6">
+      <h2 class="sec"><span class="n">06</span> Рекомендации — что сделать в первую очередь</h2>
+      <ol class="steps">
+        <li>Зафиксировать у Д8 точную дату фактического закрытия доступа к КХД/ESB — без неё весь календарь остаётся не пересчитанным.</li>
+        <li>Эскалировать вопрос «RAG-компании» (Дорожка D) отдельным письмом/звонком с явным запросом срока — единственный трек без движения.</li>
+        <li>Синхронизировать <code>test-tracker.xlsx</code> с реальным прогрессом тестирования — закрыть разрыв между устным 93% и документальным 0/24.</li>
+        <li>Спланировать прогон оставшихся контрольных сценариев («Платформа-1,2», «Анонимизатор-1», B3, F3) — без них формальное «Условие перехода к Этапу 3» не выполнено.</li>
+        <li>Не анонсировать Д8 дообучение NER под их терминологию как готовую функцию — только как возможное направление за рамками текущего пилота.</li>
+      </ol>
+    </section>
+
+    <p class="sources">Материалы: <code>case-03-pilot-execution-plan.md</code> · <code>case-03-pilot-dashboard.html</code> · <code>case-03-pilot-tz-ai-guard.md</code> · <code>docs/platform/instrukciya-domeny-i-dostup.md</code> · <code>docs/platform/rukovodstvo-administratora-ib.md</code> · <code>docs/test-data/anonymizer-2-test-documents/test-tracker.xlsx</code></p>
+  </main>
+</div>

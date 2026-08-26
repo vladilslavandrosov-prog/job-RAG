@@ -70,6 +70,19 @@
   .stage.pending { background: var(--surface-2); color: var(--muted); }
   .stage.pending .st-s { color: var(--muted-2); }
 
+  /* track grid */
+  .tracks-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 760px) { .tracks-grid { grid-template-columns: repeat(2, 1fr); } }
+  .track-card { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--surface); box-shadow: var(--shadow); }
+  .track-card .tc-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .track-card .tc-name { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; }
+  .track-card .tc-letter { width: 20px; height: 20px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink); font-weight: 700; font-size: 11px; display: flex; align-items: center; justify-content: center; flex: none; }
+  .track-card .tc-status { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
+  .track-card .tc-status.ok { background: var(--ok-tint); color: var(--ok); }
+  .track-card .tc-status.warn { background: var(--warn-tint); color: var(--warn); }
+  .track-card .tc-status.bad { background: var(--bad-tint); color: var(--bad); }
+  .track-card .tc-note { font-size: 12px; color: var(--muted); }
+
   /* checklist proportional bar */
   .propbar { display: flex; height: 30px; border-radius: 8px; overflow: hidden; margin-bottom: 12px; border: 1px solid var(--line); }
   .propbar span { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
@@ -107,7 +120,7 @@
       <h1>Пилот «Платформа» + AI Guard · Д8</h1>
       <p class="sub">Приложение №1 к Договору № ИКД-1-PRO · Подрядчик АйТиКью Про</p>
     </div>
-    <span class="snap"><span class="dot"></span>Срез на 25.08.2026</span>
+    <span class="snap"><span class="dot"></span>Срез на 26.08.2026</span>
   </header>
 
   <div class="tiles">
@@ -123,13 +136,13 @@
     </div>
     <div class="tile">
       <p class="label">Чек-лист готовности</p>
-      <p class="num tabular">7 / 11</p>
-      <p class="meta">Готово · 1 заблокирован · 2 в очереди · 1 сквозной</p>
+      <p class="num tabular">8 / 11</p>
+      <p class="meta">Готово · 2 в очереди · 1 сквозной</p>
     </div>
-    <div class="tile bad">
-      <p class="label">Активный блокер</p>
-      <p class="num" style="font-size:19px;">MCP-сервер</p>
-      <p class="meta">Ждём учётные данные от Д8</p>
+    <div class="tile ok">
+      <p class="label">MCP-сервер <span style="color:var(--ok); font-weight:700;">· новое</span></p>
+      <p class="num" style="font-size:19px;">Подключён</p>
+      <p class="meta">n8n_getCurrentTime подтверждён в журнале LLM</p>
     </div>
   </div>
 
@@ -144,14 +157,47 @@
   </section>
 
   <section>
+    <h2><span class="n">7 дорожек</span> Оценка по дорожкам Этапа 2</h2>
+    <div class="tracks-grid">
+      <div class="track-card">
+        <div class="tc-top"><span class="tc-name"><span class="tc-letter">A</span>КХД</span><span class="tc-status ok">Работает</span></div>
+        <p class="tc-note">Коннектор + тестовые выборки готовы; сценарий «Платформа-1» не подтверждён</p>
+      </div>
+      <div class="track-card">
+        <div class="tc-top"><span class="tc-name"><span class="tc-letter">B</span>ESB</span><span class="tc-status ok">Работает</span></div>
+        <p class="tc-note">Интеграция готова; сверка данных (B3) не подтверждена</p>
+      </div>
+      <div class="track-card">
+        <div class="tc-top"><span class="tc-name"><span class="tc-letter">C</span>MCP</span><span class="tc-status ok">Работает</span></div>
+        <p class="tc-note">Подключён, вызов инструмента подтверждён (n8n_getCurrentTime)</p>
+      </div>
+      <div class="track-card">
+        <div class="tc-top"><span class="tc-name"><span class="tc-letter">D</span>RAG-компании</span><span class="tc-status bad">Не начато</span></div>
+        <p class="tc-note">Ждём уточнение, что это за источник — открытый вопрос</p>
+      </div>
+      <div class="track-card">
+        <div class="tc-top"><span class="tc-name"><span class="tc-letter">E</span>Роли</span><span class="tc-status warn">В процессе</span></div>
+        <p class="tc-note">Идёт проверка разделения видимости; сценарий «Платформа-2» не подтверждён</p>
+      </div>
+      <div class="track-card">
+        <div class="tc-top"><span class="tc-name"><span class="tc-letter">F</span>RAG-корпус</span><span class="tc-status warn">Почти готово</span></div>
+        <p class="tc-note">Загрузка и поиск работают; проверка по ролям (F3) не подтверждена</p>
+      </div>
+      <div class="track-card">
+        <div class="tc-top"><span class="tc-name"><span class="tc-letter">G</span>AI Guard→LLM</span><span class="tc-status ok">Работает</span></div>
+        <p class="tc-note">Маршрутизация работает; сценарий «Анонимизатор-1» не подтверждён</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2><span class="n">11 пунктов</span> Чек-лист готовности</h2>
     <div class="panel">
-      <div class="propbar" title="7 готово · 1 заблокирован · 2 в очереди · 1 сквозной">
-        <span class="p-ok" style="width:63.6%">7</span><span class="p-bad" style="width:9.1%">1</span><span class="p-pending" style="width:18.2%">2</span><span class="p-ongoing" style="width:9.1%">1</span>
+      <div class="propbar" title="8 готово · 2 в очереди · 1 сквозной">
+        <span class="p-ok" style="width:72.7%">8</span><span class="p-pending" style="width:18.2%">2</span><span class="p-ongoing" style="width:9.1%">1</span>
       </div>
       <div class="legend">
-        <span><span class="sw" style="background:var(--ok)"></span>Готово (7)</span>
-        <span><span class="sw" style="background:var(--bad)"></span>Заблокировано — MCP (1)</span>
+        <span><span class="sw" style="background:var(--ok)"></span>Готово (8) — MCP подключился 26.08</span>
         <span><span class="sw" style="background:var(--muted-2)"></span>В очереди — пилотная группа, RAG-компании (2)</span>
         <span><span class="sw" style="background:var(--accent)"></span>Сквозной — тех. контакт (1)</span>
       </div>
@@ -186,7 +232,6 @@
   <section>
     <h2><span class="n">Риски</span> Что держать на контроле</h2>
     <div class="chips">
-      <div class="chip bad"><span class="ic"></span><span><b>MCP-сервер заблокирован</b> — ждём учётные данные от Д8, та же категория риска, что ранее была с КХД/ESB</span></div>
       <div class="chip warn"><span class="ic"></span><span><b>«RAG-компании»</b> — источник не уточнён, риск стать блокером интеграции в последний момент</span></div>
       <div class="chip warn"><span class="ic"></span><span><b>13 из 17 сценариев</b> — сконцентрированы на 2 неделях Этапа 3, распределить нагрузку заранее</span></div>
     </div>

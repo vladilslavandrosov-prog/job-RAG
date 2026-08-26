@@ -187,7 +187,7 @@
         </div>
         <div class="callout" style="border-left:3px solid var(--ok);">
           <h4>Обновление (25.08.2026) <span class="pill ok" style="margin-left:6px">инфраструктурный блокер снят</span></h4>
-          <p><strong>Этап 1 завершён</strong> — доступ к КХД и к ESB-шине закрыт, инфраструктура полностью готова. Подключение к Хранилищу (КХД) и к шине (ESB) выполнено, идёт тестирование. Тестирование по ИБ — <strong>прогон завершён на 93%</strong> (устный апдейт; трекер <code>test-tracker.xlsx</code> для сценария «Анонимизатор-2» в репозитории ещё не синхронизирован — на момент проверки файла 0 из 24 строк заполнено). Новый блокер: <strong>доступ к MCP-серверу не сделан — ждём учётные данные от Д8</strong>. Точная дата фактического закрытия доступа к КХД/ESB (новый День 1) не уточнена — календарь ниже пересчитать, как только она появится.</p>
+          <p><strong>Этап 1 завершён</strong> — доступ к КХД и к ESB-шине закрыт, инфраструктура полностью готова. Подключение к Хранилищу (КХД) и к шине (ESB) выполнено, идёт тестирование. Тестирование по ИБ — <strong>прогон завершён на 93%</strong> (устный апдейт; трекер <code>test-tracker.xlsx</code> для сценария «Анонимизатор-2» в репозитории ещё не синхронизирован — на момент проверки файла 0 из 24 строк заполнено). <strong>Обновление 26.08.2026 — блокер по MCP-серверу снят:</strong> сервер подключён и работает, подтверждено вызовом инструмента <code>n8n_getCurrentTime</code> в журнале LLM-сессий и корректным ответом агента в чате на вопрос об операционной дате. Точная дата фактического закрытия доступа к КХД/ESB (новый День 1) не уточнена — календарь ниже пересчитать, как только она появится.</p>
         </div>
         <div class="callout">
           <h4>Статус на 05.08.2026 (архив)</h4>
@@ -198,7 +198,7 @@
             <thead><tr><th>Этап</th><th>Плановая длительность</th><th>Плановые даты (от целевого Дня 1 = 31.07)</th><th>Факт на 25.08.2026</th></tr></thead>
             <tbody>
               <tr><td>Этап 1 — Подготовка и развёртывание</td><td>7 дней</td><td>31.07–06.08.2026</td><td><span class="pill ok">✓ Завершён</span> — инфраструктура и доступ к КХД/ESB готовы</td></tr>
-              <tr><td>Этап 2 — Интеграция</td><td>14 дней</td><td>07.08–20.08.2026</td><td><span class="pill warn">В процессе</span> — КХД/ESB подключены, MCP заблокирован (ждём креды Д8)</td></tr>
+              <tr><td>Этап 2 — Интеграция</td><td>14 дней</td><td>07.08–20.08.2026</td><td><span class="pill warn">В процессе</span> — КХД/ESB/MCP подключены и работают</td></tr>
               <tr><td>Этап 3 — Опытная эксплуатация</td><td>14 дней</td><td>21.08–03.09.2026</td><td><span class="pill warn">В процессе</span> — тестирование по ИБ идёт (93%), полный охват не подтверждён</td></tr>
               <tr><td>Этап 4 — Оценка и отчёт</td><td>7 дней</td><td>04.09–10.09.2026</td><td><span class="pill neutral">Не начат</span></td></tr>
             </tbody>
@@ -215,7 +215,7 @@
           <li><span class="pill ok">2 ✓</span><div class="body"><strong>Контейнерная среда</strong> <span class="meta">Docker/Kubernetes, Linux — Д8, установлено (Docker развернули собственными силами)</span></div></li>
           <li><span class="pill ok">3 ✓</span><div class="body"><strong>Доступ к КХД</strong> <span class="meta">read-only, согласованные схемы/таблицы — Д8, выполнено (обновление 25.08.2026), подключение к Хранилищу сделано</span></div></li>
           <li><span class="pill ok">4 ✓</span><div class="body"><strong>Доступ к ESB-шине</strong> <span class="meta">+ спецификация интерфейса + учётные данные — Д8, выполнено (обновление 25.08.2026), подключение к шине сделано</span></div></li>
-          <li><span class="pill gap">5</span><div class="body"><strong>Доступ к MCP-серверу</strong> <span class="meta">+ спецификация + учётные данные — Д8, не выполнено — ждём учётные данные от Д8 (обновление 25.08.2026), блокирует Дорожку C Этапа 2</span></div></li>
+          <li><span class="pill ok">5 ✓</span><div class="body"><strong>Доступ к MCP-серверу</strong> <span class="meta">+ спецификация + учётные данные — Д8, выполнено (обновление 26.08.2026) — сервер подключён и работает</span></div></li>
           <li><span class="pill warn">6</span><div class="body"><strong>Доступ к «RAG-компании»</strong> <span class="meta">Д8, блокирует Этап 2 — см. открытый вопрос</span></div></li>
           <li><span class="pill neutral">7</span><div class="body"><strong>Состав и права 2–5 ролей</strong> <span class="meta">согласовать заранее — совместно, блокирует Этап 1</span></div></li>
           <li><span class="pill ok">8 ✓</span><div class="body"><strong>Состав 2 RAG-коллекций документов</strong> <span class="meta">совместно — загрузка документов идёт, поиск по коллекциям уже работает</span></div></li>
@@ -275,10 +275,10 @@
             </ol>
           </div>
           <div class="track">
-            <h4><span class="letter">C</span>MCP-сервер <span class="pill gap">не начато — ждём креды</span></h4>
+            <h4><span class="letter">C</span>MCP-сервер <span class="pill ok">работает</span></h4>
             <ol>
-              <li>Подключение по спецификации <span class="pill gap" style="margin-left:4px">заблокировано</span><span class="owner"><span class="who">АйТиКью Про</span> · дни 3–5 · ждёт учётные данные от Д8</span></li>
-              <li>Проверка перечисления/вызова инструментов<span class="owner"><span class="who">АйТиКью Про</span> · дни 5–6</span></li>
+              <li>Подключение по спецификации <span class="pill ok" style="margin-left:4px">✓</span><span class="owner"><span class="who">АйТиКью Про</span> · дни 3–5</span></li>
+              <li>Проверка перечисления/вызова инструментов <span class="pill ok" style="margin-left:4px">✓ n8n_getCurrentTime</span><span class="owner"><span class="who">АйТиКью Про</span> · дни 5–6</span></li>
             </ol>
           </div>
           <div class="track">

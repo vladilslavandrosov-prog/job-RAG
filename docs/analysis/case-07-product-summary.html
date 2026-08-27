@@ -1,0 +1,174 @@
+<title>Резюме по продукту «Камерата»</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --code-bg: #EDF1F3; --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --code-bg: #1C252C; --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --code-bg: #1C252C; --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+  .shell { display: grid; grid-template-columns: 220px minmax(0, 780px); justify-content: center; gap: 56px; max-width: 1180px; margin: 0 auto; padding: 56px 24px 96px; }
+  @media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; } .nav-rail { display: none; } }
+
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-2); font-weight: 600; margin: 0 0 14px; }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list a { display: flex; gap: 10px; align-items: baseline; padding: 6px 0 6px 16px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; font-size: 12.5px; }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+
+  header.doc-head { margin-bottom: 28px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title { font-size: 30px; line-height: 1.18; letter-spacing: -.01em; font-weight: 700; margin: 0 0 14px; text-wrap: balance; }
+  .subtitle { font-size: 15.5px; color: var(--muted); margin: 0; max-width: 66ch; }
+
+  .legend-tiers { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin: 18px 0 0; padding: 12px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+  .legend-tiers b { color: var(--ink); }
+
+  section { margin-top: 44px; scroll-margin-top: 32px; }
+  h2.sec { display: flex; align-items: baseline; gap: 10px; font-size: 21px; font-weight: 700; margin: 0 0 6px; }
+  .sec-dek { font-size: 13.5px; color: var(--muted); margin: 0 0 18px; }
+  h3.sub { font-size: 14.5px; font-weight: 700; margin: 26px 0 10px; display: flex; align-items: center; gap: 8px; }
+  h3.sub .cnt { font-size: 11px; font-weight: 700; color: var(--muted-2); background: var(--surface-2); border-radius: 100px; padding: 1px 8px; }
+  p { margin: 0 0 14px; max-width: 72ch; }
+  code { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; font-size: .87em; background: var(--code-bg); color: var(--code-ink); padding: .12em .38em; border-radius: 4px; }
+
+  .item { border: 1px solid var(--line); border-left: 3px solid var(--line-2); border-radius: 9px; background: var(--surface); box-shadow: var(--shadow); padding: 12px 16px; margin: 0 0 10px; }
+  .item.ok { border-left-color: var(--ok); }
+  .item.bad { border-left-color: var(--bad); }
+  .item.warn { border-left-color: var(--warn); }
+  .item p { margin: 0; font-size: 13.8px; max-width: none; }
+  .item .src { display: block; font-size: 11.5px; color: var(--muted-2); margin-top: 5px; }
+  .item .tier { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; padding: 1px 7px; border-radius: 100px; margin-right: 7px; vertical-align: middle; }
+  .tier.rfi { background: var(--ok-tint); color: var(--ok); }
+  .tier.screen { background: var(--accent-tint); color: var(--accent-ink); }
+  .tier.resolved { background: var(--surface-2); color: var(--muted); }
+  .tier.sev-crit { background: var(--bad-tint); color: var(--bad); }
+  .tier.sev-sub { background: var(--warn-tint); color: var(--warn); }
+
+  .callout { border-radius: 10px; padding: 16px 20px; margin: 0 0 18px; border: 1px solid var(--accent); background: var(--accent-tint); }
+  .callout .head { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent-ink); margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14.5px; max-width: none; color: var(--ink); }
+  .callout p + p { margin-top: 10px; }
+
+  .sources { border-top: 1px solid var(--line); margin-top: 44px; padding-top: 16px; font-size: 12.5px; color: var(--muted); }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s1">Сильные стороны</a></li>
+      <li><a href="#s2">Слабые стороны</a></li>
+      <li><a href="#s3">Синтез</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Кейс 07 · Резюме по продукту</p>
+      <h1 class="title">Сильные и слабые стороны «Камераты»</h1>
+      <p class="subtitle">Синтез по всей базе знаний: RFI-ответы разработчика, документация по живым скриншотам, разбор презентаций, реестр открытых вопросов, ход пилота Д8. Собрано двумя параллельными исследовательскими агентами.</p>
+      <div class="legend-tiers">
+        <span><b>RFI-подтверждено</b> — письменный ответ разработчика, высший приоритет</span>
+        <span><b>Скриншот</b> — задокументировано по живому интерфейсу</span>
+        <span><b>Решено</b> — закрытый открытый вопрос из реестра</span>
+      </div>
+    </header>
+
+    <section id="s1">
+      <h2 class="sec">Часть 1 · Сильные стороны</h2>
+      <p class="sec-dek">Только конкретные, подтверждённые вещи — не расплывчатый маркетинг.</p>
+
+      <h3 class="sub">Защита персональных данных (PII Shield) <span class="cnt">5</span></h3>
+      <div class="item ok"><p><span class="tier rfi">RFI</span>Три механизма обнаружения ПДн одновременно — аннотации каталога, свыше 250 формальных правил (с контрольными суммами для 6 типов), NER для свободного текста.</p></div>
+      <div class="item ok"><p><span class="tier rfi">RFI</span>Измеренная, а не заявленная задержка: формальные правила — медиана 0,05 мс; NER — медиана 1,08 мс / p95 1,56 мс; совокупно ≤2 мс. Самые конкретные технические цифры во всей базе.</p></div>
+      <div class="item ok"><p><span class="tier rfi">RFI</span><span class="tier screen">скриншот</span>Таблица соответствий «метка↔значение» никогда не покидает контур, TTL 60 минут; при недоступности хранилища компонент отказывается запускаться, а не деградирует тихо.</p></div>
+      <div class="item ok"><p><span class="tier rfi">RFI</span>Разграничение доступа применяется до обезличивания — замаскированный ответ по записи без прав считается нарушением и не показывается вовсе.</p></div>
+      <div class="item ok"><p><span class="tier screen">скриншот</span>Отдельный, независимый механизм защиты коммерческой тайны («База секретов») — векторное сравнение с курируемой базой эталонов (PASS/REVIEW/BLOCK), не смешан с автоматическим PII-маскированием.</p></div>
+
+      <h3 class="sub">Управление доступом и governance данных <span class="cnt">4</span></h3>
+      <div class="item ok"><p><span class="tier screen">скриншот</span>Многослойный обязательный конвейер: роль → коллекция/домен → построчная/поколоночная фильтрация (OPA/Rego, генерируется из бизнес-доменов каталога) → PII-маскирование — применяется к каждому запросу, не обходится формулировкой.</p></div>
+      <div class="item ok"><p><span class="tier screen">скриншот</span>Изменения доступа вступают в силу немедленно, без перезапуска.</p></div>
+      <div class="item ok"><p><span class="tier screen">скриншот</span>Независимый, не наследуемый реестр сотрудников ИБ — админ в каталоге не получает доступ в саму админку автоматически.</p></div>
+      <div class="item ok"><p><span class="tier screen">скриншот</span>Три отдельных журнала аудита (LLM-сессии, привилегированные действия, SQL-запросы), запись только на добавление, экспорт для SIEM.</p></div>
+
+      <h3 class="sub">Архитектура и развёртывание <span class="cnt">3</span></h3>
+      <div class="item ok"><p><span class="tier rfi">RFI</span>Полностью on-premise, изолированный контур, единственная входная HTTPS-дверь. Векторизация на CPU — GPU не нужен самой платформе, только опциональной локальной LLM.</p></div>
+      <div class="item ok"><p><span class="tier rfi">RFI</span>Модель-агностичность через единственное требование tool/function calling — подтверждена работа с GigaChat, Qwen, OpenAI, Anthropic, YandexGPT.</p></div>
+      <div class="item ok"><p><span class="tier rfi">RFI</span>Учёт потребления с реальной принудительной блокировкой при исчерпании лимита токенов, а не просто предупреждением.</p></div>
+
+      <h3 class="sub">Честность о собственных ограничениях <span class="cnt">3</span></h3>
+      <div class="item ok"><p><span class="tier rfi">RFI</span>Прямой отказ от переобещания: разработчик письменно заявляет, что контроль обхода периметра — не функция компонента, и заявлять обратное «создаёт ложное представление о защищённости».</p></div>
+      <div class="item ok"><p><span class="tier rfi">RFI</span>Названные ограничения с датами вместо расплывчатых обещаний: Kerberos/SPNEGO и сторонний DLP не поддерживаются вообще; прокси с аутентификацией — 4 кв. 2026; Vault — 1 кв. 2027.</p></div>
+      <div class="item ok"><p><span class="tier resolved">решено</span>Разрешённая архитектурная неоднозначность ролевой модели — три вендорских документа называли три разных набора ролей; проверкой на практике подтверждена реальная, работающая модель.</p></div>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec">Часть 2 · Слабые стороны, пробелы, риски</h2>
+      <p class="sec-dek">Ранжировано по значимости для технического покупателя, оценивающего продукт для регулируемого пилота.</p>
+
+      <h3 class="sub">AI Guard / PII-маскирование <span class="cnt">4</span> · наивысшая значимость</h3>
+      <div class="item bad"><p><span class="tier sev-crit">критично</span>Нигде во всей базе, включая RFI, нет подтверждённой метрики точности PII-маскирования — измерена только задержка. Пороги ≥98%/≥95%/≥70% из ТЗ существуют только как целевые, ни разу как измеренные.</p></div>
+      <div class="item warn"><p><span class="tier sev-sub">существенно</span>Дообучение NER (LoRA) под терминологию клиента — только «заготовки», не готовая функция. Угрожает достижимости порога ≥98% на брокерской терминологии Д8.</p></div>
+      <div class="item warn"><p><span class="tier sev-sub">существенно</span>Ключевой результат пилота (93% по ИБ-тестированию) подтверждён только устно — реальный трекер (<code>test-tracker.xlsx</code>) на момент проверки пуст (0/24).</p></div>
+      <div class="item warn"><p>Механизм кастомных regex-паттернов на живом экране заметно проще, чем в документации разработчика; два паттерна под Д8 хранятся устаревшими без авто-синхронизации.</p></div>
+
+      <h3 class="sub">Пробелы дорожной карты <span class="cnt">3</span></h3>
+      <div class="item warn"><p><span class="tier rfi">RFI</span>Vault (1 кв. 2027), прокси с аутентификацией (4 кв. 2026), криптографическое подтверждение неизменности журнала (4 кв. 2026) — всё в будущем. Kerberos/SPNEGO и сторонний DLP — не поддерживаются вообще.</p></div>
+      <div class="item warn"><p><span class="tier rfi">RFI</span>Контроль обхода периметра явно не функция платформы — честно, но ломает типичное наивное предположение покупателя.</p></div>
+      <div class="item warn"><p>Роль «Оператор ИБ» нельзя сузить только до настроек анонимизатора — выдача роли открывает весь раздел администрирования безопасности целиком.</p></div>
+
+      <h3 class="sub">Маркетинг vs подтверждённая реальность <span class="cnt">5</span></h3>
+      <div class="item warn"><p><span class="tier sev-sub">существенно</span>Ни один именованный клиентский кейс не демонстрирует питчуемые бизнес-сценарии (ERP/CRM, HR/бухгалтерия/поддержка) — во всех версиях презентации кейсы остаются инструментами для разработчиков.</p></div>
+      <div class="item warn"><p>Переключение моделей ни разу не подтверждено скриншотом — в чате наблюдалась только одна модель, при этом презентация добавила гиперточный каталог версий.</p></div>
+      <div class="item warn"><p>Роль партнёра Veai описывалась противоречиво (биллинг vs DLP-шлюз) — в одной ревизии противоречие даже усилилось перед тем, как быть исправленным.</p></div>
+      <div class="item warn"><p>Нарратив «пилот дёшево и быстро» не включает стоимость инфраструктуры, GPU и обращений к внешней модели — подтверждено ТЗ и RFI, но не проговаривается по умолчанию.</p></div>
+      <div class="item warn"><p>Добавленная в презентации точность (версии моделей, номер реестра ПО, статья/сумма штрафа КоАП) не верифицирована — репутационный риск при ошибке.</p></div>
+
+      <h3 class="sub">Текущий ход пилота Д8 <span class="cnt">2</span></h3>
+      <div class="item bad"><p><span class="tier sev-crit">критично</span>Источник «RAG-компании» — единственный трек без движения с самого начала пилота, риск стать блокером в последний момент без запаса времени.</p></div>
+      <div class="item warn"><p>Точная дата фактического «Дня 1» (закрытие доступа к КХД/ESB) так и не зафиксирована, хотя от неё считается весь 6-недельный календарь.</p></div>
+
+      <h3 class="sub">Фундаментальные открытые вопросы <span class="cnt">1</span></h3>
+      <div class="item bad"><p><span class="tier sev-crit">критично для комплаенса</span>Не подтверждено, реально ли построчные фильтры/маски настроены хотя бы для одной персоны в проде, или админ-экран — пустой пример. Та же неопределённость — по полному списку доменов и по тому, могут ли агенты клиента писать данные или доступ строго read-only.</p></div>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec">Синтез</h2>
+      <div class="callout">
+        <p class="head">Как это читать вместе</p>
+        <p>Продукт демонстрирует редкую для вендора черту — письменную готовность признавать границы возможностей. Это стоит использовать как аргумент доверия перед Д8, а не прятать. Одновременно есть системный разрыв между тем, что измерено, и тем, что заявлено как цель: единственная область с реальными числами — задержка обработки; там, где решение критично для регулируемого клиента (точность распознавания ПДн, статус фактического прогона тестов), чисел либо нет, либо они только в устной форме.</p>
+        <p><strong>Практический вывод.</strong> Сильные стороны безопасно предъявлять как есть, с цитированием RFI. Слабые стороны из блока «AI Guard/PII-маскирование» — не повод останавливать пилот, а повод явно проговорить с заказчиком заранее, чтобы промежуточный неполный результат читался как ожидаемый этап калибровки, а не срыв обязательств. Маркетинговые расхождения касаются в первую очередь команды продаж, но полезны для подготовки к возражениям квалифицированного покупателя.</p>
+      </div>
+    </section>
+
+    <p class="sources">Материалы: <code>docs/rfi-responses/README.md</code> · <code>docs/platform/otkrytye-voprosy.md</code> · <code>docs/analysis/case-04-sales-pitch-critique.md</code> · <code>case-05-itq-group-full-deck-diff.md</code> · <code>case-06-pilot-progress-analysis.md</code> · <code>docs/platform/rukovodstvo-administratora-ib.md</code></p>
+  </main>
+</div>

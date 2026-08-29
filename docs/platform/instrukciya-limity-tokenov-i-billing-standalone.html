@@ -1,0 +1,474 @@
+<title>Лимиты токенов и биллинг</title>
+<style>
+  :root {
+    --bg: #F5F7F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F3;
+    --ink: #17212B;
+    --muted: #5C6B7A;
+    --muted-2: #8695A3;
+    --line: #E1E7EB;
+    --line-2: #D2DADF;
+    --accent: #0E6E63;
+    --accent-ink: #0B564D;
+    --accent-tint: #E4F0EE;
+    --ok: #1E7A4C;
+    --ok-tint: #E3F1E8;
+    --warn: #93630F;
+    --warn-tint: #FBF0DC;
+    --bad: #A8393B;
+    --bad-tint: #FBE7E7;
+    --open: #5B4B93;
+    --open-tint: #ECE8F7;
+    --code-bg: #EDF1F3;
+    --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519;
+      --surface: #161E24;
+      --surface-2: #1C252C;
+      --ink: #E7ECEF;
+      --muted: #93A2AF;
+      --muted-2: #6D7C8A;
+      --line: #263039;
+      --line-2: #2E3941;
+      --accent: #4FC3B4;
+      --accent-ink: #7CD9CC;
+      --accent-tint: #16302C;
+      --ok: #58B983;
+      --ok-tint: #16301F;
+      --warn: #E0AC4E;
+      --warn-tint: #362808;
+      --bad: #E6787A;
+      --bad-tint: #3A1618;
+      --open: #B29EE8;
+      --open-tint: #251F3A;
+      --code-bg: #1C252C;
+      --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0F1519;
+    --surface: #161E24;
+    --surface-2: #1C252C;
+    --ink: #E7ECEF;
+    --muted: #93A2AF;
+    --muted-2: #6D7C8A;
+    --line: #263039;
+    --line-2: #2E3941;
+    --accent: #4FC3B4;
+    --accent-ink: #7CD9CC;
+    --accent-tint: #16302C;
+    --ok: #58B983;
+    --ok-tint: #16301F;
+    --warn: #E0AC4E;
+    --warn-tint: #362808;
+    --bad: #E6787A;
+    --bad-tint: #3A1618;
+    --open: #B29EE8;
+    --open-tint: #251F3A;
+    --code-bg: #1C252C;
+    --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .mono { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 760px);
+    justify-content: center;
+    gap: 56px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; }
+    .nav-rail { display: none; }
+  }
+
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow {
+    font-size: 11px; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--muted-2); font-weight: 600; margin: 0 0 14px;
+  }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list li { margin: 0; }
+  .nav-list a {
+    display: flex; gap: 10px; align-items: baseline;
+    padding: 7px 0 7px 16px; margin-left: -1px;
+    border-left: 2px solid transparent;
+    color: var(--muted); text-decoration: none; font-size: 13.5px;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 14px; }
+  .nav-status {
+    margin-top: 28px; padding: 14px 16px; border-radius: 8px;
+    background: var(--accent-tint);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+  .nav-status .label {
+    font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase;
+    font-weight: 700; color: var(--accent-ink); margin: 0 0 6px;
+  }
+  .nav-status p { margin: 0; font-size: 12.5px; color: var(--ink); line-height: 1.5; }
+  .nav-status .date { color: var(--muted); }
+
+  header.doc-head { margin-bottom: 44px; }
+  .eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--accent-ink); font-weight: 700; margin: 0 0 16px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title {
+    font-size: 30px; line-height: 1.22; letter-spacing: -.01em;
+    font-weight: 700; margin: 0 0 12px; text-wrap: balance;
+  }
+  .subtitle { font-size: 16px; color: var(--muted); margin: 0 0 22px; max-width: 62ch; }
+  .lede {
+    font-size: 16px; color: var(--ink); max-width: 68ch; margin: 0;
+    padding-top: 22px; border-top: 1px solid var(--line);
+  }
+
+  section { margin-top: 52px; scroll-margin-top: 32px; }
+  h2.sec {
+    display: flex; align-items: baseline; gap: 10px;
+    font-size: 21px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 16px;
+  }
+  h2.sec .n { font-size: 14px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  h3.sub { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: var(--ink); }
+  p { margin: 0 0 14px; max-width: 68ch; }
+  section > p:last-child { margin-bottom: 0; }
+
+  code {
+    font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+    font-size: .89em; background: var(--code-bg); color: var(--code-ink);
+    padding: .12em .38em; border-radius: 4px; word-break: break-word;
+  }
+  pre.formula {
+    font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+    font-size: 13.5px; background: var(--code-bg); color: var(--code-ink);
+    padding: 16px 18px; border-radius: 10px; margin: 0 0 18px; overflow-x: auto;
+    border: 1px solid var(--line); line-height: 1.7;
+  }
+
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 14px; background: var(--surface); }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    background: var(--surface-2); font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); white-space: nowrap; font-weight: 600; width: 1%; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 700; padding: 3px 9px 3px 7px;
+    border-radius: 100px; line-height: 1.4; white-space: nowrap;
+  }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+  .pill.ok { background: var(--ok-tint); color: var(--ok); }
+  .pill.ok::before { background: var(--ok); }
+  .pill.warn { background: var(--warn-tint); color: var(--warn); }
+  .pill.warn::before { background: var(--warn); }
+
+  .tag {
+    display: inline-block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase;
+    font-weight: 700; padding: 3px 8px; border-radius: 5px; margin: 0 6px 10px 0;
+  }
+  .tag.ok { background: var(--ok-tint); color: var(--ok); }
+  .tag.note { background: var(--accent-tint); color: var(--accent-ink); }
+  .tag.open { background: var(--open-tint); color: var(--open); }
+
+  .callout {
+    border-radius: 10px; padding: 16px 18px; margin: 0 0 18px;
+    border: 1px solid var(--line); border-left: 3px solid var(--line-2);
+    background: var(--surface); box-shadow: var(--shadow);
+  }
+  .callout .head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14.5px; max-width: none; }
+  .callout p + p { margin-top: 8px; }
+  .callout.note { border-left-color: var(--accent); }
+  .callout.note .head { color: var(--accent-ink); }
+  .callout.ok { border-left-color: var(--ok); background: var(--ok-tint); }
+  .callout.ok .head { color: var(--ok); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-tint); }
+  .callout.warn .head { color: var(--warn); }
+  .callout.bad { border-left-color: var(--bad); background: var(--bad-tint); }
+  .callout.bad .head { color: var(--bad); }
+
+  ol.steps { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: step; }
+  ol.steps li { counter-increment: step; position: relative; padding: 0 0 16px 34px; font-size: 15px; max-width: 66ch; }
+  ol.steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 1px;
+    width: 22px; height: 22px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink);
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps li:last-child { padding-bottom: 0; }
+
+  ul.plain { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.plain li { position: relative; padding: 0 0 14px 20px; font-size: 15px; max-width: 66ch; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  ul.plain li:last-child { padding-bottom: 0; }
+
+  .glossary { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 0 0 18px; box-shadow: var(--shadow); }
+  .glossary dl { margin: 0; display: grid; grid-template-columns: 200px 1fr; }
+  .glossary dt, .glossary dd { padding: 12px 14px; margin: 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .glossary dt { background: var(--surface-2); font-weight: 700; color: var(--ink); }
+  .glossary dd { background: var(--surface); color: var(--muted); }
+  .glossary dl > dt:last-of-type, .glossary dl > dd:last-of-type { border-bottom: none; }
+  @media (max-width: 560px) { .glossary dl { grid-template-columns: 1fr; } .glossary dt { border-bottom: none; padding-bottom: 4px; } }
+
+  .see-also { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .see-also li { display: flex; gap: 10px; align-items: baseline; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .see-also .path { font-family: "SF Mono", Consolas, monospace; font-size: 12.5px; color: var(--accent-ink); flex: none; }
+  .see-also .desc { color: var(--muted); }
+
+  footer.doc-foot {
+    margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted-2); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s0"><span class="nav-num tabular">0</span> Что такое токены</a></li>
+      <li><a href="#s1"><span class="nav-num tabular">1</span> Лимит на пользователя</a></li>
+      <li><a href="#s2"><span class="nav-num tabular">2</span> Лимит на команду</a></li>
+      <li><a href="#s3"><span class="nav-num tabular">3</span> Потребление токенов</a></li>
+      <li><a href="#s4"><span class="nav-num tabular">4</span> Биллинг: тарифы и бюджеты</a></li>
+      <li><a href="#s5"><span class="nav-num tabular">5</span> Счета</a></li>
+    </ul>
+    <div class="nav-status">
+      <p class="label">Источник</p>
+      <p>Документ разработчика.<br><span class="date">Часть 1 — всегда включена; Часть 2 — опциональный модуль.</span></p>
+    </div>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Инструкция · Лимиты и биллинг</p>
+      <h1 class="title">Лимиты токенов и биллинг — руководство администратора</h1>
+      <p class="subtitle">Что такое токены, как платформа их считает, как настроить лимиты потребления и как пользоваться биллингом — учётом стоимости в рублях. Технические подробности сведены к минимуму.</p>
+      <p class="lede"><strong>Часть 1 — Токены и лимиты</strong> (раздел администрирования): сколько модель может обработать. <strong>Часть 2 — Биллинг</strong>: сколько это стоит в деньгах.</p>
+    </header>
+
+    <section>
+      <h3 class="sub" style="margin-top:0">Что где настраивается — карта документа</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Задача</th><th>Экран</th><th>Роль</th></tr></thead>
+          <tbody>
+            <tr><td>Лимит токенов пользователю, права на модели</td><td>Пользователи и доступ</td><td>Администратор / ИБ</td></tr>
+            <tr><td>Общий пул токенов команде (день, месяц)</td><td>Лимиты команд</td><td>Администратор / ИБ</td></tr>
+            <tr><td>Проверка фактического расхода токенов</td><td>Потребление токенов</td><td>Администратор / ИБ</td></tr>
+            <tr><td>Цены за токены (тарифы)</td><td>Биллинг → Тарифы</td><td>Финансы (биллинг)</td></tr>
+            <tr><td>Денежные бюджеты и предупреждения</td><td>Биллинг → Бюджеты</td><td>Финансы (биллинг)</td></tr>
+            <tr><td>Сводки и счета в рублях</td><td>Биллинг → Свод / Счета</td><td>Финансы (биллинг)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">Краткий словарь</h3>
+      <div class="glossary">
+        <dl>
+          <dt>Токен</dt><dd>Кусочек текста (примерно ¾ слова), которыми модель читает и пишет; в них меряется расход.</dd>
+          <dt>Входные / выходные токены</dt><dd>Отправлено в модель / получено от модели.</dd>
+          <dt>Лимит токенов</dt><dd>Ограничение объёма (в токенах) на пользователя или команду за день или месяц. 0 = без лимита.</dd>
+          <dt>Класс провайдера</dt><dd>Куда можно отправлять данные: локальный &lt; облако РФ &lt; внешний. Ограничение по безопасности, задаётся ролью.</dd>
+          <dt>Тариф</dt><dd>Цена за 1000 входных и 1000 выходных токенов для конкретной модели.</dd>
+          <dt>Бюджет</dt><dd>Денежный лимит (в рублях) на пользователя, команду или весь стенд за период.</dd>
+          <dt>Счёт</dt><dd>Итоговая сумма затрат за период с выгрузкой в XLSX или CSV.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section id="s0">
+      <h2 class="sec"><span class="n tabular">00</span> Что такое токены и как они считаются</h2>
+      <p><strong>Токен</strong> — маленький кусочек текста, которым «мыслит» языковая модель. Ориентировочно один токен — это 3–4 символа или около ¾ слова (для русского чуть меньше). Модель и читает, и пишет в токенах, поэтому расход измеряется именно в них, а не в словах или символах.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Вид</th><th>Что это</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Входные (Input)</td><td>Всё, что уходит в модель: вопрос пользователя, приложенные документы, инструкции, найденный по базе контекст. Обычно это основной объём.</td></tr>
+            <tr><td class="k">Выходные (Output)</td><td>Всё, что модель сгенерировала в ответ.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Кто считает.</strong> Точное число токенов возвращает сама модель после каждого ответа — это не приблизительная оценка. Платформа складывает эти числа по пользователям, командам, моделям и дням.</p>
+      <p><strong>Как расход соотносится с лимитами.</strong> И личный, и командный лимиты считаются <strong>одинаково</strong> — входные плюс выходные токены, суммарно за период по всем моделям: личный дневной лимит — по пользователю за сутки; командный пул — то же самое, но суммарно по всем участникам команды, за день и за месяц. Увидеть фактический расход в любой момент можно на экране «Потребление токенов» (§3).</p>
+    </section>
+
+    <section id="s1">
+      <span class="tag note">Часть 1 · Администрирование</span>
+      <h2 class="sec"><span class="n tabular">01</span> Лимит на пользователя — «Пользователи и доступ»</h2>
+      <p>Экраны управления находятся в разделе «Администрирование» (панель безопасности): «Пользователи и доступ», «Лимиты команд», «Потребление токенов». Доступ есть у роли администратора и офицера ИБ.</p>
+      <p>Откройте карточку пользователя. К лимитам относятся три поля:</p>
+      <ul class="plain">
+        <li><strong>Роль</strong> — задаёт потолок класса провайдера: локальный &lt; облако РФ &lt; внешний. Роль разрешает провайдеров своего класса и ниже. Это ограничение по <strong>безопасности</strong> — куда можно отправлять данные, а не по объёму.</li>
+        <li><strong>Лимит токенов в день</strong> — сколько токенов пользователь может израсходовать за сутки. Считается так же, как командный пул: входные + выходные суммарно по всем моделям. 0 = без лимита.</li>
+        <li><strong>Права на модели</strong> (таблица под формой) — модель, не добавленная в список, разрешена и работает по общему дневному лимиту; добавьте запись, чтобы заблокировать модель этому пользователю или задать ей отдельный дневной лимит.</li>
+      </ul>
+      <div class="callout warn">
+        <p class="head">По умолчанию система разрешает, а не запрещает</p>
+        <p>Пустая роль означает, что пользователю доступны <strong>все</strong> провайдеры, включая внешние. Модель, не добавленная в таблицу прав, тоже доступна. То есть «ничего не настроили» — это «всё можно», а не «ничего нельзя». Проверьте роли и права явно для каждого пользователя, работающего с чувствительными данными.</p>
+      </div>
+    </section>
+
+    <section id="s2">
+      <span class="tag note">Часть 1 · Администрирование</span>
+      <h2 class="sec"><span class="n tabular">02</span> Лимит на команду — «Лимиты команд»</h2>
+      <p>Экран задаёт общий пул токенов на команду — общий на всех её участников. Команды берутся из справочника каталога OpenMetadata: <strong>Команда</strong> (выбор из списка), <strong>Лимит/день</strong> и <strong>Лимит/месяц</strong> (0 = без лимита), <strong>Статус</strong> (можно временно отключить лимит, не удаляя его). В таблице рядом с каждой командой виден текущий расход: сегодня X / лимит (Y%) и месяц X / лимит (Y%).</p>
+
+      <h3 class="sub">Где ноль значит что</h3>
+      <p>Значение 0 встречается в трёх полях, и в одном из них означает не то же самое, что в остальных — самая частая ошибка настройки:</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Поле</th><th>Экран</th><th>Что означает «0»</th></tr></thead>
+          <tbody>
+            <tr><td>Лимит токенов в день</td><td>Пользователи и доступ</td><td><span class="pill ok">Без лимита</span> — пользователь не ограничен</td></tr>
+            <tr><td>Лимит/день, Лимит/месяц</td><td>Лимиты команд</td><td><span class="pill ok">Без лимита</span> — команда не ограничена</td></tr>
+            <tr><td>Лимит токенов/день в правах на модель</td><td>Пользователи и доступ, таблица прав</td><td><span class="pill warn">Общий лимит</span> — использовать общий дневной лимит пользователя, а не снять ограничение</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">Как лимиты срабатывают вместе</h3>
+      <ul class="plain">
+        <li>Личный лимит и командные пулы действуют <strong>одновременно</strong>. Срабатывает самый строгий: запрос блокируется при исчерпании любого из них.</li>
+        <li>Если пользователь состоит в нескольких командах, проверяется лимит <strong>каждой</strong> — блокировка наступит при превышении в любой.</li>
+        <li>При достижении <strong>100%</strong> очередной запрос отклоняется, и пользователь получает сообщение вида «Дневной лимит токенов пользователя исчерпан (12 000 / 12 000)».</li>
+        <li>Счётчики суток обнуляются в начале новых суток <strong>по времени сервера</strong>, месячные — в начале месяца.</li>
+      </ul>
+      <div class="callout note">
+        <p class="head">Не мгновенно и без сигнала</p>
+        <p>Изменения лимитов вступают в силу примерно в течение минуты — платформа периодически перечитывает новые значения.</p>
+        <p>При достижении 90% лимита система делает запись в служебном журнале — администратору платформы этот журнал не виден, оповещения не приходит. Смотрите цветные полоски на экране «Потребление токенов» регулярно, а не ждите сигнала.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <span class="tag note">Часть 1 · Администрирование</span>
+      <h2 class="sec"><span class="n tabular">03</span> Проверка расхода — «Потребление токенов»</h2>
+      <p>Экран показывает фактическое потребление в трёх вкладках:</p>
+      <ul class="plain">
+        <li><strong>Пользователи</strong> — по каждому пользователю за выбранную дату: число запросов, входные/выходные токены, дневной лимит, полоска «% использования» (зелёная → жёлтая → красная, считается по сумме входных+выходных). Кнопка «Подробно» — разбивка по моделям.</li>
+        <li><strong>Команды</strong> — по каждой команде: запросы и токены за день и за месяц, обе полоски «расход / лимит».</li>
+        <li><strong>Журнал вызовов</strong> — время, пользователь, провайдер, модель, входные/выходные токены каждого вызова; фильтры по дате/провайдеру/модели; ссылка на диалог.</li>
+      </ul>
+
+      <h3 class="sub">Порядок настройки лимитов</h3>
+      <ol class="steps">
+        <li>Задать роли пользователям (класс разрешённых провайдеров) в «Пользователи и доступ».</li>
+        <li>Проставить дневные лимиты токенов пользователям или оставить 0 для безлимитных.</li>
+        <li>При необходимости задать общие пулы командам в «Лимиты команд».</li>
+        <li>Через 1–2 дня открыть «Потребление токенов» и проверить, что реальный расход укладывается в лимиты; при необходимости скорректировать.</li>
+      </ol>
+    </section>
+
+    <section id="s4">
+      <span class="tag open">Часть 2 · Биллинг</span>
+      <h2 class="sec"><span class="n tabular">04</span> Биллинг: тарифы и бюджеты</h2>
+      <p>Биллинг переводит израсходованные токены в деньги: ведёт тарифы, считает стоимость каждого вызова, позволяет задавать денежные бюджеты и формировать счета. Пункт «Биллинг» в меню платформы, доступ — по роли «Финансы (биллинг)» или у администратора.</p>
+      <div class="callout note">
+        <p class="head">Отдельный модуль</p>
+        <p>Биллинг — опциональный компонент. Если он не установлен, платформа продолжает работать (учёт токенов и лимиты из Части 1 действуют всегда), но раздела «Биллинг» не будет.</p>
+      </div>
+
+      <div class="callout warn">
+        <p class="head">Тарифы — до начала работы с моделями</p>
+        <p>Вызов модели, для которой тарифа нет, в стоимость не попадает — токены посчитаются, деньги нет. Задним числом ничего не пересчитывается: добавленный позже тариф применяется только к новым вызовам. Расход за период без тарифа восстановить в рублях уже не получится.</p>
+      </div>
+
+      <h3 class="sub">Порядок запуска биллинга</h3>
+      <ol class="steps">
+        <li>Завести тарифы на все модели, которые используются на стенде (вкладка «Тарифы»).</li>
+        <li>Неделю понаблюдать за вкладкой «Свод» — увидеть реальные суммы по моделям и командам.</li>
+        <li>По этим суммам выставить бюджеты (вкладка «Бюджеты»), начав с уровня команды.</li>
+        <li>В начале следующего месяца сформировать первый счёт и сверить его со «Сводом».</li>
+      </ol>
+
+      <h3 class="sub">Вкладка «Свод»</h3>
+      <p>Стоимость по провайдеру и модели (вызовы, входные/выходные токены, сумма) и стоимость по командам.</p>
+
+      <h3 class="sub">Вкладка «Тарифы» — цены</h3>
+      <p>Тариф — цена за токены для пары «провайдер + модель»: <strong>Провайдер</strong> (например, gigachat, yandexgpt, openai), <strong>Модель</strong>, <strong>₽/1k in</strong>, <strong>₽/1k out</strong>, <strong>Валюта</strong> (по умолчанию RUB).</p>
+      <pre class="formula">стоимость = (входные_токены / 1000) × цена_за_1k_входных
+          + (выходные_токены / 1000) × цена_за_1k_выходных
+
+Пример: 2 ₽/1k in, 6 ₽/1k out, вызов 1000 in + 500 out
+        = 1 × 2 + 0,5 × 6 = 5 ₽</pre>
+      <p>Чтобы сменить цену, не удаляйте старый тариф — нажмите «Закрыть» (перестанет действовать с текущего момента) и добавьте новый. История сохранится, ранее посчитанные суммы останутся прежними.</p>
+      <div class="callout note">
+        <p class="head">Класс провайдера ≠ цена</p>
+        <p>Класс провайдера (локальный, облако РФ, внешний) на цену не влияет — стоимость зависит только от тарифа для конкретной модели.</p>
+      </div>
+
+      <h3 class="sub">Вкладка «Бюджеты» — денежные лимиты</h3>
+      <p>Бюджет — ограничение в рублях, в отличие от лимита токенов из Части 1: <strong>Уровень</strong> (команда / пользователь / глобально), <strong>ID</strong>, <strong>Период</strong> (месяц/день), <strong>Лимит</strong> (сумма), <strong>Alert %</strong> (по умолчанию 80% — сигнал, но запросы ещё проходят). При превышении бюджета запросы отклоняются с сообщением «Бюджет исчерпан»; если пользователь в нескольких командах — учитывается бюджет каждой.</p>
+
+      <h3 class="sub">Два ограничения — чем отличаются</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th></th><th>Лимит токенов (Часть 1)</th><th>Бюджет (Часть 2)</th></tr></thead>
+          <tbody>
+            <tr><td class="k">В чём измеряется</td><td>В токенах</td><td>В рублях</td></tr>
+            <tr><td class="k">Когда работает</td><td>Всегда</td><td>Только с установленным модулем биллинга и заведёнными тарифами</td></tr>
+            <tr><td class="k">При исчерпании</td><td>Запрос отклоняется</td><td>Запрос отклоняется</td></tr>
+            <tr><td class="k">Раннее предупреждение</td><td>90%, служебный журнал, не настраивается, администратору не видна</td><td>Alert %, по умолчанию 80%, настраивается</td></tr>
+            <tr><td class="k">Кто настраивает</td><td>Администратор / ИБ</td><td>Финансы (биллинг)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Практический вывод: лимит токенов — базовая защита от неконтролируемого расхода, включайте его всегда. Бюджет — финансовый контроль поверх него, он имеет смысл только когда тарифы заведены и суммы в «Своде» выглядят достоверно.</p>
+    </section>
+
+    <section id="s5">
+      <span class="tag open">Часть 2 · Биллинг</span>
+      <h2 class="sec"><span class="n tabular">05</span> Вкладка «Счета»</h2>
+      <p>Формирование счёта за период: <strong>Период</strong> (месяц в формате ГГГГ-ММ), <strong>Уровень</strong> (весь стенд или пользователь), кнопка «Сформировать счёт». Готовый счёт появляется в таблице (период, сумма, число вызовов, статус) с кнопками выгрузки XLSX и CSV для детализации.</p>
+      <div class="callout bad">
+        <p class="head">Известное ограничение</p>
+        <p>Счёт по команде сейчас сформировать нельзя — доступны только уровни «весь стенд» и «пользователь», хотя затраты по командам видны во вкладке «Свод». Будет устранено доработкой. Пока для отчёта по команде пользуйтесь данными «Свода».</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">См. также</h2>
+      <ul class="see-also">
+        <li><span class="path">administrirovanie-polzovateli.md</span><span class="desc">Общее описание раздела «Администрирование», в который встроены экраны лимитов из Части 1.</span></li>
+        <li><span class="path">instrukciya-domeny-i-dostup.md</span><span class="desc">Доступ к данным по доменам — отдельный, не пересекающийся уровень контроля (что можно увидеть, а не сколько потратить).</span></li>
+      </ul>
+    </section>
+
+    <footer class="doc-foot">
+      <span>База знаний по платформе</span>
+      <span>Составлено на основе документа разработчика</span>
+    </footer>
+  </main>
+</div>

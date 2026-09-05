@@ -1,0 +1,204 @@
+<title>Сценарий 6 и 4: что прогонять</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 24px 64px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 22px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 23px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; }
+  .sub { font-size: 13.5px; color: var(--muted); margin: 0; }
+  .hdr-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 12px 6px 10px; color: var(--muted); cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .theme-toggle:hover { border-color: var(--line-2); color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section { margin-top: 30px; }
+  h2 { font-size: 15px; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 10.5px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+  .sec-dek { font-size: 12.5px; color: var(--muted); margin: 0 0 14px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+  @media (max-width: 700px) { .tiles { grid-template-columns: 1fr; } }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px 11px; box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
+  .tile.ok { border-top-color: var(--ok); }
+  .tile.warn { border-top-color: var(--warn); }
+  .tile.bad { border-top-color: var(--bad); }
+  .tile .label { font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 6px; }
+  .tile .num { font-size: 21px; font-weight: 700; margin: 0 0 3px; }
+  .tile .meta { font-size: 11.5px; color: var(--muted); margin: 0; }
+
+  .id-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .id-chip { display: flex; flex-direction: column; gap: 2px; min-width: 108px; padding: 8px 11px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
+  .id-chip.ok { border-left: 3px solid var(--ok); }
+  .id-chip.warn { border-left: 3px solid var(--warn); }
+  .id-chip.bad { border-left: 3px solid var(--bad); }
+  .id-chip .ic-id { font-size: 10px; font-weight: 700; color: var(--muted-2); }
+  .id-chip .ic-note { font-size: 11px; color: var(--ink); }
+  .id-chip .ic-pct { font-size: 10.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .doc-table-scroll { overflow-x: auto; margin: 0 0 14px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 13px; background: var(--surface); }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  .pill { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
+  .pill.ok { background: var(--ok-tint); color: var(--ok); }
+  .pill.bad { background: var(--bad-tint); color: var(--bad); }
+  .pill.warn { background: var(--warn-tint); color: var(--warn); }
+
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 0 0 14px; border: 1.5px solid var(--bad); background: var(--bad-tint); }
+  .callout .head { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--bad); margin: 0 0 6px; }
+  .callout p { margin: 0; font-size: 13.5px; color: var(--ink); }
+
+  footer.note { margin-top: 28px; font-size: 11.5px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 13px; }
+  footer.note a { color: var(--muted-2); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Сценарий 6 и Сценарий 4: что прогонять</h1>
+      <p class="sub">case-13, повторная проверка от 02.09.2026 + резюме тестировщика по RAG-коллекции «Нормативные документы new»</p>
+    </div>
+    <div class="hdr-right">
+      <span class="snap"><span class="dot"></span>2 сценария</span>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><span class="ico" id="themeIcon">🌙</span><span id="themeLabel">Тёмная</span></button>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="n">Сценарий 6</span> Сложные данные — 18 под-кейсов</h2>
+    <p class="sec-dek">Повторная проверка 02.09 закрыла меньше половины проблем.</p>
+    <div class="tiles">
+      <div class="tile ok"><p class="label">Исправлено</p><p class="num tabular">8 / 18</p><p class="meta">id 4,5,6,7,8,14,16,17 — перепрогон не нужен</p></div>
+      <div class="tile warn"><p class="label">Без изменений</p><p class="num tabular">9 / 18</p><p class="meta">id 1,2,3,9,10,11,12,13,18 — прогонять после фикса</p></div>
+      <div class="tile bad"><p class="label">Стало хуже</p><p class="num tabular">1 / 18</p><p class="meta">id 15 — регресс, приоритет вендору</p></div>
+    </div>
+
+    <div class="id-grid">
+      <div class="id-chip ok"><span class="ic-id">ID 4</span><span class="ic-note">Банк. счёт</span><span class="ic-pct">0%→100%</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 5</span><span class="ic-note">Банк. счёт</span><span class="ic-pct">67%→100%</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 6</span><span class="ic-note">Карта/API-ключ</span><span class="ic-pct">50%→100%</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 7</span><span class="ic-note">Банк. счёт</span><span class="ic-pct">50%→100%</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 8</span><span class="ic-note">Банк. счёт</span><span class="ic-pct">50%→100%</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 14</span><span class="ic-note">Банк. счёт</span><span class="ic-pct">67%→100%</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 16</span><span class="ic-note">ФИО клиента</span><span class="ic-pct">50%→100%</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 17</span><span class="ic-note">Банк. счёт</span><span class="ic-pct">50%→100%</span></div>
+
+      <div class="id-chip warn"><span class="ic-id">ID 1</span><span class="ic-note">Паспорт: блок «выдан» течёт</span><span class="ic-pct">0%→50%</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 2</span><span class="ic-note">Телефон в нестанд. формате</span><span class="ic-pct">67%→67%</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 3</span><span class="ic-note">Адрес частично</span><span class="ic-pct">67%→67%</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 9</span><span class="ic-note">ДР×2, СНИЛС не пойманы</span><span class="ic-pct">33%→50%</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 10</span><span class="ic-note">USERNAME — 0 прогресса</span><span class="ic-pct">33%→33%</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 11</span><span class="ic-note">Метод. вопрос, не баг</span><span class="ic-pct">0%→0%</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 12</span><span class="ic-note">Обфускация «г.Mосквы»</span><span class="ic-pct">0%→0%</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 13</span><span class="ic-note">Дата рождения течёт</span><span class="ic-pct">50%→50%</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 18</span><span class="ic-note">Новый фрагмент «vich»</span><span class="ic-pct">50%→75%</span></div>
+
+      <div class="id-chip bad"><span class="ic-id">ID 15</span><span class="ic-note">Регресс: телефон тоже слетел</span><span class="ic-pct">50%→0%</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Сценарий 4 платформы</span> RAG-коллекция «Нормативные документы new»</h2>
+    <p class="sec-dek">10 реальных нормативных документов, реальных ПДн внутри почти нет — а ложных срабатываний более 20.</p>
+    <div class="tiles">
+      <div class="tile ok"><p class="label">Качество по реальному PII</p><p class="num tabular">~88%</p><p class="meta">3,5 из 4 реальных случаев (подписи министров)</p></div>
+      <div class="tile bad"><p class="label">Ложные срабатывания</p><p class="num tabular">20+</p><p class="meta">технические термины → PERSON/ADDRESS</p></div>
+      <div class="tile warn"><p class="label">Документов без единого PII</p><p class="num tabular">6 / 10</p><p class="meta">№1,5,6,8,9,10 — все маски там ложные</p></div>
+    </div>
+
+    <div class="doc-table-scroll"><table>
+      <thead><tr><th>№</th><th>Документ</th><th>Вердикт</th><th>Что нашли</th></tr></thead>
+      <tbody>
+        <tr><td>2</td><td>Постановление Правительства № 1479</td><td><span class="pill ok">Верно</span></td><td>Мишустин корректно замаскирован</td></tr>
+        <tr><td>3</td><td>sp_8.13130.pdf</td><td><span class="pill ok">Верно</span></td><td>Зиничев корректно замаскирован</td></tr>
+        <tr><td>4</td><td>sp_6.13130.2021.pdf</td><td><span class="pill ok">Верно</span></td><td>Зиничев корректно замаскирован</td></tr>
+        <tr><td>7</td><td>Приказ МЧС № 1203</td><td><span class="pill warn">Частично</span></td><td>Куренков замаскирован в одном месте, остался открытым в другом</td></tr>
+        <tr><td>1</td><td>ФЗ № 123-ФЗ (Технич. регламент)</td><td><span class="pill bad">Ложное</span></td><td>«фермы, балки» → ADDRESS</td></tr>
+        <tr><td>9</td><td>ФЗ № 123-ФЗ (та же таблица)</td><td><span class="pill bad">Ложное</span></td><td>«фермы, балки» → ADDRESS (повтор)</td></tr>
+        <tr><td>5</td><td>ФЗ № 123-ФЗ (доп. таблица)</td><td><span class="pill bad">Ложное</span></td><td>Коды классов (Т2, В1/В2/Д2/Д3) и слово «человек» → ADDRESS/PERSON</td></tr>
+        <tr><td>6</td><td>sp_8.13130.pdf</td><td><span class="pill bad">Ложное</span></td><td>Заголовки колонок таблицы → PERSON</td></tr>
+        <tr><td>8</td><td>Приказ МЧС № 1203</td><td><span class="pill bad">Ложное</span></td><td>«Библиография», «человек» → PERSON</td></tr>
+        <tr><td>10</td><td>SP-7.13130.2013-изм.3</td><td><span class="pill bad">Ложное</span></td><td>«Изм» → PERSON</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout">
+      <p class="head">Вероятная первопричина</p>
+      <p>В исходном тексте части документов пропадают пробелы при извлечении («числокойко-мест», «Психиатрическиебольницы») — обычный текст, не опечатка тестировщика. На «слипшемся» тексте эвристика NER ведёт себя непредсказуемо. Прежде чем чинить сам NER, стоит проверить извлечение текста именно на этих файлах — вероятно, часть ложных срабатываний исчезнет сама.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Что прогонять</span> Итог</h2>
+    <div class="doc-table-scroll"><table>
+      <thead><tr><th>Что</th><th>Действие</th></tr></thead>
+      <tbody>
+        <tr><td>Сценарий 6, id 4,5,6,7,8,14,16,17</td><td><span class="pill ok">Не прогонять</span> — уже исправлено</td></tr>
+        <tr><td>Сценарий 6, id 15</td><td><span class="pill bad">Эскалировать срочно</span> — регресс, не просто «ещё не исправлено»</td></tr>
+        <tr><td>Сценарий 6, id 1,2,3,9,10,12,13,18</td><td><span class="pill warn">Прогнать после фикса</span> — каждый по своему конкретному пропуску</td></tr>
+        <tr><td>Сценарий 6, id 11</td><td><span class="pill warn">Уточнить методику</span> — возможно, не баг, а правило подсчёта</td></tr>
+        <tr><td>Сценарий 4 платформы, весь набор</td><td><span class="pill warn">Сначала проверить извлечение текста</span> — потом решать, нужен ли новый прогон NER</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="note">job-RAG · <a href="case-15-scenario-4-6-analiz.md">case-15-scenario-4-6-analiz.md</a> — полный разбор · <a href="case-13-test-tracker-d8-v3.xlsx">case-13-test-tracker-d8-v3.xlsx</a> — источник · <a href="case-14-rerun-dashboard.html">case-14-rerun-dashboard.html</a> — дашборд по набору 3</footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var icon = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  var STORAGE_KEY = 'case15-dashboard-theme';
+  function systemPrefersDark() { return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+  function isDark(theme) { if (theme === 'dark') return true; if (theme === 'light') return false; return systemPrefersDark(); }
+  function render(theme) {
+    if (theme) { root.setAttribute('data-theme', theme); } else { root.removeAttribute('data-theme'); }
+    var dark = isDark(theme);
+    icon.textContent = dark ? '☀️' : '🌙';
+    label.textContent = dark ? 'Светлая' : 'Тёмная';
+  }
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  render(saved);
+  btn.addEventListener('click', function () {
+    var next = isDark(root.getAttribute('data-theme')) ? 'light' : 'dark';
+    render(next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+  });
+})();
+</script>

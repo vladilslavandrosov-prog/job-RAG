@@ -1,0 +1,167 @@
+<title>Вердикт критика по дорожной карте</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 40px 24px 64px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 22px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 23px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; }
+  .sub { font-size: 13.5px; color: var(--muted); margin: 0; }
+  .hdr-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bad); }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 12px 6px 10px; color: var(--muted); cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .theme-toggle:hover { border-color: var(--line-2); color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .verdict { border: 1.5px solid var(--bad); background: var(--bad-tint); border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; }
+  .verdict .v-label { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--bad); margin: 0 0 6px; }
+  .verdict p.v-text { margin: 0; font-size: 14px; color: var(--ink); max-width: none; }
+
+  section { margin-top: 26px; }
+  h2 { font-size: 14px; font-weight: 700; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 10.5px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+
+  /* horizon tiles */
+  .hz-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 700px) { .hz-grid { grid-template-columns: repeat(2, 1fr); } }
+  .hz-card { border-radius: 10px; padding: 13px 14px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
+  .hz-card.warn { border-top-color: var(--warn); }
+  .hz-card.bad { border-top-color: var(--bad); }
+  .hz-card .hz-q { font-size: 10.5px; font-weight: 700; color: var(--muted-2); text-transform: uppercase; letter-spacing: .03em; }
+  .hz-card .hz-comp { font-size: 12px; color: var(--muted); margin: 2px 0 8px; }
+  .hz-card .hz-verdict { font-size: 13px; font-weight: 700; }
+  .hz-card.warn .hz-verdict { color: var(--warn); }
+  .hz-card.bad .hz-verdict { color: var(--bad); }
+
+  /* findings */
+  .chips { display: flex; flex-direction: column; gap: 8px; }
+  .chip { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border-radius: 9px; font-size: 13px; border: 1px solid var(--line); background: var(--surface); }
+  .chip .rank { flex: none; font-size: 10px; font-weight: 700; color: #fff; background: var(--bad); border-radius: 100px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .chip b { font-weight: 700; }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); font-size: 13.5px; }
+  .panel p { margin: 0; }
+  .panel b { color: var(--bad); }
+
+  footer.note { margin-top: 28px; font-size: 11.5px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 13px; }
+  footer.note a { color: var(--muted-2); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Вердикт критика: дорожная карта Камераты</h1>
+      <p class="sub">Независимая оценка, сверенная с реальным состоянием пилота (case-08)</p>
+    </div>
+    <div class="hdr-right">
+      <span class="snap"><span class="dot"></span>Доверие ограничено</span>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><span class="ico" id="themeIcon">🌙</span><span id="themeLabel">Тёмная</span></button>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <p class="v-label">Одним абзацем</p>
+    <p class="v-text">Доверять только горизонту Q4 2026 — дальше документ читать как маркетинг направления, а не как план. Роадмап технически честен в системе A/B/C/D, но ни разу не упоминает API, MCP, CRM или сам баг «слетают домен и персона» — то есть обходит стороной именно то, что <b>case-08</b> называет главным новым риском пилота. Из 35 пунктов реализован ровно один.</p>
+  </div>
+
+  <section>
+    <h2><span class="n">По горизонтам</span> Что с этим делать в разговоре с заказчиком</h2>
+    <div class="hz-grid">
+      <div class="hz-card warn">
+        <p class="hz-q">Q4 2026</p>
+        <p class="hz-comp">10/12 · B</p>
+        <p class="hz-verdict">Рабочая гипотеза, не обязательство</p>
+      </div>
+      <div class="hz-card warn">
+        <p class="hz-q">Q1 2027</p>
+        <p class="hz-comp">5B / 6C</p>
+        <p class="hz-verdict">Направление, не план</p>
+      </div>
+      <div class="hz-card bad">
+        <p class="hz-q">Q2 2027</p>
+        <p class="hz-comp">100% · C</p>
+        <p class="hz-verdict">В переговорах о сроках не использовать</p>
+      </div>
+      <div class="hz-card bad">
+        <p class="hz-q">H2 2027</p>
+        <p class="hz-comp">100% · D</p>
+        <p class="hz-verdict">Маркетинг направлений мысли, не продукт</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">5 находок</span> Что не заметил наш собственный разбор (case-10)</h2>
+    <div class="chips">
+      <div class="chip"><span class="rank">1</span><span><b>Ноль упоминаний API/MCP/CRM.</b> Именно это — единственный дефект пилота, подтверждённый тремя независимыми тест-сценариями (case-08). Roadmap о нём молчит полностью.</span></div>
+      <div class="chip"><span class="rank">2</span><span><b>ИНТ-2 раньше ИНТ-3 на целый квартал.</b> Чтение почты как источника данных открывается в Q4 2026, а распространение на неё политик маскирования — только в Q1 2027. Разрыв виден прямо в датах документа, без домыслов.</span></div>
+      <div class="chip"><span class="rank">3</span><span><b>54% документа (19/35 пунктов, C+D) официально необязывающие</b> — сам документ пишет, что изменение состава этих пунктов не считается изменением обязательств.</span></div>
+      <div class="chip"><span class="rank">4</span><span><b>РМ-4 — пустой заполнитель.</b> «Дальнейшие фазы агента рабочего места» не содержит вообще никакой информации; существует, похоже, только чтобы в таблице H2 2027 была строка.</span></div>
+      <div class="chip"><span class="rank">5</span><span><b>Ошибка датировки в case-10.</b> Связка «НАД-1 отвечает на баг домена/персоны» не проходит проверку по датам: баг задокументирован 03.09, roadmap вышел 28.08 — на неделю раньше.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Итог</span> Характеристика вендора</h2>
+    <div class="panel">
+      <p>Технически грамотная, местами добросовестная команда (буквенная система уверенности не пустая формальность для Q4 2026) со <b>слабой дисциплиной приоритизации</b> относительно собственных известных дефектов и готовностью закрывать разговор о будущем длинным списком, а не устранением того, что уже сломано у платящего клиента. Не мошенничество и не пустой roadmap — но не документ, которому можно доверять дальше горизонта одного квартала без независимой проверки.</p>
+    </div>
+  </section>
+
+  <footer class="note">job-RAG · <a href="case-12-roadmap-critic-verdict.md">case-12-roadmap-critic-verdict.md</a> — полный вердикт с 5 новыми острыми вопросами вендору · <a href="case-10-roadmap-analysis.md">case-10-roadmap-analysis.md</a> — исходный (более мягкий) разбор · <a href="case-11-voprosy-vendoru-roadmap.md">case-11-voprosy-vendoru-roadmap.md</a> — вопрос №1</footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var icon = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  var STORAGE_KEY = 'case12-dashboard-theme';
+  function systemPrefersDark() { return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+  function isDark(theme) { if (theme === 'dark') return true; if (theme === 'light') return false; return systemPrefersDark(); }
+  function render(theme) {
+    if (theme) { root.setAttribute('data-theme', theme); } else { root.removeAttribute('data-theme'); }
+    var dark = isDark(theme);
+    icon.textContent = dark ? '☀️' : '🌙';
+    label.textContent = dark ? 'Светлая' : 'Тёмная';
+  }
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  render(saved);
+  btn.addEventListener('click', function () {
+    var next = isDark(root.getAttribute('data-theme')) ? 'light' : 'dark';
+    render(next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+  });
+})();
+</script>

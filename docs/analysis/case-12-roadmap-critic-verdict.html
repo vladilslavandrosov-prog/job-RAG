@@ -1,0 +1,261 @@
+<title>Вердикт критика по roadmap Камераты</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --code-bg: #EDF1F3; --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --code-bg: #1C252C; --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --code-bg: #1C252C; --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+  .shell { display: grid; grid-template-columns: 232px minmax(0, 780px); justify-content: center; gap: 56px; max-width: 1180px; margin: 0 auto; padding: 56px 24px 96px; }
+  @media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; } .nav-rail { display: none; } }
+
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-2); font-weight: 600; margin: 0 0 14px; }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list a { display: flex; gap: 10px; align-items: baseline; padding: 6px 0 6px 16px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; font-size: 12.5px; }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 16px; }
+  .nav-status { margin-top: 22px; padding: 13px 15px; border-radius: 8px; background: var(--bad-tint); border: 1px solid color-mix(in srgb, var(--bad) 30%, transparent); }
+  .nav-status .label { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; color: var(--bad); margin: 0 0 6px; }
+  .nav-status p { margin: 0; font-size: 12px; color: var(--ink); line-height: 1.5; }
+
+  header.doc-head { margin-bottom: 28px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bad); flex: none; }
+  h1.title { font-size: 30px; line-height: 1.18; letter-spacing: -.01em; font-weight: 700; margin: 0 0 14px; text-wrap: balance; }
+  .subtitle { font-size: 15.5px; color: var(--muted); margin: 0; max-width: 68ch; }
+
+  section { margin-top: 44px; scroll-margin-top: 32px; }
+  h2.sec { display: flex; align-items: baseline; gap: 10px; font-size: 20px; font-weight: 700; margin: 0 0 6px; }
+  h2.sec .n { font-size: 13px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .sec-dek { font-size: 13.5px; color: var(--muted); margin: 0 0 16px; }
+  p { margin: 0 0 14px; max-width: 74ch; }
+  section > p:last-child { margin-bottom: 0; }
+  code { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; font-size: .87em; background: var(--code-bg); color: var(--code-ink); padding: .12em .38em; border-radius: 4px; }
+
+  .callout { border-radius: 10px; padding: 16px 20px; margin: 0 0 18px; border: 1.5px solid var(--bad); background: var(--bad-tint); }
+  .callout .head { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--bad); margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 15px; max-width: none; color: var(--ink); }
+  .callout p + p { margin-top: 10px; }
+  .callout b { color: var(--bad); }
+
+  .item { border: 1px solid var(--line); border-left: 3px solid var(--line-2); border-radius: 9px; background: var(--surface); box-shadow: var(--shadow); padding: 12px 16px; margin: 0 0 10px; }
+  .item.bad { border-left-color: var(--bad); }
+  .item.warn { border-left-color: var(--warn); }
+  .item p { margin: 0; font-size: 13.8px; max-width: none; }
+  .item b { color: var(--ink); }
+
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 13.5px; background: var(--surface); }
+  th, td { text-align: left; padding: 10px 13px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
+  .pill.warn { background: var(--warn-tint); color: var(--warn); }
+  .pill.bad { background: var(--bad-tint); color: var(--bad); }
+
+  .qa-card { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); padding: 16px 18px; margin: 0 0 14px; }
+  .qa-card .q { font-weight: 700; font-size: 14px; margin: 0 0 8px; display: flex; gap: 8px; }
+  .qa-card .q .qmark { flex: none; width: 20px; height: 20px; border-radius: 6px; background: var(--bad-tint); color: var(--bad); font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .qa-card .a { font-size: 13.5px; color: var(--muted); margin: 0; padding-left: 28px; }
+
+  ol.disagree { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: dstep; }
+  ol.disagree li { counter-increment: dstep; position: relative; padding: 0 0 14px 34px; font-size: 13.8px; max-width: none; }
+  ol.disagree li::before { content: counter(dstep); position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 6px; background: var(--warn-tint); color: var(--warn); font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  ol.disagree li:last-child { padding-bottom: 0; }
+
+  .see-also { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .see-also li { display: flex; gap: 10px; align-items: baseline; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .see-also .path { font-family: "SF Mono", Consolas, monospace; font-size: 12.5px; color: var(--accent-ink); flex: none; }
+  .see-also .desc { color: var(--muted); }
+
+  .sources { border-top: 1px solid var(--line); margin-top: 44px; padding-top: 16px; font-size: 12.5px; color: var(--muted); }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s1"><span class="nav-num">1</span> Амбиции vs мощность</a></li>
+      <li><a href="#s2"><span class="nav-num">2</span> Что roadmap не замечает</a></li>
+      <li><a href="#s3"><span class="nav-num">3</span> Честность A/B/C/D</a></li>
+      <li><a href="#s4"><span class="nav-num">4</span> Периметр безопасности</a></li>
+      <li><a href="#s5"><span class="nav-num">5</span> Риск на заказчика</a></li>
+      <li><a href="#s6"><span class="nav-num">6</span> Реакция на клиента?</a></li>
+      <li><a href="#s7"><span class="nav-num">7</span> Согласованность линий</a></li>
+      <li><a href="#s8"><span class="nav-num">8</span> Расхождения с case-10</a></li>
+      <li><a href="#s9"><span class="nav-num">9</span> Рейтинг по горизонтам</a></li>
+      <li><a href="#s10"><span class="nav-num">10</span> Вопросы вендору</a></li>
+    </ul>
+    <div class="nav-status">
+      <p class="label">Роль документа</p>
+      <p>Независимая, намеренно скептическая оценка — не пересказ case-10, местами расходится с ним.</p>
+    </div>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Кейс 12 · Вердикт критика</p>
+      <h1 class="title">Вердикт критика по дорожной карте Камераты</h1>
+      <p class="subtitle">Q4 2026 – H2 2027. Источники: <code>roadmap-2026q4-2027h2.md</code> (редакция 28.08.2026), <code>case-08-test-tracker-analiz.md</code> (трекер пилота на 04.09.2026), <code>case-10-roadmap-analysis.md</code>, <code>case-11-voprosy-vendoru-roadmap.md</code>.</p>
+    </header>
+
+    <div class="callout">
+      <p class="head">Вердикт одним абзацем</p>
+      <p><b>Доверять частично и только на горизонте Q4 2026</b> — дальше документ читать как маркетинг направления, а не как план. Дорожная карта технически написана честно (система A/B/C/D действительно снижает уверенность с горизонтом), но за этой честностью прячется куда менее приятная картина: из 35 пунктов реализован ровно один (ХРН-1), 54% пунктов (19 из 35, все C и D) по собственному тексту документа <b>не создают обязательств ни при каком раскладе</b>, а документ <b>ни разу не упоминает</b> ни API, ни MCP, ни CRM, ни сам факт бага «слетают домен и персона» — то есть обходит стороной именно тот системный дефект, который case-08 называет главным новым риском пилота.</p>
+      <p>Это не роадмап человека, который знает, что у него сломано, и говорит, как будет чинить; это роадмап человека, который знает, что у него спросят «а что дальше», и отвечает длинным, аккуратно раскрашенным списком. Ближайший квартал (10 из 12 пунктов уровня B) можно использовать как рабочую гипотезу графика — с поправкой на то, что та же команда сейчас не закрыла 8 из 17 сценариев приёмки. Всё, что дальше Q1 2027, не должно фигурировать ни в одном обсуждении сроков или денег с заказчиком.</p>
+    </div>
+
+    <section id="s1">
+      <h2 class="sec"><span class="n">01</span> Масштаб амбиций против мощности исполнения</h2>
+      <p>Заявка roadmap на 15 месяцев вперёд: агент рабочей станции (новая поверхность безопасности), переход хранения на Iceberg, неизменяемый хэш-цепочкой журнал аудита, распределённое владение данными между подразделениями холдинга, обслуживание нескольких изолированных контуров одной установкой, ИИ-помощник стюарда данных. Это список уровня продуктовой стратегии зрелой платформы с несколькими production-инсталляциями.</p>
+      <p>Одновременно — по case-08, снятому с той же команды 04.09.2026, через неделю после roadmap: 8 из 17 формальных сценариев приёмки всё ещё содержат ошибки, включая базовые (права доступа к данным, доступность работы через API, анонимизация из подключённых источников), незакрытый инфраструктурный баг с потерей домена/персоны, и открытый блокер — у ведущего тестировщика со стороны заказчика на 04.09 нет доступа в систему.</p>
+      <p>Это не «команда, которая закончила v1 и теперь смотрит вперёд» — это команда, которая всё ещё исправляет v1 в проде у единственного платного пилота. Спрашивать имеет смысл не «реалистичен ли список», а «кто именно будет его делать, если не те же люди, которые сейчас разбирают 8 сценариев с ошибками».</p>
+      <div class="item warn"><p><b>Смешение уровней сложности внутри одной буквы.</b> В Q4 2026 уровня B перечислены рядом «Оформление интерфейса под фирменный стиль заказчика» (ЭКС-2 — по сути тема CSS) и «Контур подтверждения действий» (НАД-3 — новый слой поведения агента, требующий сквозного тестирования). Буква описывает <i>ресурсную обеспеченность</i>, а не <i>риск задержки/качества</i> — заказчику, который слышит «это B», стоит понимать, что «B» ничего не говорит о том, насколько это трудно сделать вовремя.</p></div>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec"><span class="n">02</span> Что дорожная карта демонстративно не замечает</h2>
+      <p class="sec-dek">Самый сильный и самый проверяемый пункт критики.</p>
+      <div class="item bad"><p><b>Ноль упоминаний «API» и «MCP» во всём документе</b> — при том, что в case-08 это единственный дефект, подтверждённый тремя независимыми сценариями теста («не прошла деанонимизация данных при вызове запроса через API», «ответ через API отличается от ответа через чат... подхватился отчёт брокера», «при получении ответа через API не прошла деанонимизация»). Ближайший по смыслу пункт — НАД-4 (расширение аудита на вызовы инструментов, Q1 2027, C) — про <i>видимость</i> вызовов, а не про <i>корректность</i> их результата. Он не обещает, что ответ через API станет совпадать с ответом через чат.</p></div>
+      <div class="item bad"><p><b>Ноль упоминаний «CRM»</b> и явной привязки к сценарию «комплексная работа CRM + DWH» (case-08, статус «Есть ошибки», риск, известный ещё по case-06). Линия «Каталог» тематически смежна, но решает другую задачу (согласование формул показателей), а не настройку совместного доступа к разнородным источникам под RLS.</p></div>
+      <div class="item bad"><p><b>Ноль упоминаний «домена» и «персоны»</b> — то есть самого инфраструктурного бага, открытого и не исправленного на 04.09.2026.</p></div>
+      <p><b>Вывод:</b> там, где вендор мог бы прямо сказать «мы знаем, что сейчас ломается, и вот пункт дорожной карты, который это чинит» — он этого не делает ни разу. Roadmap полон новых возможностей и молчит о существующих дефектах.</p>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec"><span class="n">03</span> Честность уровней уверенности — реальная, но с лазейкой</h2>
+      <p>Падение уверенности с горизонтом (Q4 2026 почти весь B → H2 2027 полностью D) — действительно необычная для вендорских roadmap прямота: большинство таких документов подают все кварталы одинаково уверенно.</p>
+      <p>Но у этой честности есть встроенная лазейка: раздел «Порядок пересмотра» гласит — «изменение состава пунктов уровня C и D не является изменением обязательств». Пунктов уровня C и D — 19 из 35, то есть <b>54% всего документа официально нефальсифицируемы</b>. Почти весь H2 2027 и большая часть Q1–Q2 2027 не создают вендору репутационного риска за срыв, при этом визуально занимают почти половину документа.</p>
+      <div class="item warn"><p><b>РМ-4 («Дальнейшие фазы агента рабочего места», H2 2027, D)</b> — апофеоз паттерна: содержательно пустая строка, существующая, похоже, только для того, чтобы в таблице H2 2027 у линии «Раб. места» была хоть какая-то запись. Наличие content-free заполнителей в официальном документе — самостоятельный красный флаг: он показывает, что задача документа отчасти — заполнить сетку 6×4, а не только сообщить содержание.</p></div>
+    </section>
+
+    <section id="s4">
+      <h2 class="sec"><span class="n">04</span> Периметр безопасности: не только рабочая станция</h2>
+      <p>case-11 уже поднял вопрос о том, что РМ-1 (служба чтения локальных файлов) не упоминает применение маскирования PII/DLP к содержимому файлов. Это верно, но в документе есть второй, не менее конкретный и куда более проверяемый случай того же паттерна — и его не заметили ни case-10, ни case-11.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Пункт</th><th>Горизонт</th><th>Уровень</th><th>Что происходит</th></tr></thead>
+        <tbody>
+          <tr><td class="k">ИНТ-2</td><td>Q4 2026</td><td><span class="pill warn">C</span></td><td>Чтение выделенных почтовых ящиков и папок <b>как источника данных</b></td></tr>
+          <tr><td class="k">ИНТ-3</td><td>Q1 2027</td><td><span class="pill warn">C</span></td><td>Распространение политик доступа и маскирования <b>на почтовые источники</b></td></tr>
+        </tbody>
+      </table></div>
+      <p>По собственному графику документа платформа получает возможность читать содержимое корпоративной переписки <b>на квартал раньше</b>, чем на эту переписку распространяются те же политики маскирования и доступа, что действуют для остальных источников. Это не гипотетический риск — это прямо написано в двух соседних строках одной таблицы. Если ИНТ-2 попадёт в договор внедрения как есть, у заказчика минимум квартал будет включённый канал чтения почты без гарантии PII/DLP-маскирования на уровне остальных источников.</p>
+      <div class="item bad"><p><b>Системный паттерн, не единичный недосмотр:</b> каждая новая поверхность чтения данных (локальные файлы, почтовые ящики) появляется в документе раньше, чем явно подтверждённое распространение на неё существующего контура защиты. Три из шести линий двигают периметр быстрее, чем закрывают вопросы о том, что происходит с данными на новом периметре.</p></div>
+    </section>
+
+    <section id="s5">
+      <h2 class="sec"><span class="n">05</span> Перенос риска на заказчика</h2>
+      <p>Раздел «Что потребуется со стороны заказчика» есть в каждом квартале и растёт по требовательности: Q4 2026 называет согласование первых 20–30 показателей с бизнес-подразделениями «определяющим фактором сроков этапа» — прямое, письменное признание, что если этап сползёт, объяснение уже готово, и оно не про инженерию. Решение о периоде удержания журналов аудита запрашивается <b>дважды</b> за три квартала (Q4 2026 и снова Q2 2027) — скорее говорит о том, что в Q4 2026 вопрос не был закрыт, чем о поэтапной эскалации. Модель подписи агента в изолированном контуре целиком перекладывается на заказчика без вендорской рекомендации по умолчанию — у самого вендора нет референс-архитектуры для собственного же основного режима поставки.</p>
+      <p>Проблема не в самих требованиях (организационная готовность заказчика — нормальная часть corporate-grade внедрения), а в том, что раздел сформулирован так, что почти любая задержка на стороне вендора получает готовое объяснение «заказчик не предоставил X», при полном отсутствии встречного раздела обязательств вендора при задержке с его стороны.</p>
+    </section>
+
+    <section id="s6">
+      <h2 class="sec"><span class="n">06</span> Роадмап как реакция на конкретного клиента?</h2>
+      <p>case-10 называет совпадение сроков «приятным»: запись №36 в трекере пилота от 26.08.2026 просит roadmap, документ приходит 28.08.2026. Более жёсткое прочтение: <b>два дня на документ, описывающий стратегию до H2 2027</b>, — это физически возможно только в двух случаях: либо это выдержка из уже существующего бэклога, спешно переупакованная под клиента, либо документ реально составлен за 48 часов, а значит 15 «B»-пунктов на два ближайших квартала получили свою уверенность второпях, без полноценного ресурсного планирования.</p>
+      <div class="item bad"><p><b>Датировка не сходится.</b> Связка «НАД-1 отвечает на баг домена/персоны», которую case-10 приводит как пример отзывчивости, не выдерживает проверки: комментарий про баг датирован 03.09.2026 — на неделю <i>позже</i> даты roadmap (28.08.2026). Документ физически не мог отвечать на баг, который на момент публикации ещё не был задокументирован.</p></div>
+      <p>С email-линией (ИНТ-1/2) хронология действительно работает в пользу отзывчивости. Но это ближе к «нам напомнили поднять приоритет уже существующего пункта бэклога», чем к «мы построили стратегию вокруг вашей боли», как это подано в case-10.</p>
+    </section>
+
+    <section id="s7">
+      <h2 class="sec"><span class="n">07</span> Внутренняя согласованность: три оси или шесть бэклогов?</h2>
+      <p>case-10 предлагает читать документ как ставку на три оси. Первые две (Каталог, Надзор) действительно читаются как последовательная логика — здесь согласие с case-10. Третья — нет: туда сведены Хранение (стоимость и производительность бэкенда), Раб. места (новая продуктовая поверхность), Эксплуатация (operability) и Интеграции (источники контента) — четыре самостоятельных решения без общей архитектурной зависимости, объединённых только тем, что не относятся к первым двум осям.</p>
+      <p>Шесть линий документа, по всей видимости, — шесть подсистем/команд продукта, сведённых в жёсткую сетку «линия × квартал» почти без кросс-линейных зависимостей (единственная явная — ИНТ-3 ссылается на НАД-1). Похоже на документ, собранный запросом «пришлите каждый свои ближайшие 1–2 года» и сведённый в одну таблицу, а не написанный из единой продуктовой стратегии сверху вниз — довод за то, чтобы обсуждать каждую линию с вендором отдельно, ожидая разной зрелости планирования.</p>
+    </section>
+
+    <section id="s8">
+      <h2 class="sec"><span class="n">08</span> Конкретные расхождения с case-10</h2>
+      <ol class="disagree">
+        <li><b>«Q4 2026 можно доверять как плану»</b> (case-10, §1) — слишком щедро: та же команда в ту же неделю не закрыла 8 из 17 сценариев базовой приёмки.</li>
+        <li><b>Таблица пересечений с пилотом</b> (case-10, §3) включает НАД-1 ↔ баг домена/персоны как пример отзывчивости — анахронизм (см. §6 выше), связь тематическая, не причинно-следственная.</li>
+        <li><b>Отсутствие слов API/MCP/CRM/домен-персона</b> в тексте roadmap не было замечено ни в case-10, ни в case-11 — самое конкретное свидетельство того, что документ обходит главный дефект пилота.</li>
+        <li><b>Разрыв ИНТ-2 → ИНТ-3</b> не был замечен — второй, не менее конкретный случай «периметр растёт быстрее контроля», доказательный без домыслов (виден в датах).</li>
+        <li><b>«Границы продукта — показательная честность»</b> (case-10, §4) — не стоит засчитывать как честность-жертву: отказ лезть в BI/MDM/фронт-офис — это архитектурный факт позиционирования, а не добродетель.</li>
+        <li><b>Три оси</b> (case-10, §2) — согласие по первым двум, несогласие по третьей (см. §7 выше).</li>
+      </ol>
+    </section>
+
+    <section id="s9">
+      <h2 class="sec"><span class="n">09</span> Рейтинг доверия по горизонтам</h2>
+      <p class="sec-dek">Не единая оценка — честный ответ здесь разный по кварталам.</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Горизонт</th><th>Что с ним делать в разговоре с заказчиком</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Q4 2026<br><span class="pill warn">10/12 · B</span></td><td>Рабочая гипотеза графика, <b>не обязательство</b>. Закладывать буфер минимум в один квартал с учётом текущей загрузки команды 8 незакрытыми сценариями. Требовать явных критериев приёмки по каждому пункту в ТЗ отдельно от роадмапа.</td></tr>
+          <tr><td class="k">Q1 2027<br><span class="pill warn">5B / 6C</span></td><td>Направление, не план. B-пункты обсуждать только с пометкой «предварительно», C-пункты не упоминать как сроки вообще.</td></tr>
+          <tr><td class="k">Q2 2027<br><span class="pill bad">100% · C</span></td><td>Не использовать в переговорах о сроках или бюджете вообще. Максимум — «вендор подтверждает архитектурное направление», без даты.</td></tr>
+          <tr><td class="k">H2 2027<br><span class="pill bad">100% · D</span></td><td>Читать как маркетинговый список направлений мысли. РМ-4 буквально не содержит информации. Не ссылаться на этот горизонт ни в одном документе с обязательствами перед Д8.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout">
+        <p class="head">Итоговая характеристика вендора</p>
+        <p>Технически грамотная, местами добросовестная команда (буквенная система уверенности — не пустая формальность для первого горизонта) со <b>слабой дисциплиной приоритизации</b> относительно собственных известных дефектов и явной готовностью закрывать разговор о будущем длинным списком, а не устранением того, что уже сломано у платящего клиента. Это не мошенничество и не пустой roadmap — но и не документ, которому можно доверять дальше горизонта одного квартала без независимой проверки.</p>
+      </div>
+    </section>
+
+    <section id="s10">
+      <h2 class="sec"><span class="n">10</span> Вопросы вендору — острее, чем в case-11</h2>
+      <p class="sec-dek">Не дублируют вопрос №1 (маскирование РМ-агента) из case-11.</p>
+
+      <div class="qa-card">
+        <p class="q"><span class="qmark">1</span>Про отсутствие API/MCP в тексте</p>
+        <p class="a">Roadmap ни разу не упоминает API и MCP, при этом в пилоте это единственный дефект, подтверждённый тремя независимыми сценариями (case-08). Это значит, что канал API/MCP не входит в приоритеты развития вообще, или он неявно покрыт одним из пунктов (например, НАД-4)? Просим назвать конкретный квартал и уровень уверенности для достижения функциональной эквивалентности ответов через API/MCP и через чат — до того, как этот канал попадёт в договорные обязательства ТЗ.</p>
+      </div>
+      <div class="qa-card">
+        <p class="q"><span class="qmark">2</span>Про разрыв ИНТ-2 / ИНТ-3</p>
+        <p class="a">Чтение почтовых ящиков как источника данных (ИНТ-2) стоит на квартал раньше распространения на почтовые источники политик маскирования (ИНТ-3). Готов ли вендор либо свести оба пункта в один релиз, либо письменно зафиксировать, что ИНТ-2 не будет включаться ни в одну боевую конфигурацию до готовности ИНТ-3?</p>
+      </div>
+      <div class="qa-card">
+        <p class="q"><span class="qmark">3</span>Про исправление бага «слетают домен и персона»</p>
+        <p class="a">Ни один пункт roadmap явно не называет исправление этого бага (зафиксирован 03.09.2026, не исправлен на момент выгрузки трекера) отдельной задачей. Это баг конкретной сборки, закрывается вне дорожной карты в ближайшем спринте, или системная проблема архитектуры контекста агента, заслуживающая отдельного пункта — и не блокирует ли она НАД-1/НАД-3, которые тоже опираются на корректную идентификацию агента и персоны?</p>
+      </div>
+      <div class="qa-card">
+        <p class="q"><span class="qmark">4</span>Про ресурс на Q4 2026</p>
+        <p class="a">10 пунктов уровня B в ближайшем квартале — это отдельная от команды пилота Д8 команда разработки, или те же инженеры, которые сейчас закрывают 8 из 17 незакрытых сценариев приёмки, должны параллельно поставить 10 новых B-пунктов в тот же период? Можно ли увидеть распределение ресурса по пунктам Q4 2026 отдельно от текущей работы над пилотом?</p>
+      </div>
+      <div class="qa-card">
+        <p class="q"><span class="qmark">5</span>Про происхождение документа</p>
+        <p class="a">Roadmap датирован 28.08.2026 — через два дня после записи №36 в трекере с просьбой прислать дорожную карту. Это выдержка из уже существующего продуктового бэклога (в этом случае просим показать историю ревизий документа для оценки стабильности направления во времени), или документ был специально составлен под пилот Д8 за эти два дня? Если второе — на чём основана уверенность уровня B для 15 пунктов, сформулированных в столь сжатые сроки?</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">См. также</h2>
+      <ul class="see-also">
+        <li><span class="path">roadmap-2026q4-2027h2.md</span><span class="desc">Полный текст документа.</span></li>
+        <li><span class="path">case-08-test-tracker-analiz.md</span><span class="desc">Источник фактов о текущем состоянии платформы.</span></li>
+        <li><span class="path">case-10-roadmap-analysis.md</span><span class="desc">Исходный (более мягкий) разбор той же дорожной карты.</span></li>
+        <li><span class="path">case-11-voprosy-vendoru-roadmap.md</span><span class="desc">Вопрос №1 (маскирование РМ-агента), не дублируется здесь.</span></li>
+        <li><span class="path">case-12-roadmap-critic-dashboard.html</span><span class="desc">Краткая версия этого вердикта на одном экране.</span></li>
+      </ul>
+    </section>
+  </main>
+</div>

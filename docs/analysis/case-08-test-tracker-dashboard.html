@@ -1,0 +1,301 @@
+<title>Дашборд выполнения тест-кейсов Д8</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --open: #5B4B93; --open-tint: #ECE8F7;
+    --cat-a: #0E8C7C; --cat-b: #7A4FBF;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --open: #B29EE8; --open-tint: #251F3A;
+      --cat-a: #38A896; --cat-b: #9A82D4;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --open: #B29EE8; --open-tint: #251F3A;
+    --cat-a: #38A896; --cat-b: #9A82D4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 24px 72px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 25px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; }
+  .sub { font-size: 14px; color: var(--muted); margin: 0; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 14px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  @media (max-width: 760px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 16px 14px; box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
+  .tile.ok { border-top-color: var(--ok); }
+  .tile.warn { border-top-color: var(--warn); }
+  .tile.bad { border-top-color: var(--bad); }
+  .tile .label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 8px; }
+  .tile .num { font-size: 25px; font-weight: 700; margin: 0 0 4px; letter-spacing: -.01em; }
+  .tile .meta { font-size: 12.5px; color: var(--muted); margin: 0; }
+
+  section { margin-top: 30px; }
+  h2 { font-size: 15px; font-weight: 700; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 11px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+  h3.grp { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 18px 0 10px; }
+  h3.grp:first-child { margin-top: 0; }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); }
+
+  /* scenario grid */
+  .sc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 760px) { .sc-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .sc-grid { grid-template-columns: 1fr; } }
+  .sc-card { border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; background: var(--surface); box-shadow: var(--shadow); }
+  .sc-card .sc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+  .sc-card .sc-name { font-size: 12.5px; font-weight: 700; line-height: 1.35; }
+  .sc-card .sc-status { flex: none; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 100px; white-space: nowrap; margin-top: 1px; }
+  .sc-card .sc-status.ok { background: var(--ok-tint); color: var(--ok); }
+  .sc-card .sc-status.warn { background: var(--warn-tint); color: var(--warn); }
+  .sc-card .sc-status.bad { background: var(--bad-tint); color: var(--bad); }
+  .sc-card .sc-status.neutral { background: var(--surface-2); color: var(--muted); }
+  .sc-card .sc-note { font-size: 11.5px; color: var(--muted); }
+
+  /* proportional bars */
+  .propbar { display: flex; height: 30px; border-radius: 8px; overflow: hidden; margin-bottom: 12px; border: 1px solid var(--line); }
+  .propbar span { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+  .propbar .p-ok { background: var(--ok); }
+  .propbar .p-bad { background: var(--bad); }
+  .propbar .p-pending { background: var(--muted-2); }
+  .propbar .p-ongoing { background: var(--accent); }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
+  .legend .sw { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+  /* before/after bars */
+  .ba-row { display: grid; grid-template-columns: 190px 1fr; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .ba-row:last-child { margin-bottom: 0; }
+  @media (max-width: 620px) { .ba-row { grid-template-columns: 1fr; } }
+  .ba-row .ba-label { font-size: 13px; font-weight: 700; }
+  .ba-row .ba-sub { font-size: 11.5px; color: var(--muted); font-weight: 400; }
+  .ba-bars { display: flex; flex-direction: column; gap: 6px; }
+  .ba-bar-line { display: grid; grid-template-columns: 46px 1fr 80px; align-items: center; gap: 8px; }
+  .ba-bar-line .ba-tag { font-size: 10.5px; color: var(--muted-2); text-align: right; }
+  .ba-bar-line .ba-track { height: 16px; border-radius: 5px; background: var(--surface-2); overflow: hidden; }
+  .ba-bar-line .ba-fill { height: 100%; border-radius: 5px; }
+  .ba-bar-line .ba-fill.before { background: var(--muted-2); }
+  .ba-bar-line .ba-fill.after.better { background: var(--ok); }
+  .ba-bar-line .ba-fill.after.mixed { background: var(--warn); }
+  .ba-bar-line .ba-val { font-size: 12px; color: var(--ink); font-weight: 700; }
+  .ba-flag { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 100px; margin-left: 8px; vertical-align: middle; }
+  .ba-flag.better { background: var(--ok-tint); color: var(--ok); }
+  .ba-flag.mixed { background: var(--warn-tint); color: var(--warn); }
+
+  /* class breakdown bar */
+  .barrow { display: grid; grid-template-columns: 130px 1fr 70px; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .barrow:last-child { margin-bottom: 0; }
+  .barrow .rl { font-size: 12.5px; color: var(--muted); text-align: right; }
+  .barrow .bb { display: flex; height: 20px; border-radius: 5px; overflow: hidden; background: var(--surface-2); }
+  .barrow .bb .seg { display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; color: #fff; }
+  .barrow .rt { font-size: 12.5px; color: var(--muted-2); font-variant-numeric: tabular-nums; }
+
+  /* risk chips */
+  .chips { display: flex; flex-direction: column; gap: 8px; }
+  .chip { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 9px; font-size: 13px; border: 1px solid var(--line); }
+  .chip.bad { background: var(--bad-tint); border-color: var(--bad); color: var(--bad); }
+  .chip.warn { background: var(--warn-tint); border-color: var(--warn); color: var(--warn); }
+  .chip b { color: var(--ink); font-weight: 700; }
+  .chip .ic { flex: none; width: 7px; height: 7px; border-radius: 50%; background: currentColor; margin-top: 2px; align-self: flex-start; }
+
+  /* out-of-plan section */
+  .oop-panel { border: 1.5px solid var(--open); background: var(--open-tint); border-radius: 12px; padding: 18px 20px; }
+  .oop-panel h2 { color: var(--open); }
+  .oop-panel h2 .n { background: var(--surface); color: var(--open); }
+  .oop-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .oop-cols { grid-template-columns: 1fr; } }
+  .oop-cols h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--open); margin: 0 0 10px; }
+  ul.oop-list { list-style: none; margin: 0; padding: 0; }
+  ul.oop-list li { position: relative; padding: 0 0 9px 18px; font-size: 13px; color: var(--ink); }
+  ul.oop-list li::before { content: "+"; position: absolute; left: 0; top: 0; color: var(--open); font-weight: 700; }
+  ul.oop-list li .tag-done { font-size: 10px; font-weight: 700; color: var(--ok); margin-left: 6px; }
+  .oop-foot { margin-top: 14px; padding-top: 12px; border-top: 1px solid color-mix(in srgb, var(--open) 30%, transparent); font-size: 12px; color: var(--muted); }
+
+  footer.note { margin-top: 32px; font-size: 12px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 14px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Выполнение тест-кейсов пилота · Д8</h1>
+      <p class="sub">Трекер v2 (case-08) · 17 сценариев ТЗ + журнал замечаний, 17.08–04.09.2026</p>
+    </div>
+    <span class="snap"><span class="dot"></span>Срез на 05.09.2026</span>
+  </header>
+
+  <div class="tiles">
+    <div class="tile warn">
+      <p class="label">Сценарии ТЗ</p>
+      <p class="num tabular">6 / 17</p>
+      <p class="meta">полностью пройдены; 8 с ошибками, 1 в работе, 2 не проверялись</p>
+    </div>
+    <div class="tile ok">
+      <p class="label">Журнал замечаний</p>
+      <p class="num tabular">47 / 69</p>
+      <p class="meta">закрыто (68%) · 6 в работе · 16 без движения</p>
+    </div>
+    <div class="tile ok">
+      <p class="label">Лучший прогресс</p>
+      <p class="num tabular">41% → 66%</p>
+      <p class="meta">точность на сложных данных, ложные срабатывания ↓ втрое</p>
+    </div>
+    <div class="tile bad">
+      <p class="label">Открыто сейчас</p>
+      <p class="num" style="font-size:18px;">Логин заблокирован</p>
+      <p class="meta">у основного тестировщика Д8, запись от 04.09</p>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="n">17 сценариев</span> Статус выполнения по блокам ТЗ</h2>
+
+    <h3 class="grp">Анонимизатор (9)</h3>
+    <div class="sc-grid">
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">1 · Обезличивание в запросе</span><span class="sc-status ok">Успешно</span></div><p class="sc-note">Ø качество 84.5% на 20 запросах</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">2 · Обезличивание в документе</span><span class="sc-status bad">Есть ошибки</span></div><p class="sc-note">не все форматы (xml/pptx/скан-pdf); после доработки — противоречивый сдвиг</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">3 · Восстановление в ответе</span><span class="sc-status ok">Успешно</span></div><p class="sc-note">100% (127/127), 0 ложных срабатываний</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">4 · Журналирование</span><span class="sc-status ok">Успешно</span></div><p class="sc-note">—</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">5 · Разграничение доступа</span><span class="sc-status ok">Успешно</span></div><p class="sc-note">—</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">6 · Сложные данные</span><span class="sc-status bad">Есть ошибки</span></div><p class="sc-note">41%→66% после доработки, нужен ещё один прогон</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">7 · Лимиты пользователей</span><span class="sc-status neutral">Не проверялось</span></div><p class="sc-note">инструкция передана, нужен повторный тест</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">8 · Работа из агентов</span><span class="sc-status bad">Есть ошибки</span></div><p class="sc-note">чат ок; деанонимизация через API не проходит</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">9 · Потоковое использование</span><span class="sc-status ok">Успешно</span></div><p class="sc-note">параллельные запросы обрабатываются корректно</p></div>
+    </div>
+
+    <h3 class="grp">Платформа данных (8)</h3>
+    <div class="sc-grid">
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">1 · Права доступа к объектам</span><span class="sc-status bad">Есть ошибки</span></div><p class="sc-note">у тестового пользователя слетают домен и персона</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">2 · Права доступа к данным (RLS)</span><span class="sc-status bad">Есть ошибки</span></div><p class="sc-note">тот же баг домена/персоны, что и в сценарии 1</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">3 · Доступ к данным через API</span><span class="sc-status bad">Есть ошибки</span></div><p class="sc-note">через MCP подхватился не тот источник (отчёт брокера вместо DWH)</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">4 · Анонимизация из источников</span><span class="sc-status bad">Есть ошибки</span></div><p class="sc-note">деанонимизация не проходит через API</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">5 · Комплексная работа CRM+DWH</span><span class="sc-status bad">Есть ошибки</span></div><p class="sc-note">семантический слой всё ещё не настроен</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">6 · Работа с RAG</span><span class="sc-status ok">Успешно</span></div><p class="sc-note">проверка соответствия нормативке ЦБ РФ пройдена</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">7 · Электронная почта</span><span class="sc-status warn">В работе</span></div><p class="sc-note">нужна настройка Gmail; IMAP в компании не применяется</p></div>
+      <div class="sc-card"><div class="sc-top"><span class="sc-name">8 · Проведение сверок</span><span class="sc-status neutral">Не проверялось</span></div><p class="sc-note">тест-кейс ещё формулируется совместно с Д8</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">69 записей</span> Журнал замечаний — статус</h2>
+    <div class="panel">
+      <div class="propbar" title="47 готово · 6 в работе · 16 открыто">
+        <span class="p-ok" style="width:68.1%">47</span><span class="p-ongoing" style="width:8.7%">6</span><span class="p-pending" style="width:23.2%">16</span>
+      </div>
+      <div class="legend" style="margin-bottom:18px;">
+        <span><span class="sw" style="background:var(--ok)"></span>Готово (47)</span>
+        <span><span class="sw" style="background:var(--accent)"></span>В работе (6)</span>
+        <span><span class="sw" style="background:var(--muted-2)"></span>Открыто / без статуса (16)</span>
+      </div>
+      <div class="barrow">
+        <span class="rl">Ошибка</span>
+        <span class="bb"><span class="seg" style="width:100%; background:var(--cat-b)">24</span></span>
+        <span class="rt">24 / 69</span>
+      </div>
+      <div class="barrow">
+        <span class="rl">Вопрос</span>
+        <span class="bb"><span class="seg" style="width:91.7%; background:var(--cat-a)">22</span></span>
+        <span class="rt">22 / 69</span>
+      </div>
+      <div class="barrow">
+        <span class="rl">Новое требование</span>
+        <span class="bb"><span class="seg" style="width:37.5%; background:var(--accent)">9</span></span>
+        <span class="rt">9 / 69</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">3 сценария</span> Было → стало после доработок</h2>
+    <div class="panel">
+      <div class="ba-row">
+        <div class="ba-label">Сложные данные<div class="ba-sub">опечатки, нестандартные форматы</div></div>
+        <div class="ba-bars">
+          <div class="ba-bar-line"><span class="ba-tag">Было</span><div class="ba-track"><div class="ba-fill before" style="width:45.5%"></div></div><span class="ba-val tabular">45.5%</span></div>
+          <div class="ba-bar-line"><span class="ba-tag">Стало</span><div class="ba-track"><div class="ba-fill after better" style="width:67.4%"></div></div><span class="ba-val tabular">67.4% <span class="ba-flag better">лучше</span></span></div>
+        </div>
+      </div>
+      <div class="ba-row">
+        <div class="ba-label">Обезличивание в документе<div class="ba-sub">агрегированная точность по сущностям</div></div>
+        <div class="ba-bars">
+          <div class="ba-bar-line"><span class="ba-tag">Было</span><div class="ba-track"><div class="ba-fill before" style="width:82.6%"></div></div><span class="ba-val tabular">82.6%</span></div>
+          <div class="ba-bar-line"><span class="ba-tag">Стало</span><div class="ba-track"><div class="ba-fill after mixed" style="width:87.9%"></div></div><span class="ba-val tabular">87.9% <span class="ba-flag mixed">неоднозначно</span></span></div>
+        </div>
+      </div>
+      <div class="ba-row">
+        <div class="ba-label">Восстановление PII<div class="ba-sub">без повторного теста — сразу чисто</div></div>
+        <div class="ba-bars">
+          <div class="ba-bar-line"><span class="ba-tag">Итог</span><div class="ba-track"><div class="ba-fill after better" style="width:100%"></div></div><span class="ba-val tabular">100%</span></div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px; color:var(--muted); margin-top:10px;">«Неоднозначно» — среднее качество выросло, но доля запросов с ложными срабатываниями увеличилась (5/10 → 8/10): вероятно, донастройка расширила охват ценой лишних срабатываний.</p>
+  </section>
+
+  <section>
+    <h2><span class="n">Риски</span> Что держать на контроле</h2>
+    <div class="chips">
+      <div class="chip bad"><span class="ic"></span><span><b>Канал API/MCP заметно отстаёт от чата</b> — 3 независимых сценария (анонимизатор-8, платформа-3, платформа-4) показывают, что деанонимизация или выбор источника данных ломаются именно при обращении через API/MCP</span></div>
+      <div class="chip bad"><span class="ic"></span><span><b>«Слетают» домен и персона</b> — один и тот же баг зафиксирован в сценариях 1 и 2 блока «Платформа данных» (03.09, Горячев); похоже на общую инфраструктурную проблему, а не на два разных дефекта</span></div>
+      <div class="chip warn"><span class="ic"></span><span><b>«RAG-компании»</b> — статус стал менее видимым: раньше это была отдельная дорожка с нулевым движением, теперь — один пункт в общем списке источников без отдельной строки. Подтверждения, что риск снят, нет</span></div>
+      <div class="chip warn"><span class="ic"></span><span><b>Семантический слой CRM+DWH</b> (платформа-5) — по-прежнему не настроен, комментарий в трекере дословно повторяет более раннюю формулировку</span></div>
+    </div>
+  </section>
+
+  <section class="oop-panel">
+    <h2><span class="n">9 + 6</span> Не входило в первоначальный план пилота</h2>
+    <p style="font-size:13px; color:var(--ink); margin:0 0 16px;">Пилот по «Общему описанию» — это стенд + 2 источника (КХД, ESB) + 2 роли + RAG-корпус из 2 коллекций + AI Guard на одну облачную LLM + до 20 пользователей. Всё ниже — то, что появилось поверх этого объёма в ходе работы.</p>
+    <div class="oop-cols">
+      <div>
+        <h4>Новые требования из журнала (9)</h4>
+        <ul class="oop-list">
+          <li>Отображать список базовых маскируемых типов PII</li>
+          <li>Упорядочивание сессий по времени последней активности + фильтр «Только активные» <span class="tag-done">В РАБОТЕ</span></li>
+          <li>Прямой доступ через API (сейчас — только штатный интерфейс чата)</li>
+          <li>Поддержка эндпоинта, отвечавшего 403 (за рамками API)</li>
+          <li>Разбор xml и pptx документов</li>
+          <li>Отдельная настройка NER-модели («не в рамках пилота»)</li>
+          <li>Отрисовка диаграмм (например, Ганта) в чате</li>
+          <li>Выбор контура/источника данных в интерфейсе пользователя <span class="tag-done">ГОТОВО</span></li>
+          <li>Баг с таймаутом в пререлизном интерфейсе</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Согласованный бэклог «Доработки» (6)</h4>
+        <ul class="oop-list">
+          <li>Мультидоменная авторизация</li>
+          <li>Работа с MS Office 365 (сейчас — только Gmail/IMAP)</li>
+          <li>Актуальная версия API Claude (web search и т. п.)</li>
+          <li>Выбор источника данных в интерфейсе пользователя</li>
+          <li>Разбор pptx и xml документов</li>
+          <li>Именование замен по кастомным правилам, не как <code>CUSTOM_N</code></li>
+        </ul>
+      </div>
+    </div>
+    <p class="oop-foot">Ни один из этих 15 пунктов не блокирует приёмку исходного объёма пилота — но каждый стоит явно развести с ТЗ при подведении итогов, чтобы не выглядеть как невыполненное обязательство.</p>
+  </section>
+
+  <footer class="note">job-RAG · docs/analysis/case-08-test-tracker-analiz.md — полный разбор с таблицами · docs/analysis/case-08-test-tracker-d8-v2.xlsx — исходный трекер</footer>
+</div>

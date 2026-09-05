@@ -44,6 +44,12 @@
   .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 14px; color: var(--muted); white-space: nowrap; }
   .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 
+  .hdr-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 12px 6px 10px; color: var(--muted); cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .theme-toggle:hover { border-color: var(--line-2); color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .theme-toggle .ico { font-size: 13px; line-height: 1; }
+
   .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
   @media (max-width: 760px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
   .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 16px 14px; box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
@@ -143,7 +149,10 @@
       <h1>Выполнение тест-кейсов пилота · Д8</h1>
       <p class="sub">Трекер v2 (case-08) · 17 сценариев ТЗ + журнал замечаний, 17.08–04.09.2026</p>
     </div>
-    <span class="snap"><span class="dot"></span>Срез на 05.09.2026</span>
+    <div class="hdr-right">
+      <span class="snap"><span class="dot"></span>Срез на 05.09.2026</span>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><span class="ico" id="themeIcon">🌙</span><span id="themeLabel">Тёмная</span></button>
+    </div>
   </header>
 
   <div class="tiles">
@@ -299,3 +308,47 @@
 
   <footer class="note">job-RAG · docs/analysis/case-08-test-tracker-analiz.md — полный разбор с таблицами · docs/analysis/case-08-test-tracker-d8-v2.xlsx — исходный трекер</footer>
 </div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var icon = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  var STORAGE_KEY = 'case08-dashboard-theme';
+
+  function systemPrefersDark() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  function isDark(theme) {
+    if (theme === 'dark') return true;
+    if (theme === 'light') return false;
+    return systemPrefersDark();
+  }
+
+  function render(theme) {
+    if (theme) {
+      root.setAttribute('data-theme', theme);
+    } else {
+      root.removeAttribute('data-theme');
+    }
+    var dark = isDark(theme);
+    // Button always offers the OTHER mode.
+    icon.textContent = dark ? '☀️' : '🌙';
+    label.textContent = dark ? 'Светлая' : 'Тёмная';
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  render(saved);
+
+  btn.addEventListener('click', function () {
+    var current = root.getAttribute('data-theme');
+    var currentlyDark = isDark(current);
+    var next = currentlyDark ? 'light' : 'dark';
+    render(next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+  });
+})();
+</script>

@@ -1,0 +1,229 @@
+<title>Какие кейсы прогонять заново</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --open: #5B4B93; --open-tint: #ECE8F7;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --open: #B29EE8; --open-tint: #251F3A;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --open: #B29EE8; --open-tint: #251F3A;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 24px 64px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 22px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 23px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; }
+  .sub { font-size: 13.5px; color: var(--muted); margin: 0; }
+  .hdr-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 12px 6px 10px; color: var(--muted); cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .theme-toggle:hover { border-color: var(--line-2); color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 26px; }
+  @media (max-width: 760px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 15px 12px; box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
+  .tile.ok { border-top-color: var(--ok); }
+  .tile.warn { border-top-color: var(--warn); }
+  .tile.bad { border-top-color: var(--bad); }
+  .tile.neutral { border-top-color: var(--muted-2); }
+  .tile .label { font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 7px; }
+  .tile .num { font-size: 22px; font-weight: 700; margin: 0 0 3px; letter-spacing: -.01em; }
+  .tile .meta { font-size: 11.5px; color: var(--muted); margin: 0; }
+
+  section { margin-top: 28px; }
+  h2 { font-size: 14px; font-weight: 700; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 10.5px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+
+  .group-head { display: flex; align-items: center; gap: 10px; margin: 22px 0 10px; }
+  .group-head:first-child { margin-top: 0; }
+  .group-badge { font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 100px; white-space: nowrap; }
+  .group-badge.ok { background: var(--ok-tint); color: var(--ok); }
+  .group-badge.bad { background: var(--bad-tint); color: var(--bad); }
+  .group-badge.neutral { background: var(--surface-2); color: var(--muted); }
+  .group-badge.warn { background: var(--warn-tint); color: var(--warn); }
+  .group-title { font-size: 13.5px; font-weight: 700; }
+  .group-dek { font-size: 12px; color: var(--muted); margin: 0 0 10px 0; }
+
+  .case-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (max-width: 700px) { .case-grid { grid-template-columns: 1fr; } }
+  .case-card { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--surface); box-shadow: var(--shadow); border-left: 3px solid var(--line-2); }
+  .case-card.ok { border-left-color: var(--ok); }
+  .case-card.bad { border-left-color: var(--bad); }
+  .case-card.neutral { border-left-color: var(--muted-2); }
+  .case-card.warn { border-left-color: var(--warn); }
+  .case-card .cc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 5px; }
+  .case-card .cc-name { font-size: 13px; font-weight: 700; }
+  .case-card .cc-num { font-size: 10.5px; color: var(--muted-2); font-weight: 700; }
+  .case-card .cc-note { font-size: 12px; color: var(--muted); margin: 0; }
+  .case-card .cc-ref { font-size: 11px; color: var(--muted-2); margin-top: 5px; }
+
+  .action-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .action-list li { display: flex; gap: 10px; align-items: flex-start; padding: 11px 14px; border-radius: 9px; font-size: 13px; border: 1px solid var(--line); background: var(--surface); }
+  .action-list .anum { flex: none; font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 100px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+  footer.note { margin-top: 28px; font-size: 11.5px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 13px; }
+  footer.note a { color: var(--muted-2); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Какие кейсы прогонять заново</h1>
+      <p class="sub">10 документов «Сценарий 2», проверка тестирования Саши от 05.09.2026</p>
+    </div>
+    <div class="hdr-right">
+      <span class="snap"><span class="dot"></span>1 из 10 чисто</span>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><span class="ico" id="themeIcon">🌙</span><span id="themeLabel">Тёмная</span></button>
+    </div>
+  </header>
+
+  <div class="tiles">
+    <div class="tile ok">
+      <p class="label">Чисто</p>
+      <p class="num tabular">1 / 10</p>
+      <p class="meta">Перепрогон не нужен</p>
+    </div>
+    <div class="tile bad">
+      <p class="label">Ждёт фикс вендора</p>
+      <p class="num tabular">6 / 10</p>
+      <p class="meta">Прогон сейчас повторит те же ошибки</p>
+    </div>
+    <div class="tile neutral">
+      <p class="label">Блокировано форматом</p>
+      <p class="num tabular">2 / 10</p>
+      <p class="meta">.xml и .pptx — уже в роадмапе</p>
+    </div>
+    <div class="tile warn">
+      <p class="label">Проверить у себя</p>
+      <p class="num tabular">1 / 10</p>
+      <p class="meta">Прежде чем звать вендора</p>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="n">Вердикт</span> По каждому кейсу</h2>
+
+    <div class="group-head"><span class="group-badge ok">✓ Не прогонять — уже чисто</span></div>
+    <div class="case-grid">
+      <div class="case-card ok">
+        <div class="cc-top"><span class="cc-num">09</span><span class="cc-name">email_perepiska.txt</span></div>
+        <p class="cc-note">Явных дефектов не найдено — все ФИО, email, телефоны, ИНН и счёт распознаны и замаскированы корректно.</p>
+      </div>
+    </div>
+
+    <div class="group-head"><span class="group-badge bad">✗ Не прогонять сейчас — сначала фикс вендора</span></div>
+    <p class="group-dek">Перепрогон без исправления корневой причины воспроизведёт ту же ошибку.</p>
+    <div class="case-grid">
+      <div class="case-card bad">
+        <div class="cc-top"><span class="cc-num">01</span><span class="cc-name">vypiska_bank.txt</span></div>
+        <p class="cc-note">Сумма «+3 450 000» → распознана как телефон. Рецидив бага, закрытого 28.08 только для дат (трекер, стр. 44) — фикс не обобщили.</p>
+      </div>
+      <div class="case-card bad">
+        <div class="cc-top"><span class="cc-num">02</span><span class="cc-name">dogovor.docx</span></div>
+        <p class="cc-note">«Заказчик»/«Исполнитель» → PERSON; одно лицо получило 3 разные метки из-за падежей.</p>
+      </div>
+      <div class="case-card bad">
+        <div class="cc-top"><span class="cc-num">03</span><span class="cc-name">otchet_brokera.xlsx</span></div>
+        <p class="cc-note">«Клиент», «Тикер», «Контролёр», «Уполномоченное» (шапка таблицы) → PERSON.</p>
+      </div>
+      <div class="case-card bad">
+        <div class="cc-top"><span class="cc-num">04</span><span class="cc-name">crm_deal.json</span></div>
+        <p class="cc-note">Номер паспорта в JSON вообще не замаскирован; «Черновик» → PERSON.</p>
+      </div>
+      <div class="case-card bad">
+        <div class="cc-top"><span class="cc-num">07</span><span class="cc-name">akt_sverki.pdf</span></div>
+        <p class="cc-note">Компания «Балтика-Снаб» → PERSON, её же ИНН не замаскирован; «Дебет» → PERSON.</p>
+      </div>
+      <div class="case-card bad">
+        <div class="cc-top"><span class="cc-num">10</span><span class="cc-name">spravka_kadry.doc</span></div>
+        <p class="cc-note">СНИЛС не замаскирован вообще — похоже, тип сущности не входит в конфигурацию. Остальное (паспорт, ИНН, адрес) — чисто.</p>
+      </div>
+    </div>
+
+    <div class="group-head"><span class="group-badge neutral">⛔ Не прогонять — заблокировано форматом</span></div>
+    <p class="group-dek">Технический отказ загрузки, до модуля маскирования дело не доходит. Уже признано и в роадмапе (трекер, стр. 34).</p>
+    <div class="case-grid">
+      <div class="case-card neutral">
+        <div class="cc-top"><span class="cc-num">05</span><span class="cc-name">platezhka.xml</span></div>
+        <p class="cc-note">«Недопустимый формат файла: .xml» — жёсткий отказ при прикреплении.</p>
+      </div>
+      <div class="case-card neutral">
+        <div class="cc-top"><span class="cc-num">06</span><span class="cc-name">kreditny_komitet.pptx</span></div>
+        <p class="cc-note">«Недопустимый формат файла: .pptx» — тот же отказ.</p>
+      </div>
+    </div>
+
+    <div class="group-head"><span class="group-badge warn">⚠ Сначала проверить у себя, потом прогнать</span></div>
+    <div class="case-grid">
+      <div class="case-card warn">
+        <div class="cc-top"><span class="cc-num">08</span><span class="cc-name">doverennost_scan.pdf</span></div>
+        <p class="cc-note">Скан без текстового слоя не проиндексирован. Трекер (стр. 61) говорит, что это уже «Готово» при условии VLM-модели по умолчанию в админке — проверить эту настройку на нашем стенде до эскалации вендору.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Порядок действий</span> Прежде чем прогонять заново</h2>
+    <ol class="action-list" style="list-style:none; padding:0; counter-reset: astep;">
+      <li><span class="anum">1</span><span>Проверить в админке, стоит ли VLM-модель по умолчанию (кейс 8) — если да, эскалировать как реальный баг; если нет, включить и прогнать самим.</span></li>
+      <li><span class="anum">2</span><span>Передать вендору находку про рецидив «число → телефон» (кейс 1) с явной просьбой обобщить фикс от 28.08, а не патчить точечно под сумму.</span></li>
+      <li><span class="anum">3</span><span>Передать вендору паттерн «служебное слово → PERSON» одним пакетом (кейсы 2, 3, 4, 7) — это один корень, а не четыре разных бага.</span></li>
+      <li><span class="anum">4</span><span>Уточнить, входит ли СНИЛС в список распознаваемых типов PII вообще (кейс 10) — если нет, зафиксировать как пробел покрытия, не как баг.</span></li>
+      <li><span class="anum">5</span><span>Кейсы 5 и 6 (.xml, .pptx) не трогать до появления поддержки формата — прогон сейчас ничего не даст.</span></li>
+    </ol>
+  </section>
+
+  <footer class="note">job-RAG · <a href="case-14-anonymizer-3-analiz.md">case-14-anonymizer-3-analiz.md</a> — полный разбор с гипотезами первопричины · <a href="case-13-test-tracker-d8-v3.xlsx">case-13-test-tracker-d8-v3.xlsx</a> — журнал замечаний</footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var icon = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  var STORAGE_KEY = 'case14-dashboard-theme';
+  function systemPrefersDark() { return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+  function isDark(theme) { if (theme === 'dark') return true; if (theme === 'light') return false; return systemPrefersDark(); }
+  function render(theme) {
+    if (theme) { root.setAttribute('data-theme', theme); } else { root.removeAttribute('data-theme'); }
+    var dark = isDark(theme);
+    icon.textContent = dark ? '☀️' : '🌙';
+    label.textContent = dark ? 'Светлая' : 'Тёмная';
+  }
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  render(saved);
+  btn.addEventListener('click', function () {
+    var next = isDark(root.getAttribute('data-theme')) ? 'light' : 'dark';
+    render(next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+  });
+})();
+</script>

@@ -1,0 +1,287 @@
+<title>Итоговый статус проекта · Д8</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --open: #5B4B93; --open-tint: #ECE8F7;
+    --cat-a: #0E8C7C; --cat-b: #7A4FBF;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --open: #B29EE8; --open-tint: #251F3A;
+      --cat-a: #38A896; --cat-b: #9A82D4;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --open: #B29EE8; --open-tint: #251F3A;
+    --cat-a: #38A896; --cat-b: #9A82D4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 40px 24px 72px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 25px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; }
+  .sub { font-size: 14px; color: var(--muted); margin: 0; }
+  .hdr-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 14px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 12px 6px 10px; color: var(--muted); cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .theme-toggle:hover { border-color: var(--line-2); color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .theme-toggle .ico { font-size: 13px; line-height: 1; }
+
+  .verdict { border: 1.5px solid var(--accent); background: var(--accent-tint); border-radius: 12px; padding: 16px 20px; margin-bottom: 28px; }
+  .verdict .v-label { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent-ink); margin: 0 0 6px; }
+  .verdict p.v-text { margin: 0; font-size: 14.5px; color: var(--ink); max-width: 78ch; }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  @media (max-width: 760px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 16px 14px; box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
+  .tile.ok { border-top-color: var(--ok); }
+  .tile.warn { border-top-color: var(--warn); }
+  .tile.bad { border-top-color: var(--bad); }
+  .tile .label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 8px; }
+  .tile .num { font-size: 24px; font-weight: 700; margin: 0 0 4px; letter-spacing: -.01em; }
+  .tile .meta { font-size: 12.5px; color: var(--muted); margin: 0; }
+
+  section { margin-top: 30px; }
+  h2 { font-size: 15px; font-weight: 700; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 11px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+  h2 .lnk { margin-left: auto; font-size: 11.5px; font-weight: 600; color: var(--accent-ink); text-decoration: none; }
+  h2 .lnk:hover { text-decoration: underline; }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); }
+
+  /* stage stepper */
+  .stages { display: flex; gap: 8px; }
+  @media (max-width: 700px) { .stages { flex-direction: column; } }
+  .stage { flex: 1; border-radius: 10px; padding: 12px 14px; border: 1px solid var(--line); position: relative; }
+  .stage .st-n { font-size: 10.5px; color: var(--muted-2); font-weight: 700; }
+  .stage .st-t { font-size: 13.5px; font-weight: 700; margin: 3px 0 5px; }
+  .stage .st-s { font-size: 11.5px; font-weight: 600; }
+  .stage .st-d { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .stage.done { background: var(--ok-tint); border-color: var(--ok); }
+  .stage.done .st-s { color: var(--ok); }
+  .stage.active { background: var(--warn-tint); border-color: var(--warn); }
+  .stage.active .st-s { color: var(--warn); }
+  .stage.pending { background: var(--surface-2); color: var(--muted); }
+  .stage.pending .st-s { color: var(--muted-2); }
+
+  /* proportional bars */
+  .propbar { display: flex; height: 30px; border-radius: 8px; overflow: hidden; margin-bottom: 12px; border: 1px solid var(--line); }
+  .propbar span { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+  .propbar .p-ok { background: var(--ok); }
+  .propbar .p-bad { background: var(--bad); }
+  .propbar .p-pending { background: var(--muted-2); }
+  .propbar .p-ongoing { background: var(--accent); }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
+  .legend .sw { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+  /* block comparison bars */
+  .blk-row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .blk-row:last-child { margin-bottom: 0; }
+  @media (max-width: 600px) { .blk-row { grid-template-columns: 1fr; } }
+  .blk-row .blk-label { font-size: 13px; font-weight: 700; }
+  .blk-row .blk-sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .blk-bar { display: flex; height: 26px; border-radius: 6px; overflow: hidden; background: var(--surface-2); }
+  .blk-bar .seg { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
+
+  /* risk chips */
+  .chips { display: flex; flex-direction: column; gap: 8px; }
+  .chip { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border-radius: 9px; font-size: 13px; border: 1px solid var(--line); }
+  .chip.bad { background: var(--bad-tint); border-color: var(--bad); color: var(--bad); }
+  .chip.warn { background: var(--warn-tint); border-color: var(--warn); color: var(--warn); }
+  .chip b { color: var(--ink); font-weight: 700; }
+  .chip .ic { flex: none; width: 7px; height: 7px; border-radius: 50%; background: currentColor; margin-top: 5px; }
+  .chip .rank { flex: none; font-size: 10px; font-weight: 700; color: var(--muted-2); background: var(--surface); border: 1px solid var(--line); border-radius: 100px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+
+  /* resolved list */
+  ul.resolved { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  ul.resolved li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--ink); }
+  ul.resolved li .ck { flex: none; color: var(--ok); font-weight: 700; }
+
+  /* out of plan condensed */
+  .oop-mini { border: 1.5px dashed var(--open); background: var(--open-tint); border-radius: 12px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .oop-mini .om-text { font-size: 13.5px; color: var(--ink); max-width: 62ch; }
+  .oop-mini .om-text b { color: var(--open); }
+  .oop-mini a.om-lnk { flex: none; font-size: 12.5px; font-weight: 700; color: var(--open); text-decoration: none; white-space: nowrap; border: 1px solid var(--open); border-radius: 100px; padding: 7px 14px; }
+  .oop-mini a.om-lnk:hover { background: var(--open); color: #fff; }
+
+  footer.note { margin-top: 32px; font-size: 12px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 14px; }
+  footer.note a { color: var(--muted-2); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Итоговый статус проекта · Пилот Д8</h1>
+      <p class="sub">Приложение №1 к Договору № ИКД-1-PRO · Подрядчик АйТиКью Про · сводка по всем материалам проекта на сегодня</p>
+    </div>
+    <div class="hdr-right">
+      <span class="snap"><span class="dot"></span>Срез на 05.09.2026</span>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><span class="ico" id="themeIcon">🌙</span><span id="themeLabel">Тёмная</span></button>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <p class="v-label">Одним предложением</p>
+    <p class="v-text">Интеграция в основном сделана и тестирование идёт полным ходом (6 из 17 сценариев ТЗ пройдены, журнал закрыт на 68%), но блок «Платформа данных» заметно отстаёт от блока «Анонимизатор» по готовности, а прямо сейчас тестирование блокирует бытовая проблема — заблокированный логин у ключевого тестировщика Д8.</p>
+  </div>
+
+  <div class="tiles">
+    <div class="tile warn">
+      <p class="label">Этап проекта</p>
+      <p class="num" style="font-size:18px;">3 · Опытная эксплуатация</p>
+      <p class="meta">формальный прогон по ТЗ идёт с 17.08</p>
+    </div>
+    <div class="tile warn">
+      <p class="label">Сценарии ТЗ</p>
+      <p class="num tabular">6 / 17</p>
+      <p class="meta">пройдены полностью; 8 с ошибками, 1 в работе, 2 не проверялись</p>
+    </div>
+    <div class="tile ok">
+      <p class="label">Журнал замечаний</p>
+      <p class="num tabular">47 / 69</p>
+      <p class="meta">закрыто (68%) за 19 дней, 17.08–04.09</p>
+    </div>
+    <div class="tile bad">
+      <p class="label">Активных рисков</p>
+      <p class="num tabular">5</p>
+      <p class="meta">1 блокирует тестирование прямо сейчас</p>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="n">Этапы</span> Календарь пилота</h2>
+    <div class="stages">
+      <div class="stage done"><div class="st-n">01</div><div class="st-t">Подготовка</div><div class="st-s">✓ Завершён</div><div class="st-d">Стенд, доступ к КХД/ESB</div></div>
+      <div class="stage done"><div class="st-n">02</div><div class="st-t">Интеграция</div><div class="st-s">✓ В основном завершён</div><div class="st-d">MCP, роли, RAG-корпус готовы; RLS и «RAG-компании» — с оговорками</div></div>
+      <div class="stage active"><div class="st-n">03</div><div class="st-t">Опытная эксплуатация</div><div class="st-s">Идёт полным ходом</div><div class="st-d">17 сценариев ТЗ, журнал замечаний</div></div>
+      <div class="stage pending"><div class="st-n">04</div><div class="st-t">Оценка и отчёт</div><div class="st-s">Не начат</div><div class="st-d">—</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">17 сценариев</span> Готовность по блокам ТЗ <a class="lnk" href="case-08-test-tracker-dashboard.html">детальный дашборд →</a></h2>
+    <div class="panel">
+      <div class="blk-row">
+        <div class="blk-label">Анонимизатор<div class="blk-sub">9 сценариев</div></div>
+        <div class="blk-bar" title="5 успешно · 3 с ошибками · 1 не проверялось">
+          <span class="seg" style="width:55.6%; background:var(--ok)">5</span><span class="seg" style="width:33.3%; background:var(--bad)">3</span><span class="seg" style="width:11.1%; background:var(--muted-2)">1</span>
+        </div>
+      </div>
+      <div class="blk-row">
+        <div class="blk-label">Платформа данных<div class="blk-sub">8 сценариев</div></div>
+        <div class="blk-bar" title="1 успешно · 5 с ошибками · 1 в работе · 1 не проверялось">
+          <span class="seg" style="width:12.5%; background:var(--ok)">1</span><span class="seg" style="width:62.5%; background:var(--bad)">5</span><span class="seg" style="width:12.5%; background:var(--warn)">1</span><span class="seg" style="width:12.5%; background:var(--muted-2)">1</span>
+        </div>
+      </div>
+      <div class="legend" style="margin-top:14px;">
+        <span><span class="sw" style="background:var(--ok)"></span>Успешно</span>
+        <span><span class="sw" style="background:var(--bad)"></span>Есть ошибки</span>
+        <span><span class="sw" style="background:var(--warn)"></span>В работе</span>
+        <span><span class="sw" style="background:var(--muted-2)"></span>Не проверялось</span>
+      </div>
+      <p style="font-size:12.5px; color:var(--muted); margin:14px 0 0;">Разрыв в готовности заметен: в «Анонимизаторе» больше половины сценариев уже чистые, в «Платформе данных» — только один из восьми. Это не тестируется в равном темпе, а действительно отстаёт как компонент.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Журнал</span> Продвижение по замечаниям</h2>
+    <div class="panel">
+      <div class="propbar" title="47 готово · 6 в работе · 16 открыто">
+        <span class="p-ok" style="width:68.1%">47</span><span class="p-ongoing" style="width:8.7%">6</span><span class="p-pending" style="width:23.2%">16</span>
+      </div>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--ok)"></span>Готово (47)</span>
+        <span><span class="sw" style="background:var(--accent)"></span>В работе (6)</span>
+        <span><span class="sw" style="background:var(--muted-2)"></span>Открыто (16)</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Риски</span> Топ-5 на контроль, по приоритету</h2>
+    <div class="chips">
+      <div class="chip bad"><span class="rank">1</span><span><b>Заблокирован логин у ключевого тестировщика Д8</b> — открытый блокер на 04.09, останавливает тестирование прямо сейчас, требует немедленного решения</span></div>
+      <div class="chip bad"><span class="rank">2</span><span><b>Канал API/MCP системно отстаёт от чата</b> — 3 независимых сценария подтверждают: деанонимизация и выбор источника данных ломаются именно при обращении через API/MCP</span></div>
+      <div class="chip bad"><span class="rank">3</span><span><b>«Слетают» домен и персона</b> при табличных запросах — инфраструктурный баг, воспроизводится в двух разных сценариях блока «Платформа данных»</span></div>
+      <div class="chip warn"><span class="rank">4</span><span><b>«RAG-компании»</b> — исторически главный риск проекта (нулевое движение с самого начала); теперь статус стал ещё менее прозрачным, отдельного подтверждения решения нет</span></div>
+      <div class="chip warn"><span class="rank">5</span><span><b>8 из 17 сценариев ещё требуют доработки</b> при том, что Этап 3 уже идёт полным ходом — плотность оставшейся работы высокая</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Прогресс</span> Что удалось закрыть по пути</h2>
+    <div class="panel">
+      <ul class="resolved">
+        <li><span class="ck">✓</span> Разрыв «устное vs задокументированное» — раньше статус фиксировался репликами на встречах, теперь есть датированный журнал на 69 записей и формальный прогон по 17 сценариям ТЗ</li>
+        <li><span class="ck">✓</span> Отсутствие метрики точности NER/анонимизатора — теперь есть числовые показатели по трём срезам сложности, включая повторные тесты после доработок</li>
+        <li><span class="ck">✓</span> Подключение MCP-сервера — работает, подтверждено вызовом инструмента и адекватным ответом модели</li>
+        <li><span class="ck">✓</span> Точность распознавания на сложных данных выросла почти вдвое (41% → 66%) после одной итерации доработок</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="oop-mini">
+      <p class="om-text"><b>15 пунктов</b> (9 новых требований из журнала + 6 согласованных доработок «на потом») не входят в первоначальный объём пилота и не должны считаться невыполненными обязательствами при подведении итогов.</p>
+      <a class="om-lnk" href="case-08-test-tracker-dashboard.html">Полный список →</a>
+    </div>
+  </section>
+
+  <footer class="note">job-RAG · <a href="case-03-pilot-execution-plan.md">case-03-pilot-execution-plan.md</a> — план пилота · <a href="case-06-pilot-progress-analysis.md">case-06-pilot-progress-analysis.md</a> — срез на 28.08 · <a href="case-08-test-tracker-analiz.md">case-08-test-tracker-analiz.md</a> — разбор трекера v2 · <a href="case-08-test-tracker-dashboard.html">case-08-test-tracker-dashboard.html</a> — детальный дашборд по сценариям</footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var icon = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  var STORAGE_KEY = 'case09-dashboard-theme';
+
+  function systemPrefersDark() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function isDark(theme) {
+    if (theme === 'dark') return true;
+    if (theme === 'light') return false;
+    return systemPrefersDark();
+  }
+  function render(theme) {
+    if (theme) { root.setAttribute('data-theme', theme); } else { root.removeAttribute('data-theme'); }
+    var dark = isDark(theme);
+    icon.textContent = dark ? '☀️' : '🌙';
+    label.textContent = dark ? 'Светлая' : 'Тёмная';
+  }
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  render(saved);
+  btn.addEventListener('click', function () {
+    var current = root.getAttribute('data-theme');
+    var next = isDark(current) ? 'light' : 'dark';
+    render(next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+  });
+})();
+</script>

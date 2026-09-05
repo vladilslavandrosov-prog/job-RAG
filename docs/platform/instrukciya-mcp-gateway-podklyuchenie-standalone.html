@@ -1,0 +1,332 @@
+<title>Подключение к MCP Gateway</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8; --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7; --open: #5B4B93; --open-tint: #ECE8F7;
+    --code-bg: #EDF1F3; --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+      --code-bg: #1C252C; --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+    --code-bg: #1C252C; --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  .mono, code { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  .shell { display: grid; grid-template-columns: 232px minmax(0, 780px); justify-content: center; gap: 56px; max-width: 1180px; margin: 0 auto; padding: 56px 24px 96px; }
+  @media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; } .nav-rail { display: none; } }
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-2); font-weight: 600; margin: 0 0 14px; }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list a { display: flex; gap: 10px; align-items: baseline; padding: 6px 0 6px 16px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; font-size: 13px; transition: color .15s ease, border-color .15s ease; }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 16px; }
+  .nav-group { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .nav-status { margin-top: 20px; padding: 13px 15px; border-radius: 8px; background: var(--warn-tint); border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent); }
+  .nav-status .label { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; color: var(--warn); margin: 0 0 6px; }
+  .nav-status p { margin: 0; font-size: 12px; color: var(--ink); line-height: 1.5; }
+  header.doc-head { margin-bottom: 40px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title { font-size: 30px; line-height: 1.2; letter-spacing: -.01em; font-weight: 700; margin: 0 0 14px; text-wrap: balance; }
+  .subtitle { font-size: 15.5px; color: var(--muted); margin: 0; max-width: 64ch; }
+  section { margin-top: 48px; scroll-margin-top: 32px; }
+  .part-head { margin: 56px 0 24px; padding-top: 28px; border-top: 2px solid var(--line); }
+  .part-head .eyebrow2 { font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; margin: 0 0 8px; }
+  .part-head h2 { font-size: 25px; font-weight: 700; margin: 0 0 8px; }
+  .part-head p { margin: 0; color: var(--muted); font-size: 14.5px; max-width: 68ch; }
+  .part-head.client .eyebrow2 { color: var(--accent-ink); }
+  .part-head.internal .eyebrow2 { color: var(--warn); }
+  h2.sec { display: flex; align-items: baseline; gap: 10px; font-size: 19px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 14px; }
+  h2.sec .n { font-size: 13px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  h3.sub { font-size: 15px; font-weight: 700; margin: 22px 0 10px; color: var(--ink); }
+  p { margin: 0 0 14px; max-width: 70ch; }
+  section > p:last-child { margin-bottom: 0; }
+  code { font-size: .87em; background: var(--code-bg); color: var(--code-ink); padding: .12em .38em; border-radius: 4px; word-break: break-word; }
+  pre { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; font-size: 12.5px; background: var(--code-bg); color: var(--code-ink); padding: 14px 16px; border-radius: 10px; margin: 0 0 18px; overflow-x: auto; border: 1px solid var(--line); line-height: 1.65; }
+  pre code { background: none; padding: 0; }
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 13.5px; background: var(--surface); }
+  th, td { text-align: left; padding: 10px 13px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); white-space: nowrap; font-weight: 600; width: 1%; }
+  .tag { display: inline-block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; padding: 3px 8px; border-radius: 5px; margin: 0 6px 10px 0; }
+  .tag.ok { background: var(--ok-tint); color: var(--ok); }
+  .tag.note { background: var(--accent-tint); color: var(--accent-ink); }
+  .tag.warn { background: var(--warn-tint); color: var(--warn); }
+  .callout { border-radius: 10px; padding: 15px 18px; margin: 0 0 18px; border: 1px solid var(--line); border-left: 3px solid var(--line-2); background: var(--surface); box-shadow: var(--shadow); }
+  .callout .head { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14px; max-width: none; }
+  .callout p + p { margin-top: 8px; }
+  .callout.note { border-left-color: var(--accent); } .callout.note .head { color: var(--accent-ink); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-tint); } .callout.warn .head { color: var(--warn); }
+  .callout.bad { border-left-color: var(--bad); background: var(--bad-tint); } .callout.bad .head { color: var(--bad); }
+  ul.plain { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.plain li { position: relative; padding: 0 0 12px 20px; font-size: 14.5px; max-width: 68ch; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  ul.plain li:last-child { padding-bottom: 0; }
+  ol.steps { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: cstep; }
+  ol.steps li { counter-increment: cstep; position: relative; padding: 0 0 12px 32px; font-size: 14.5px; max-width: 66ch; }
+  ol.steps li::before { content: counter(cstep); position: absolute; left: 0; top: -1px; width: 22px; height: 22px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink); font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
+  ul.checklist { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.checklist li { position: relative; padding: 0 0 11px 28px; font-size: 14px; max-width: 68ch; }
+  ul.checklist li::before { content: ""; position: absolute; left: 0; top: 2px; width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--line-2); }
+  .see-also { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .see-also li { display: flex; gap: 10px; align-items: baseline; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .see-also .path { font-family: "SF Mono", Consolas, monospace; font-size: 12.5px; color: var(--accent-ink); flex: none; }
+  .see-also .desc { color: var(--muted); }
+  footer.doc-foot { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted-2); }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">Часть I · вендору</p>
+    <ul class="nav-list">
+      <li><a href="#s1"><span class="nav-num tabular">1</span> Что выдаёт ИБ</a></li>
+      <li><a href="#s2"><span class="nav-num tabular">2</span> Получение токена</a></li>
+      <li><a href="#s3"><span class="nav-num tabular">3</span> Подключение клиента</a></li>
+      <li><a href="#s4"><span class="nav-num tabular">4</span> Ошибки</a></li>
+      <li><a href="#s5"><span class="nav-num tabular">5</span> Жизненный цикл</a></li>
+      <li><a href="#s6"><span class="nav-num tabular">6</span> Чеклист</a></li>
+    </ul>
+    <p class="nav-eyebrow nav-group">Часть II · только ИБ</p>
+    <ul class="nav-list">
+      <li><a href="#s7"><span class="nav-num tabular">7</span> Регистрация клиента</a></li>
+      <li><a href="#s8"><span class="nav-num tabular">8</span> Проверка</a></li>
+      <li><a href="#s9"><span class="nav-num tabular">9</span> Диагностика</a></li>
+    </ul>
+    <div class="nav-status">
+      <p class="label">Не для вендора</p>
+      <p>Часть II ниже — внутренние детали стенда. Наружу передаётся только Часть I.</p>
+    </div>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Инструкция · MCP Gateway</p>
+      <h1 class="title">Подключение внешнего клиента к MCP Gateway</h1>
+      <p class="subtitle">Часть I — для интегратора внешней системы (вендора). Часть II — для администратора ИБ, который заводит этот доступ.</p>
+    </header>
+
+    <div class="callout warn">
+      <p class="head">Вендору передаётся только Часть I</p>
+      <p>Часть II содержит внутренние детали стенда — имена служебных скриптов и команды к контейнерам. Для отправки наружу используйте отдельную выгрузку клиентской части.</p>
+    </div>
+
+    <div class="part-head client">
+      <p class="eyebrow2">Часть I</p>
+      <h2>Для интегратора внешней системы</h2>
+      <p><strong>Кому:</strong> интегратору внешней агентской системы, которому служба информационной безопасности заказчика выдала доступ к платформе через MCP.</p>
+    </div>
+
+    <p><strong>Что это.</strong> Платформа отдаёт свои инструменты — поиск по каталогу, запросы к данным, документы — как <strong>MCP-сервер</strong>. Ваш агент или LLM-хост подключается к нему по стандартному MCP поверх HTTP и вызывает разрешённые вам инструменты.</p>
+    <div class="callout note"><p class="head">Данные режутся по вашей персоне</p><p>По доменам и правам на строки. Вы видите только то, что вам выделено, независимо от того, какой запрос отправили.</p></div>
+
+    <section id="s1">
+      <h2 class="sec"><span class="n tabular">01</span> Что вам выдаёт администратор ИБ</h2>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Что</th><th>Пояснение</th></tr></thead>
+        <tbody>
+          <tr><td class="k">URL шлюза</td><td>Например <code>https://&lt;gateway&gt;</code> — тот же хост, что и для completions</td></tr>
+          <tr><td class="k"><code>client_id</code> / <code>client_secret</code></td><td>Выдаются один раз при одобрении заявки (dual-control). Хранить как пароль</td></tr>
+          <tr><td class="k">Namespace (aud)</td><td><code>data__</code> — инструменты данных (запросы, каталог) и/или <code>om__</code>. Токен привязан к одному namespace</td></tr>
+          <tr><td class="k">Домены и коллекции персоны</td><td>Не всегда сообщаются явно. Определяют, к каким данным будет доступ</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout note"><p class="head">Набор инструментов задаёт ИБ по вашей персоне</p><p>В ответе <code>tools/list</code> придут только разрешённые — по умолчанию не выдаётся ничего. Пустой список — не ошибка подключения (см. §4).</p></div>
+      <div class="callout warn"><p class="head"><code>client_secret</code> выдаётся один раз</p><p>Повторно его не покажут — при утере потребуется ротация через ИБ. Храните как пароль: в защищённом хранилище, не в репозитории и не в конфигурации, попадающей в логи.</p></div>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec"><span class="n tabular">02</span> Получение токена</h2>
+      <p>OAuth 2.0, grant <code>client_credentials</code> с указанием ресурса (RFC 8707):</p>
+      <pre><code>curl -s -X POST https://&lt;gateway&gt;/oauth/token \
+  -d grant_type=client_credentials \
+  -d client_id=&lt;client_id&gt; \
+  -d client_secret=&lt;client_secret&gt; \
+  -d resource=data__  # запрашиваемый namespace (aud)
+
+# → { "access_token": "pii_ses_...", "token_type": "Bearer", "expires_in": 900 }</code></pre>
+      <ul class="plain">
+        <li><strong>Время жизни токена:</strong> <code>data__</code> — 900 секунд, остальные namespace — 1800. Кэшируйте токен до <code>expires_in</code>.</li>
+        <li><strong>Один токен — один namespace.</strong> Нужен доступ и к <code>data__</code>, и к <code>om__</code> — берите два токена.</li>
+        <li><strong>Аутентификация клиента:</strong> <code>client_secret_post</code> либо заголовок <code>Authorization: Basic base64(client_id:client_secret)</code>.</li>
+        <li><strong>Автонастройка:</strong> OAuth-дискавери через <code>/.well-known/oauth-authorization-server</code> и <code>/.well-known/oauth-protected-resource</code>.</li>
+      </ul>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec"><span class="n tabular">03</span> Подключение MCP-клиента</h2>
+      <p>Транспорт — <strong>Streamable HTTP</strong>, эндпоинт — <code>/mcp</code>, авторизация — заголовок <code>Authorization: Bearer &lt;access_token&gt;</code>.</p>
+      <h3 class="sub">Конфигурация типового MCP-клиента</h3>
+      <pre><code>{
+  "mcpServers": {
+    "synapse": {
+      "type": "streamable-http",
+      "url": "https://&lt;gateway&gt;/mcp",
+      "headers": { "Authorization": "Bearer pii_ses_..." }
+    }
+  }
+}</code></pre>
+      <h3 class="sub">Проверка вручную (JSON-RPC поверх HTTP)</h3>
+      <p>Список доступных вам инструментов:</p>
+      <pre><code>TOKEN=pii_ses_...
+curl -s https://&lt;gateway&gt;/mcp -H "Authorization: Bearer $TOKEN" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'</code></pre>
+      <p>Вызов инструмента — запрос к данным на естественном языке:</p>
+      <pre><code>curl -s https://&lt;gateway&gt;/mcp -H "Authorization: Bearer $TOKEN" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":2,"method":"tools/call",
+       "params":{"name":"data__query_data",
+       "arguments":{"question":"сколько сделок за июль"}}}'</code></pre>
+      <div class="callout note"><p class="head">Имя инструмента — из ответа tools/list</p><p>Оно уже включает ваш namespace, например <code>data__query_data</code> или <code>data__run_sql_query</code>. Инструмент <code>run_sql_query</code> возвращает только строки, разрешённые вашей персоне.</p></div>
+    </section>
+
+    <section id="s4">
+      <h2 class="sec"><span class="n tabular">04</span> Ошибки</h2>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Ответ</th><th>Причина</th><th>Что делать</th></tr></thead>
+        <tbody>
+          <tr><td class="k"><code>invalid_client</code></td><td>Неверный секрет, клиент не активен или истёк период ротации</td><td>Проверить учётные данные; при ротации — обновить секрет в grace-окне (36 часов)</td></tr>
+          <tr><td class="k"><code>invalid_target</code></td><td>Токен выдан под другой <code>aud</code></td><td>Получить токен с нужным <code>resource=&lt;namespace&gt;</code></td></tr>
+          <tr><td class="k"><code>access_denied</code></td><td>Клиент отозван либо сбой резолвера (fail-closed)</td><td>Обратиться в службу ИБ заказчика</td></tr>
+          <tr><td class="k">Пустой <code>tools/list</code></td><td>Персоне не назначены инструменты</td><td>Запросить у ИБ видимость нужных инструментов</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s5">
+      <h2 class="sec"><span class="n tabular">05</span> Жизненный цикл доступа</h2>
+      <ul class="plain">
+        <li><strong>Ротация секрета</strong> — по инициативе ИБ. Новый активен сразу, старый работает ещё <strong>36 часов</strong>.</li>
+        <li><strong>Отзыв доступа</strong> — немедленно для новых токенов; выданный токен перестаёт работать в пределах 30 секунд.</li>
+      </ul>
+      <div class="callout warn"><p class="head">Планируйте обработку ротации заранее</p><p>Если секрет зашит в конфигурацию, которую нельзя обновить за 36 часов, интеграция остановится. Читайте секрет из хранилища без пересборки и повторно запрашивайте токен при ответе <code>invalid_client</code>.</p></div>
+    </section>
+
+    <section id="s6">
+      <h2 class="sec"><span class="n tabular">06</span> Чеклист подключения</h2>
+      <ul class="checklist">
+        <li>Получены URL шлюза, <code>client_id</code>, <code>client_secret</code> и список разрешённых namespace.</li>
+        <li>Секрет положен в защищённое хранилище, не в репозиторий.</li>
+        <li>Токен получен на нужный <code>resource</code>; при необходимости — два токена.</li>
+        <li>Реализовано кэширование токена до <code>expires_in</code> и повторное получение по истечении.</li>
+        <li><code>tools/list</code> возвращает непустой список, состав согласован с ИБ.</li>
+        <li>Пробный <code>tools/call</code> выполнен успешно.</li>
+        <li>Предусмотрено обновление секрета в 36-часовом окне ротации.</li>
+        <li>Обработаны ответы <code>invalid_client</code>, <code>invalid_target</code>, <code>access_denied</code>.</li>
+      </ul>
+    </section>
+
+    <div class="part-head internal">
+      <p class="eyebrow2">Часть II · внутреннее, не для вендора</p>
+      <h2>Для администратора ИБ — заведение доступа</h2>
+      <p><strong>Кому:</strong> администратору ИБ. Порядок: предпосылки в OpenMetadata → регистрация клиента в рабочем месте ИБ → проверка.</p>
+    </div>
+
+    <p>Ключ вендора маппится на одну org-scoped персону OM и на <code>om_user_email</code> — учётную запись, которую нужно имперсонировать. При выдаче токена pii-shield имперсонирует этого пользователя через OM (persona-select-service), и в токен зашиваются домены и RLS-фильтры персоны.</p>
+    <div class="callout note"><p class="head">Разница — только в ключе</p><p>Никакого отдельного контура для вендора нет: всё разграничение делает персона, как для обычного пользователя.</p></div>
+
+    <section id="s7">
+      <h2 class="sec"><span class="n tabular">07</span> Регистрация клиента (dual-control)</h2>
+      <p><strong>Путь:</strong> «Рабочее место ИБ» → «Внешние агентские системы» → «+ Заявка».</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Поле</th><th>Что указывать</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Вендор, Назначение</td><td>Свободный текст — нужен для аудита</td></tr>
+          <tr><td class="k">Персона (<code>persona_id</code>)</td><td>Граница доступа: домены и RLS. Список тянется из персон OM</td></tr>
+          <tr><td class="k"><code>om_user_email</code></td><td>Кого имперсонировать. Выпадающий список пользователей OM, боты первыми</td></tr>
+          <tr><td class="k">Ресурсы (<code>resources</code>)</td><td>Namespace aud: <code>data__</code> и/или <code>om__</code>. Один namespace на выдачу</td></tr>
+          <tr><td class="k">Требуется маскировка ПДн</td><td>Флажок, по умолчанию включён</td></tr>
+        </tbody>
+      </table></div>
+      <h3 class="sub">Флажок «Требуется маскировка ПДн»</h3>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Состояние</th><th>Что получает клиент</th><th>Когда уместно</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Включён (по умолчанию)</td><td>Обезличенные данные — плейсхолдеры вместо значений</td><td>Всегда, если нет причин для обратного</td></tr>
+          <tr><td class="k">Снят</td><td>Реальные персональные данные; маскировка — позже, на выходе к модели</td><td>Только доверенный клиент, чей путь к модели идёт через платформу</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout warn"><p class="head">Не снимайте флажок, если модель вызывается мимо платформы</p><p>Иначе инструменты отдадут реальные ПДн, и они уйдут во внешнюю модель без обезличивания. Снимайте только убедившись, что путь клиента к модели проходит через <code>/completions</code> платформы — и зафиксируйте это решение в заявке.</p></div>
+      <p>После сохранения заявка получает статус <strong>pending</strong>. Администратор открывает карточку и нажимает «Одобрить» — генерируется <code>client_secret</code> (в реестре хранится PBKDF2-хеш, открытое значение показывается один раз), статус меняется на <strong>active</strong>.</p>
+      <div class="callout bad"><p class="head">Открытый секрет показывается один раз</p><p>Если карточку закрыли, не скопировав значение, потребуется ротация. Готовьте защищённый канал передачи до нажатия «Одобрить».</p></div>
+    </section>
+
+    <section id="s8">
+      <h2 class="sec"><span class="n tabular">08</span> Проверка перед передачей вендору</h2>
+      <p><strong>а)</strong> Имперсонация выпускает токен — ожидаем HTTP 200 и <code>accessToken</code>:</p>
+      <pre><code>docker exec &lt;om&gt; curl -s -X POST \
+  http://localhost:8585/api/v1/users/persona-select-service \
+  -H "Authorization: Bearer &lt;impersonation-bot&gt;" \
+  -H "Content-Type: application/json" \
+  -w "HTTP %{http_code}" \
+  -d '{"userEmail":"&lt;om_user_email&gt;","personaId":"&lt;persona_id&gt;"}'</code></pre>
+      <p><strong>б)</strong> проверка <code>tools/list</code> и <code>tools/call</code> под выданным токеном (см. §3).</p>
+    </section>
+
+    <section id="s9">
+      <h2 class="sec"><span class="n tabular">09</span> Диагностика</h2>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Симптом</th><th>Причина</th><th>Что делать</th></tr></thead>
+        <tbody>
+          <tr><td class="k">404 <code>user not found</code></td><td>Неверный <code>om_user_email</code></td><td>Проверить адрес пользователя (GET /api/v1/users?fields=personas)</td></tr>
+          <tr><td class="k">400 <code>PERSONA_NOT_ASSIGNED</code></td><td>Персона не назначена пользователю</td><td>Назначить персону пользователю в OM</td></tr>
+          <tr><td class="k">403 <code>requires a bot with allowImpersonation</code></td><td>У бота имперсонации нет флага</td><td>PATCH <code>/api/v1/users/&lt;bot_id&gt;</code>: <code>add /allowImpersonation=true</code></td></tr>
+          <tr><td class="k">Пустой <code>tools/list</code></td><td>Персона без видимости инструментов данных</td><td>Рабочее место ИБ → Политики инструментов</td></tr>
+          <tr><td class="k"><code>invalid_target</code></td><td>Токен выдан под другой <code>aud</code></td><td>Взять токен с нужным <code>resource=</code></td></tr>
+          <tr><td class="k"><code>access_denied</code></td><td>Клиент отозван либо резолвер недоступен (fail-closed)</td><td>Проверить статус клиента в карточке</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout warn"><p class="head">На стендах с LDAP</p><p>Правка флагов бота имперсонации может конфликтовать с настройками платформенного бота — проверьте его флаги до правки.</p></div>
+      <h3 class="sub">Чеклист заведения клиента</h3>
+      <ul class="checklist">
+        <li>Поле <code>dataAccessPolicy</code> зарегистрировано для типов <code>user</code> и <code>persona</code>.</li>
+        <li>Учётная запись <code>om_user_email</code> существует, нужная персона назначена.</li>
+        <li>У бота имперсонации выставлены <code>isBot</code> и <code>allowImpersonation</code>.</li>
+        <li>Персоне клиента отмечены нужные инструменты данных в политиках инструментов.</li>
+        <li>Заявка заведена, поля вендора и назначения заполнены для аудита.</li>
+        <li>Защищённый канал передачи готов до нажатия «Одобрить».</li>
+        <li>Проверка (а) — HTTP 200, проверка (б) — непустой <code>tools/list</code> и успешный вызов.</li>
+        <li>Вендору передана только клиентская часть документа (Часть I).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="sec">См. также</h2>
+      <ul class="see-also">
+        <li><span class="path">instrukciya-domeny-i-dostup.md</span><span class="desc">Персона/домен как основной механизм доступа — здесь та же персона служит границей для внешнего MCP-клиента.</span></li>
+        <li><span class="path">instrukciya-rls-nastroika-prav.md</span><span class="desc">Построчный/поколоночный доступ, зашиваемый в токен клиента через персону.</span></li>
+        <li><span class="path">administrirovanie-polzovateli.md</span><span class="desc">Раздел «Рабочее место ИБ», где находится экран «Внешние агентские системы».</span></li>
+      </ul>
+    </section>
+
+    <footer class="doc-foot">
+      В исходном документе раздел «Возможные ошибки» дублировался под двумя разными нумерациями с одинаковым содержанием; здесь оставлена одна версия (§0.1–0.3 в тексте, здесь §9), ссылки в «Диагностике» приведены в соответствие с ней.
+    </footer>
+  </main>
+</div>

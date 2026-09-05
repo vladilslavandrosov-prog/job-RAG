@@ -1,0 +1,356 @@
+<title>Настройка RLS: строки и колонки</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8; --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7; --open: #5B4B93; --open-tint: #ECE8F7;
+    --code-bg: #EDF1F3; --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+      --code-bg: #1C252C; --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+    --code-bg: #1C252C; --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  .mono, code { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  .shell { display: grid; grid-template-columns: 232px minmax(0, 780px); justify-content: center; gap: 56px; max-width: 1180px; margin: 0 auto; padding: 56px 24px 96px; }
+  @media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; } .nav-rail { display: none; } }
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-2); font-weight: 600; margin: 0 0 14px; }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list a { display: flex; gap: 10px; align-items: baseline; padding: 6px 0 6px 16px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; font-size: 12.5px; transition: color .15s ease, border-color .15s ease; }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 20px; }
+  .nav-status { margin-top: 20px; padding: 13px 15px; border-radius: 8px; background: var(--accent-tint); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+  .nav-status .label { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; color: var(--accent-ink); margin: 0 0 6px; }
+  .nav-status p { margin: 0; font-size: 12px; color: var(--ink); line-height: 1.5; }
+  header.doc-head { margin-bottom: 40px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title { font-size: 30px; line-height: 1.2; letter-spacing: -.01em; font-weight: 700; margin: 0 0 14px; text-wrap: balance; }
+  .subtitle { font-size: 15.5px; color: var(--muted); margin: 0; max-width: 64ch; }
+  section { margin-top: 46px; scroll-margin-top: 32px; }
+  h2.sec { display: flex; align-items: baseline; gap: 10px; font-size: 19px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 14px; }
+  h2.sec .n { font-size: 13px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  h3.sub { font-size: 15px; font-weight: 700; margin: 22px 0 10px; color: var(--ink); }
+  p { margin: 0 0 14px; max-width: 70ch; }
+  section > p:last-child { margin-bottom: 0; }
+  code { font-size: .87em; background: var(--code-bg); color: var(--code-ink); padding: .12em .38em; border-radius: 4px; word-break: break-word; }
+  pre { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; font-size: 12.5px; background: var(--code-bg); color: var(--code-ink); padding: 14px 16px; border-radius: 10px; margin: 0 0 18px; overflow-x: auto; border: 1px solid var(--line); line-height: 1.65; }
+  pre code { background: none; padding: 0; }
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 13.5px; background: var(--surface); }
+  th, td { text-align: left; padding: 10px 13px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); white-space: nowrap; font-weight: 600; width: 1%; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; padding: 2px 8px 2px 6px; border-radius: 100px; line-height: 1.4; white-space: nowrap; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+  .pill.anchor { background: var(--warn-tint); color: var(--warn); } .pill.anchor::before { background: var(--warn); }
+  .pill.scoped { background: var(--ok-tint); color: var(--ok); } .pill.scoped::before { background: var(--ok); }
+  .pill.ref { background: var(--surface-2); color: var(--muted); } .pill.ref::before { background: var(--muted-2); }
+  .pill.gap { background: var(--bad-tint); color: var(--bad); } .pill.gap::before { background: var(--bad); }
+  .callout { border-radius: 10px; padding: 15px 18px; margin: 0 0 18px; border: 1px solid var(--line); border-left: 3px solid var(--line-2); background: var(--surface); box-shadow: var(--shadow); }
+  .callout .head { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14px; max-width: none; }
+  .callout p + p { margin-top: 8px; }
+  .callout.note { border-left-color: var(--accent); } .callout.note .head { color: var(--accent-ink); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-tint); } .callout.warn .head { color: var(--warn); }
+  .callout.bad { border-left-color: var(--bad); background: var(--bad-tint); } .callout.bad .head { color: var(--bad); }
+  ul.plain { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.plain li { position: relative; padding: 0 0 12px 20px; font-size: 14.5px; max-width: 68ch; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  ul.plain li:last-child { padding-bottom: 0; }
+  ol.steps { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: cstep; }
+  ol.steps li { counter-increment: cstep; position: relative; padding: 0 0 12px 32px; font-size: 14.5px; max-width: 66ch; }
+  ol.steps li::before { content: counter(cstep); position: absolute; left: 0; top: -1px; width: 22px; height: 22px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink); font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
+  ul.checklist { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.checklist li { position: relative; padding: 0 0 11px 28px; font-size: 14px; max-width: 68ch; }
+  ul.checklist li::before { content: ""; position: absolute; left: 0; top: 2px; width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--line-2); }
+  .case { border: 1px solid var(--accent); border-radius: 12px; background: var(--accent-tint); padding: 18px 20px; margin: 0 0 20px; }
+  .case .case-label { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent-ink); margin: 0 0 10px; }
+  .case h4 { font-size: 14.5px; font-weight: 700; margin: 14px 0 6px; color: var(--ink); }
+  .case h4:first-of-type { margin-top: 2px; }
+  .case p, .case li { background: transparent; }
+  .case pre { background: var(--surface); }
+  .see-also { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .see-also li { display: flex; gap: 10px; align-items: baseline; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .see-also .path { font-family: "SF Mono", Consolas, monospace; font-size: 12.5px; color: var(--accent-ink); flex: none; }
+  .see-also .desc { color: var(--muted); }
+  details.appendix { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 14px 18px; margin: 0 0 18px; }
+  details.appendix summary { cursor: pointer; font-weight: 700; font-size: 14px; }
+  details.appendix[open] summary { margin-bottom: 12px; }
+  footer.doc-foot { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted-2); }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s1"><span class="nav-num tabular">1</span> Модель в двух словах</a></li>
+      <li><a href="#s2"><span class="nav-num tabular">2</span> Пошагово: как задать политику</a></li>
+      <li><a href="#s3"><span class="nav-num tabular">3</span> Несколько баз данных</a></li>
+      <li><a href="#s4"><span class="nav-num tabular">4</span> Граф доступа</a></li>
+      <li><a href="#s5"><span class="nav-num tabular">5</span> Ошибки в выражениях</a></li>
+      <li><a href="#s6"><span class="nav-num tabular">6</span> Маскировка и расчёты</a></li>
+      <li><a href="#s7"><span class="nav-num tabular">7</span> Ограничения версии</a></li>
+      <li><a href="#s8"><span class="nav-num tabular">8</span> Когда вступает в силу</a></li>
+      <li><a href="#s9"><span class="nav-num tabular">9</span> Типичные ошибки</a></li>
+      <li><a href="#s10"><span class="nav-num tabular">10</span> Сквозной пример</a></li>
+      <li><a href="#s11"><span class="nav-num tabular">11</span> Чеклист сдачи</a></li>
+    </ul>
+    <div class="nav-status">
+      <p class="label">Роль</p>
+      <p>DataSteward. Раздел «Политики доступа» — виден только DataSteward и администратору.</p>
+    </div>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Инструкция · RLS</p>
+      <h1 class="title">Настройка прав на строки и колонки (RLS)</h1>
+      <p class="subtitle">Кто какие строки таблицы видит и какие колонки ему маскируются. Предполагается знание SQL — выражения фильтров пишутся вручную.</p>
+    </header>
+
+    <section id="s1">
+      <h2 class="sec"><span class="n tabular">01</span> Модель в двух словах</h2>
+      <p>Политика состоит из трёх осей. Они задаются на <strong>персоне</strong> и уточняются на <strong>пользователе</strong>:</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Ось</th><th>Что делает</th><th>Пример</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Row-фильтры</td><td>К таблице добавляется WHERE — пользователь видит только свои строки</td><td><code>manager_id = 42</code></td></tr>
+          <tr><td class="k">Маскируемые колонки</td><td>Значение колонки подменяется на NULL</td><td><code>clients.credit_limit</code></td></tr>
+          <tr><td class="k">Домены</td><td>Какие домены каталога видны в поиске. Ось каталога, <strong>не строк</strong></td><td>Финтех</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Персона — шаблон, пользователь — значения:</strong> персона («Менеджер») несёт шаблон фильтра с плейсхолдерами (<code>manager_id = :manager_id</code>), список маскируемых колонок и разрешённые домены — правило для всех носителей персоны. Пользователь («ivan») несёт подстановки параметров и, при необходимости, дополнительные фильтры/маски, которые сужают доступ ещё сильнее.</p>
+      <div class="callout note"><p class="head">Итог для пользователя</p><p>шаблон персоны с параметрами <strong>AND</strong> доп. фильтры пользователя; маски = маски персоны <strong>плюс</strong> маски пользователя; домены — только с персоны (и команд пользователя).</p></div>
+
+      <h3 class="sub">1.1. Что происходит с тем, что вы не настроили</h3>
+      <p>Зависит от того, входит ли таблица в <strong>управляемую схему</strong> (набор задаёт инженер в конфигурации охвата):</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Где находится таблица</th><th>Если гранта нет</th><th>Что видит пользователь</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Внутри управляемой схемы</td><td>«По умолчанию закрыто»</td><td><strong>Ноль строк</strong> — запрос не падает, данных нет</td></tr>
+          <tr><td class="k">Управляемая, тег <code>RLS.Reference</code></td><td>Справочник — исключение</td><td>Видна <strong>целиком</strong></td></tr>
+          <tr><td class="k">Вне управляемых схем</td><td>Правило не действует</td><td>Видна <strong>целиком</strong> — как раньше</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout warn"><p class="head">Закрыто не везде</p><p>Всё за пределами управляемых схем и не описанное политикой по-прежнему видно целиком. Прежде чем полагаться на защиту новой базы/схемы — выясните, входит ли она в управляемый набор.</p></div>
+      <div class="callout bad"><p class="head">RLS не применяется к admin и сервисным аккаунтам</p><p>Они видят всё независимо от политики — заложено в архитектуре. Никогда не тестируйте настройку под администратором: увидите полные данные и решите, что фильтр не работает.</p></div>
+
+      <h3 class="sub">1.2. Где RLS действует, а где нет</h3>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Путь к данным</th><th>RLS</th><th>Чем ограничено</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Прямые SQL (Trino)</td><td><span class="pill scoped">действует</span></td><td>Row-фильтры и маскировка колонок</td></tr>
+          <tr><td class="k">Чат и агенты (SQL)</td><td><span class="pill scoped">действует</span></td><td>Тот же движок, персональный токен пользователя</td></tr>
+          <tr><td class="k">Выгрузки XLSX/CSV</td><td><span class="pill scoped">действует</span></td><td>Косвенно — файл из уже отфильтрованных результатов</td></tr>
+          <tr><td class="k">Поиск по каталогу</td><td><span class="pill gap">нет</span></td><td>Только домены — видимость сущностей каталога</td></tr>
+          <tr><td class="k">Документы и RAG</td><td><span class="pill gap">нет</span></td><td>Только домены — область поиска по документам</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout note"><p class="head">Обход через служебную учётную запись закрыт</p><p>Без персонального токена запрос отклоняется («RLS-контекст не установлен»), а не выполняется под сервисным аккаунтом. Это вопрос к инженеру, не к политике.</p></div>
+      <div class="callout note"><p class="head">Домен — не доступ к данным</p><p>Домены ограничивают видимость в каталоге и область поиска; строки таблиц ограничивают только row-фильтры, независимо от доменов.</p></div>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec"><span class="n tabular">02</span> Пошагово: как задать политику</h2>
+      <h3 class="sub">Шаг 1. Политика персоны — шаблон</h3>
+      <ol class="steps">
+        <li>Выберите тип = Персона и саму персону, например «Менеджер».</li>
+        <li><strong>Row-фильтры</strong> — на каждую таблицу выражение WHERE, плейсхолдеры через <code>:имя</code>. Пример: <code>{"test_dwh__dwh.report.account": "ACTUAL_DATE &lt; :value"}</code>.</li>
+        <li><strong>Маскируемые колонки</strong> — пример: <code>test_dwh__dwh.report.account.external_id</code>.</li>
+        <li><strong>Домены</strong> — из списка доменов каталога, например «Финтех».</li>
+        <li>Предпросмотр → Сохранить.</li>
+      </ol>
+      <h3 class="sub">Шаг 2. Политика пользователя — значения и сужение</h3>
+      <ol class="steps">
+        <li>Выберите тип = Пользователь и пользователя.</li>
+        <li><strong>Параметры</strong> — значения плейсхолдеров. Пример: <code>{"value": "2021-07-29"}</code>.</li>
+        <li><em>(необязательно)</em> Дополнительные row-фильтры — добавляются через AND.</li>
+        <li><em>(необязательно)</em> Дополнительные маскируемые колонки.</li>
+        <li>Предпросмотр черновика — эффект без сохранения.</li>
+        <li>Сохранить.</li>
+      </ol>
+      <div class="callout note"><p class="head">Домены — только на персоне</p><p>На пользователе не задаются; к ним добавляются домены команд, в которых он состоит.</p></div>
+      <h3 class="sub">Шаг 3. Проверка предпросмотром</h3>
+      <p>Два режима: по сохранённой политике (в том числе от имени пользователя) и по черновику. Что сверять:</p>
+      <ul class="plain">
+        <li>правильные ли таблицы — с нужным каталогом в ключе;</li>
+        <li>подставились ли все параметры;</li>
+        <li>не остались ли «голые» плейсхолдеры вида <code>:value</code>.</li>
+      </ul>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec"><span class="n tabular">03</span> Несколько баз данных — ключевой момент</h2>
+      <p>Каждая внешняя СУБД видна как <strong>каталог</strong> <code>сервис__база</code> (например <code>trade__trade</code>). Одна и та же таблица может существовать в разных базах — ключ политики включает каталог:</p>
+      <ul class="plain">
+        <li><strong>Правильно:</strong> <code>trade__trade.trading.positions</code> — только эта база.</li>
+        <li><strong>Устаревший широкий вариант:</strong> <code>trading.positions</code> без каталога — запасной, покроет одноимённую таблицу в любой базе. Использовать только осознанно.</li>
+      </ul>
+      <pre><code>trade__trade.trading.positions → market_value_rub &lt; :max_value
+crm__crm.crm.clients → manager_id = :manager_id</code></pre>
+      <p><strong>Связи между базами.</strong> «Свои клиенты» → «свои сделки» описывается правилами охвата инженера: граф внешних ключей разворачивает фильтр от якоря по цепочке связей, в том числе между базами. Результат виден на экране «Граф доступа».</p>
+    </section>
+
+    <section id="s4">
+      <h2 class="sec"><span class="n tabular">04</span> Экран «Граф доступа»</h2>
+      <p>Визуализация покрытия политиками:</p>
+      <p>
+        <span class="pill anchor">anchor</span> якорь, точка выдачи доступа &nbsp;·&nbsp;
+        <span class="pill scoped">scoped</span> таблица под фильтром &nbsp;·&nbsp;
+        <span class="pill ref">reference</span> справочник &nbsp;·&nbsp;
+        <span class="pill gap">gap</span> без пути к якорю
+      </p>
+      <p>Рёбра: сплошные — реальные внешние ключи, пунктирные — логические связи (в т.ч. между базами).</p>
+      <div class="callout warn"><p class="head">Красный gap — это не утечка, а закрытая таблица</p><p>Внутри управляемой схемы пользователь получит ноль строк: не утечёт, но и не поработает. Разберите узел: добавьте связь до якоря, задайте явный фильтр или пометьте справочником.</p></div>
+      <div class="callout bad"><p class="head">Кроме одного случая</p><p>Красный узел <strong>вне</strong> управляемой схемы — это утечка: правило закрытия там не действует, таблица видна целиком.</p></div>
+    </section>
+
+    <section id="s5">
+      <h2 class="sec"><span class="n tabular">05</span> Ошибки в выражениях и параметрах</h2>
+      <p>Выражения фильтров при сохранении <strong>не проверяются</strong> — корректность выясняется в момент запроса пользователя:</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Что не так</th><th>Что произойдёт</th><th>Как поймать заранее</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Не задан параметр, «голый» плейсхолдер</td><td>Запрос пользователя завершится ошибкой</td><td>Предпросмотр покажет плейсхолдер — проверяйте перед сохранением</td></tr>
+          <tr><td class="k">Синтаксическая ошибка в WHERE</td><td>Запрос пользователя завершится ошибкой</td><td>Проверки при сохранении нет — сверяйте вручную, запросом от имени пользователя</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s6">
+      <h2 class="sec"><span class="n tabular">06</span> Маскировка колонок и расчёты</h2>
+      <p>Маскировка подменяет значение на NULL — колонка остаётся в схеме и выборке, значений нет:</p>
+      <ul class="plain">
+        <li><code>COUNT(колонка)</code> не считает NULL — счётчик занизится;</li>
+        <li><code>SUM</code>/<code>AVG</code> игнорируют NULL — суммы и средние изменятся;</li>
+        <li><code>GROUP BY</code> по маскированной колонке схлопнет всё в одну группу NULL;</li>
+        <li>соединения по маскированной колонке перестанут находить совпадения.</li>
+      </ul>
+      <div class="callout bad"><p class="head">Ошибки не будет — будут другие цифры</p><p>Отчёт выглядит корректно, но посчитан не по всем данным. Проверьте участие колонки в агрегатах и соединениях до маскировки; если участвует — предупредите потребителей отчётов.</p></div>
+    </section>
+
+    <section id="s7">
+      <h2 class="sec"><span class="n tabular">07</span> Ограничения текущей версии</h2>
+      <ul class="plain">
+        <li><strong>Учитывается только первая персона</strong> — у нескольких персон row-фильтры/маски берутся только с первой (домены — исключение, они объединяются). <em>Учёт нескольких персон запланирован.</em></li>
+        <li><strong>Отдельного отключения политики нет</strong> — чтобы снять, сохраните её пустой; сохраните текст заранее. <em>Удаление и переключатель запланированы.</em></li>
+        <li><strong>Проверки выражений при сохранении нет</strong> — см. §5. <em>Запланировано.</em></li>
+        <li><strong>«По умолчанию закрыто»</strong> действует только внутри управляемых схем — см. §1.1.</li>
+      </ul>
+    </section>
+
+    <section id="s8">
+      <h2 class="sec"><span class="n tabular">08</span> Когда изменения вступают в силу</h2>
+      <ol class="steps">
+        <li><strong>Сохранение</strong> записывает политику в каталог сразу.</li>
+        <li><strong>Фоновая синхронизация</strong> переносит её в движок доступа за ~30–60 секунд — подождите до минуты.</li>
+        <li><strong>Применение</strong> — при следующем SQL-запросе. Перелогин для фильтров/масок не нужен; смена персоны/доменов — при следующем входе.</li>
+      </ol>
+    </section>
+
+    <section id="s9">
+      <h2 class="sec"><span class="n tabular">09</span> Типичные ошибки</h2>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Симптом</th><th>Причина</th><th>Что делать</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Фильтр не сработал, видно чужое</td><td>Ключ без каталога</td><td>Задать ключ через пикер: <code>catalog.schema.table</code></td></tr>
+          <tr><td class="k">В предпросмотре остался <code>:параметр</code></td><td>Пользователю не заданы параметры</td><td>Добавить значение в «Параметры» пользователя</td></tr>
+          <tr><td class="k">Политика «протекла» на другую базу</td><td>Ключ без каталога</td><td>Переписать на ключ с каталогом</td></tr>
+          <tr><td class="k">Пользователь видит всё</td><td>admin/сервисный аккаунт, или таблица вне управляемой схемы</td><td>Проверять под обычным пользователем, сверить список схем</td></tr>
+          <tr><td class="k">Запрос падает с ошибкой</td><td>Незаданный параметр / синтаксис</td><td>Сверить в предпросмотре от имени пользователя</td></tr>
+          <tr><td class="k">Пользователь видит ноль строк</td><td>Таблица в управляемой схеме, гранта нет</td><td>Задать фильтр, достроить связь до якоря или пометить справочником</td></tr>
+          <tr><td class="k">«RLS-контекст не установлен»</td><td>Не передан персональный токен</td><td>Не проблема политики — к инженеру</td></tr>
+          <tr><td class="k">Изменение не видно сразу</td><td>Не прошла синхронизация</td><td>Подождать около минуты</td></tr>
+          <tr><td class="k">Красный gap в графе</td><td>Нет пути по внешним ключам до якоря</td><td>Добавить связь или явный фильтр</td></tr>
+          <tr><td class="k">Вторая персона не действует</td><td>Учитывается только первая</td><td>Свести правила в одну персону</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s10">
+      <h2 class="sec"><span class="n tabular">10</span> Сквозной пример</h2>
+      <div class="case">
+        <p class="case-label">Пример</p>
+        <h4>Персона «Менеджер» — вводим в форме</h4>
+        <ul class="plain">
+          <li>Row-фильтр: <code>trade__trade.trading.positions</code> → <code>market_value_rub &lt; :max_value</code></li>
+          <li>Маскируемая колонка: <code>trade__trade.trading.positions.avg_price</code></li>
+          <li>Домен: Финтех</li>
+        </ul>
+        <h4>Пользователь «manager» (носит персону «Менеджер»)</h4>
+        <ul class="plain">
+          <li>Параметр: <code>max_value = 1000000</code></li>
+          <li>Доп. фильтр: <code>trade__trade.trading.positions</code> → <code>currency = 'RUB'</code></li>
+          <li>Доп. маска: <code>crm__crm.crm.clients.client_id</code></li>
+        </ul>
+        <h4>Что применится к его запросам</h4>
+        <pre><code>positions: WHERE (market_value_rub &lt; 1000000) AND (currency = 'RUB')
+маски: trading.positions.avg_price = NULL
+       crm.clients.client_id = NULL
+домены: Финтех</code></pre>
+      </div>
+    </section>
+
+    <section id="s11">
+      <h2 class="sec"><span class="n tabular">11</span> Чеклист сдачи политики</h2>
+      <ul class="checklist">
+        <li>Все ключи таблиц и колонок заданы через пикер, с указанием каталога.</li>
+        <li>Предпросмотр от имени пользователя не содержит «голых» плейсхолдеров.</li>
+        <li>Выражения фильтров проверены на живом запросе — не под администратором.</li>
+        <li>Маскируемые колонки проверены на участие в агрегатах и соединениях; потребители отчётов предупреждены.</li>
+        <li>На «Графе доступа» разобраны все красные узлы.</li>
+        <li>Проверено, входят ли затронутые схемы в управляемый набор.</li>
+        <li>Справочники внутри управляемых схем помечены тегом <code>RLS.Reference</code>.</li>
+        <li>Учтено, что вторая персона пользователя не действует.</li>
+        <li>После сохранения выждана минута до проверки.</li>
+      </ul>
+    </section>
+
+    <details class="appendix">
+      <summary>Приложение: как это работает под капотом (для инженера)</summary>
+      <ol class="steps">
+        <li><strong>Создание.</strong> «Доступ» → orchestrator <code>PUT /api/v1/rls/policy</code> → <code>extension.dataAccessPolicy</code> на персоне и пользователе (шифрование при хранении). Доступ: DataSteward/admin плюс токен бота.</li>
+        <li><strong>Расчёт и доставка.</strong> Воркер <code>opa_sync</code> (~30–60 с) объединяет шаблоны и правила, при наличии <code>rls_scope_rules.json</code> разворачивает граф внешних ключей, загружает в OPA: <code>data.om_policies.user_policies[username]</code>.</li>
+        <li><strong>Мультикаталог.</strong> Воркер <code>catalog_sync</code> превращает каждый <code>databaseService</code> в каталог Trino <code>сервис__база</code>. Ключи политики — <code>catalog.schema.table</code>, запасной — <code>schema.table</code>.</li>
+        <li><strong>JWT.</strong> Claims <code>persona_id</code>, <code>persona_name</code>, <code>domains</code>, <code>isAdmin</code>, <code>row_filters</code>, <code>masked_columns</code>.</li>
+        <li><strong>Применение.</strong> Trino на OPA, токен проверяется по JWKS OpenMetadata; OPA отдаёт <code>rowFilters</code>/<code>columnMask</code> по <code>catalog.schema.table</code>. Сервисные аккаунты и admin — без ограничений.</li>
+        <li><strong>«По умолчанию закрыто».</strong> <code>opa_sync</code> кладёт в OPA <code>governed_schemas</code> и <code>reference_tables</code>; <code>trino.rego</code> подставляет <code>{"expression": "false"}</code>, если у пользователя нет ключа и таблица не справочник.</li>
+      </ol>
+      <p>Эндпоинты (<code>/api/v1/rls/*</code>): <code>entities</code>, <code>domains</code>, <code>policy</code> (GET/PUT), <code>preview</code>/<code>preview-draft</code>, <code>graph</code>. Пикеры — <code>/api/v1/datasources/tables</code> и <code>/columns</code>.</p>
+      <p>Файлы: политики — <code>extension.dataAccessPolicy</code> в OM; охват — <code>config/rls_scope_rules.json</code>; оверлей — <code>/app/rls_policies.json</code>; правила — <code>trino/opa/policies/trino.rego</code>; синхронизация — <code>orchestrator/backend/monitoring/opa_sync.py</code>; каталоги — <code>orchestrator/backend/datasources/catalog_sync.py</code>.</p>
+    </details>
+
+    <section>
+      <h2 class="sec">См. также</h2>
+      <ul class="see-also">
+        <li><span class="path">upravlenie-dannymi.md</span><span class="desc">Экран «Граф доступа» в общем контексте раздела «Управление данными».</span></li>
+        <li><span class="path">instrukciya-domeny-i-dostup.md</span><span class="desc">Доменный доступ к коллекциям/документам — ось «Домены», отдельная от RLS, действующая на каталог и RAG, а не строки таблиц.</span></li>
+        <li><span class="path">instrukciya-mcp-gateway-podklyuchenie.md</span><span class="desc">Row-фильтры и маски персоны, зашитые в JWT для внешнего MCP-клиента.</span></li>
+      </ul>
+    </section>
+  </main>
+</div>

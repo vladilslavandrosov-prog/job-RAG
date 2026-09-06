@@ -1,0 +1,200 @@
+<title>Переоценка Сценария 6 и 4</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 64px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 22px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 23px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; text-wrap: balance; }
+  .sub { font-size: 13.5px; color: var(--muted); margin: 0; max-width: 62ch; }
+  .hdr-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 12px 6px 10px; color: var(--muted); cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .theme-toggle:hover { border-color: var(--line-2); color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section { margin-top: 32px; }
+  h2 { font-size: 15px; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 10.5px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+  .sec-dek { font-size: 12.5px; color: var(--muted); margin: 0 0 16px; max-width: 68ch; }
+
+  /* ---- threshold gauges ---- */
+  .gauges { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; }
+  @media (max-width: 760px) { .gauges { grid-template-columns: 1fr; } }
+  .gauge-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px 18px; box-shadow: var(--shadow); }
+  .gauge-card .g-label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 12px; }
+  .gauge-track { position: relative; height: 26px; background: var(--surface-2); border-radius: 8px; overflow: visible; margin-bottom: 10px; }
+  .gauge-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px 0 0 8px; background: var(--bad); transition: width .2s; }
+  .gauge-threshold { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); }
+  .gauge-threshold::after { content: attr(data-t); position: absolute; top: -19px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .gauge-nums { display: flex; justify-content: space-between; align-items: baseline; }
+  .gauge-nums .actual { font-size: 26px; font-weight: 700; color: var(--bad); }
+  .gauge-nums .actual .frac { font-size: 13px; font-weight: 600; color: var(--muted); margin-left: 6px; }
+  .gauge-nums .verdict { font-size: 11.5px; font-weight: 700; color: var(--bad); background: var(--bad-tint); padding: 4px 10px; border-radius: 100px; white-space: nowrap; }
+  .gauge-note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+
+  .id-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .id-chip { display: flex; flex-direction: column; gap: 2px; min-width: 128px; padding: 8px 11px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
+  .id-chip.ok { border-left: 3px solid var(--ok); }
+  .id-chip.warn { border-left: 3px solid var(--warn); }
+  .id-chip.bad { border-left: 3px solid var(--bad); }
+  .id-chip .ic-id { font-size: 10px; font-weight: 700; color: var(--muted-2); }
+  .id-chip .ic-note { font-size: 11px; color: var(--ink); }
+  .id-chip .ic-pct { font-size: 10.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .doc-table-scroll { overflow-x: auto; margin: 0 0 6px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 13px; background: var(--surface); }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  .pill { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
+  .pill.ok { background: var(--ok-tint); color: var(--ok); }
+  .pill.bad { background: var(--bad-tint); color: var(--bad); }
+  .pill.warn { background: var(--warn-tint); color: var(--warn); }
+
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 0 0 14px; border: 1.5px solid var(--bad); background: var(--bad-tint); }
+  .callout.warn2 { border-color: var(--warn); background: var(--warn-tint); }
+  .callout .head { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; margin: 0 0 6px; color: var(--bad); }
+  .callout.warn2 .head { color: var(--warn); }
+  .callout p { margin: 0; font-size: 13.5px; color: var(--ink); }
+  .callout p + p { margin-top: 6px; }
+
+  .reco { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .reco li { display: flex; gap: 10px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px; font-size: 13px; box-shadow: var(--shadow); }
+  .reco .rn { flex: none; width: 20px; height: 20px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+  footer.note { margin-top: 28px; font-size: 11.5px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 13px; }
+  footer.note a { color: var(--muted-2); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Переоценка Сценария 6 и Сценария 4 по критериям приёмки</h1>
+      <p class="sub">Те же сырые данные case-15, пересчитанные против официальных порогов с листа «Тест-кейсы» (case-13) — а не только описанные качественно.</p>
+    </div>
+    <div class="hdr-right">
+      <span class="snap"><span class="dot"></span>2 сценария · 2 порога</span>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><span class="ico" id="themeIcon">🌙</span><span id="themeLabel">Тёмная</span></button>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="n">Итог</span> Оба сценария формально не проходят собственный порог приёмки</h2>
+    <p class="sec-dek">Близко у Сценария 6 (не хватает 2,6 п.п.), заметно у Сценария 4 (не хватает 7,5 п.п., и на выборке меньше требуемой).</p>
+    <div class="gauges">
+      <div class="gauge-card">
+        <p class="g-label">Сценарий 6 · сложные данные (порог из критерия: ≥70%)</p>
+        <div class="gauge-track">
+          <div class="gauge-fill tabular" style="width:67.4%"></div>
+          <div class="gauge-threshold" data-t="70%" style="left:70%"></div>
+        </div>
+        <div class="gauge-nums">
+          <span class="actual tabular">67,4%<span class="frac">29 / 43 сущностей</span></span>
+          <span class="verdict">не пройден</span>
+        </div>
+        <p class="gauge-note">Было 45,5% (20/44) до повторной проверки 02.09 — прогресс есть, порога пока нет.</p>
+      </div>
+      <div class="gauge-card">
+        <p class="g-label">Сценарий 4 · подключённые источники / RAG (порог из критерия: ≥95%)</p>
+        <div class="gauge-track">
+          <div class="gauge-fill tabular" style="width:87.5%"></div>
+          <div class="gauge-threshold" data-t="95%" style="left:95%"></div>
+        </div>
+        <div class="gauge-nums">
+          <span class="actual tabular">87,5%<span class="frac">3,5 / 4 случая PII</span></span>
+          <span class="verdict">не пройден</span>
+        </div>
+        <p class="gauge-note">Выборка реального PII (n=4) меньше требуемых по критерию 10 запросов — статистически менее надёжно.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Сценарий 6</span> Что критерий разрешает не считать дефектом</h2>
+    <p class="sec-dek">Критерий приёмки прямо говорит: пробелы на сложных/искажённых данных — не безусловный дефект, если общий % выше согласованного порога. Регресс и новая утечка — исключение, они не про «сложные данные».</p>
+    <div class="id-grid">
+      <div class="id-chip warn"><span class="ic-id">ID 1, 2, 3, 9, 12, 13</span><span class="ic-note">Пробелы покрытия на искажённых/нестандартных данных</span><span class="ic-pct">Легитимно — «зона донастройки», не срочный баг</span></div>
+      <div class="id-chip bad"><span class="ic-id">ID 15</span><span class="ic-note">Регресс: телефон работал, перестал</span><span class="ic-pct">Не пробел покрытия — приоритет №1</span></div>
+      <div class="id-chip bad"><span class="ic-id">ID 18</span><span class="ic-note">Новая утечка «vich» после фикса</span><span class="ic-pct">Не пробел покрытия — новый дефект</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 10</span><span class="ic-note">Тип USERNAME не распознан ни разу</span><span class="ic-pct">Отдельный вопрос — входит ли тип в конфигурацию вообще</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Сценарий 4</span> Что ещё не проверено, помимо самого числа</h2>
+    <div class="callout">
+      <p class="head">Два пункта критерия не покрыты текущим разбором</p>
+      <p>Критерий требует не только маскирование на входе, но и <b>корректную деанонимизацию в ответе</b> сотруднику, плюс <b>отдельную проверку исходящего трафика</b>. Case-15 оценивал только то, что видно в чате — это не то же самое, что подтверждение отсутствия ПДн в реальном запросе к внешней LLM.</p>
+    </div>
+    <div class="callout warn2">
+      <p class="head">Ложные срабатывания — вне периметра этого критерия</p>
+      <p>20+ ложных срабатываний на технических терминах не подпадают ни под один явный порог в тексте критерия — он весь про recall реального PII (95%). Это пробел самого тест-плана, а не скрытая недоработка: порога для false positive rate там просто нет.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Что дальше</span> Рекомендации</h2>
+    <ol class="reco">
+      <li><span class="rn">1</span>Добавить оба числа (67,4% и 87,5%) в пакет для разработчика — сейчас там только перечисление находок, без сопоставления с официальными порогами.</li>
+      <li><span class="rn">2</span>По Сценарию 6 — уточнить у разработчика, 70% это финально согласованный порог или иллюстративный пример в тексте критерия.</li>
+      <li><span class="rn">3</span>По Сценарию 4 — закрыть два непроверенных пункта критерия (деанонимизация в ответе, проверка исходящего трафика) до выставления итоговой оценки.</li>
+      <li><span class="rn">4</span>Предложить дополнить сам тест-план явным порогом по false positive rate для Сценария 4.</li>
+    </ol>
+  </section>
+
+  <footer class="note">Источники: <code>case-13-test-tracker-d8-v3.xlsx</code> (лист «Тест-кейсы» — критерии; листы «Сценарий 6», «Сценарий 4 платформы» — сырые данные), <code>case-15-scenario-4-6-analiz.md</code>, <code>case-21-pereotsenka-scenariev-6-i-4-po-kriteriyam-priemki.md</code> — полный разбор.</footer>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var icon = document.getElementById('themeIcon');
+    var label = document.getElementById('themeLabel');
+    var KEY = 'case21-dashboard-theme';
+    function systemDark() { return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+    function apply(mode) {
+      if (mode === 'dark') { root.setAttribute('data-theme', 'dark'); icon.textContent = '☀️'; label.textContent = 'Светлая'; }
+      else { root.setAttribute('data-theme', 'light'); icon.textContent = '🌙'; label.textContent = 'Тёмная'; }
+    }
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    apply(saved ? saved : (systemDark() ? 'dark' : 'light'));
+    btn.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      apply(next);
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+    });
+  })();
+</script>

@@ -1,0 +1,208 @@
+<title>Сравнение теста: 05.09 → 07.09</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 24px 64px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 22px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 23px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; text-wrap: balance; }
+  .sub { font-size: 13.5px; color: var(--muted); margin: 0; max-width: 68ch; }
+  .hdr-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 12px 6px 10px; color: var(--muted); cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .theme-toggle:hover { border-color: var(--line-2); color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section { margin-top: 30px; }
+  h2 { font-size: 15px; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 10.5px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+  .sec-dek { font-size: 12.5px; color: var(--muted); margin: 0 0 14px; max-width: 72ch; }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
+  @media (max-width: 820px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px 11px; box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
+  .tile.ok { border-top-color: var(--ok); }
+  .tile.warn { border-top-color: var(--warn); }
+  .tile .label { font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 6px; }
+  .tile .num { font-size: 21px; font-weight: 700; margin: 0 0 3px; }
+  .tile .meta { font-size: 11.5px; color: var(--muted); margin: 0; }
+
+  .scen-table-scroll { overflow-x: auto; margin: 0 0 6px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 13px; background: var(--surface); }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  .grp-row td { background: var(--surface-2); font-weight: 700; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); padding: 6px 12px; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 100px; white-space: nowrap; }
+  .pill.ok { background: var(--ok-tint); color: var(--ok); }
+  .pill.bad { background: var(--bad-tint); color: var(--bad); }
+  .pill.warn { background: var(--warn-tint); color: var(--warn); }
+  .pill.mut { background: var(--surface-2); color: var(--muted); }
+  .arrow { color: var(--muted-2); font-size: 12px; margin: 0 6px; }
+  .status-cell { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
+  .cmt { font-size: 11.5px; color: var(--muted); max-width: 360px; }
+
+  .id-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  .id-chip { display: flex; flex-direction: column; gap: 2px; min-width: 122px; padding: 8px 11px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
+  .id-chip.ok { border-left: 3px solid var(--ok); }
+  .id-chip.warn { border-left: 3px solid var(--warn); }
+  .id-chip.bad { border-left: 3px solid var(--bad); }
+  .id-chip .ic-id { font-size: 10px; font-weight: 700; color: var(--muted-2); }
+  .id-chip .ic-note { font-size: 11px; color: var(--ink); }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 10px 0 18px; font-size: 11.5px; color: var(--muted); }
+  .legend span.sw { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 0 0 14px; border: 1.5px solid var(--ok); background: var(--ok-tint); }
+  .callout.warn2 { border-color: var(--warn); background: var(--warn-tint); }
+  .callout .head { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; margin: 0 0 6px; color: var(--ok); }
+  .callout.warn2 .head { color: var(--warn); }
+  .callout p { margin: 0; font-size: 13px; color: var(--ink); }
+  .callout p + p { margin-top: 6px; }
+
+  footer.note { margin-top: 28px; font-size: 11.5px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 13px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Что изменилось в тестировании: 05.09 → 07.09</h1>
+      <p class="sub">Построчное сравнение файла трекера между двумя снимками — по листу «Тест-кейсы» (итоговые статусы) и по детальным листам «Сценарий 6» / «Сценарий 2».</p>
+    </div>
+    <div class="hdr-right">
+      <span class="snap"><span class="dot"></span>05.09 → 07.09</span>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><span class="ico" id="themeIcon">🌙</span><span id="themeLabel">Тёмная</span></button>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="n">Итог</span> Сдвиг за два дня</h2>
+    <div class="tiles">
+      <div class="tile ok"><p class="label">Статус сменился на «Успешно»</p><p class="num tabular">4</p><p class="meta">Сценарий 6, Сценарий 8 (анон.), Сценарий 4 платформы</p></div>
+      <div class="tile ok"><p class="label">Сценарий 6: реально исправлено</p><p class="num tabular">3 / 18</p><p class="meta">id 3, 11, 15 — включая регресс id 15</p></div>
+      <div class="tile ok"><p class="label">Сценарий 2: новый формат</p><p class="num tabular">.pptx</p><p class="meta">0% → 54%, раньше — жёсткий отказ</p></div>
+      <div class="tile warn"><p class="label">Платформа данных: сдвинулось, не закрыто</p><p class="num tabular">3</p><p class="meta">Сценарий 1, 2, 3, 5 — «В работе ITQ»</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Тест-кейсы</span> Итоговые статусы по сценариям</h2>
+    <p class="sec-dek">Все строки листа «Тест-кейсы», где статус или комментарий изменился между снимками.</p>
+    <div class="scen-table-scroll">
+      <table>
+        <thead><tr><th>Сценарий</th><th>05.09</th><th></th><th>07.09</th><th>Комментарий 07.09</th></tr></thead>
+        <tbody>
+          <tr class="grp-row"><td colspan="5">АНОНИМИЗАТОР</td></tr>
+          <tr><td>2 — Обезличивание в документе</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="cmt">Пофиксили xml, pptx. Анонимизация 73% (было 60%). Таблицы в pptx пока не считываются.</td></tr>
+          <tr><td>6 — Сложные данные</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="cmt">Изменения в тестах №3, №11, №15. Точность признана приемлемой для приёмки (согласовано с заказчиком).</td></tr>
+          <tr><td>7 — Лимиты пользователей</td><td><span class="pill mut">Не проверялось</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="cmt">Настроить удалось; отчёт по детализации списания падает с ошибкой; вопросы по валюте тарифа.</td></tr>
+          <tr><td>8 — Работа из агентов</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="cmt">Деанонимизация через API починена (настройками для агентов).</td></tr>
+          <tr class="grp-row"><td colspan="5">ПЛАТФОРМА ДАННЫХ</td></tr>
+          <tr><td>1 — Права доступа к объектам</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">Ограничение по колонкам — ОК. Не получается проверить ограничения на данные из API.</td></tr>
+          <tr><td>2 — Права доступа к данным</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">Та же картина, что и Сценарий 1 платформы.</td></tr>
+          <tr><td>3 — Доступность через API</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">—</td></tr>
+          <tr><td>4 — Анонимизация из источников</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="cmt">—</td></tr>
+          <tr><td>5 — Комплексная работа (CRM+DWH)</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">Ранее вообще не удавалось настроить семантический слой — теперь в работе.</td></tr>
+          <tr><td>7 — Электронная почта</td><td><span class="pill warn">В работе</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">Gmail настроен, часть ответов по почте корректна, часть уходит в DWH.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--ok)"></span>Успешно</span>
+      <span><span class="sw" style="background:var(--bad)"></span>Есть ошибки</span>
+      <span><span class="sw" style="background:var(--warn)"></span>В работе</span>
+      <span><span class="sw" style="background:var(--muted-2)"></span>Не проверялось</span>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Сценарий 6</span> Все 18 под-кейсов, перепроверено по сути (не только по метке «Тест ОК»)</h2>
+    <p class="sec-dek">«Тест ОК» — согласованная с заказчиком приёмка, факт. Ниже — что стоит за каждой меткой технически.</p>
+    <div class="id-grid">
+      <div class="id-chip ok"><span class="ic-id">ID 3</span><span class="ic-note">Адрес+ФИО+телефон — теперь 100%</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 11</span><span class="ic-note">Основной адрес прописки — распознаётся</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 15</span><span class="ic-note">Регресс с телефоном — исправлен</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 1</span><span class="ic-note">Паспорт (серия/номер) + СНИЛС — маскируются, по спеке</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 12</span><span class="ic-note">Обфусцированный «г.Mосква» впервые пойман; паспорт по спеке — ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 13</span><span class="ic-note">СНИЛС (дефисы) маскируется</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 4–8, 14, 16, 17</span><span class="ic-note">Стабильно 100%, без изменений</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 9</span><span class="ic-note">СНИЛС в формате с точками — норма (не в скоупе). ДР ловится частично (1 из 3 форматов)</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 2</span><span class="ic-note">Телефон в нестандартном формате — по-прежнему не распознан</span></div>
+      <div class="id-chip warn"><span class="ic-id">ID 18</span><span class="ic-note">Фрагмент «vich» после ФИО — всё ещё утекает</span></div>
+      <div class="id-chip bad"><span class="ic-id">ID 10</span><span class="ic-note">USERNAME: маскируется ключ «user», а не значение; второй логин не тронут вообще — стоит показать разработчику отдельно</span></div>
+    </div>
+    <div class="callout">
+      <p class="head">Согласованный результат</p>
+      <p>Сценарий 6 принят как соответствующий требованиям приёмки. Из 18 под-кейсов — 3 реально исправлены (включая приоритетный регресс id 15), 6 соответствуют спецификации без доработок (паспорт/СНИЛС в допустимом скоупе), 9 стабильно на 100% без изменений.</p>
+    </div>
+    <div class="callout warn2">
+      <p class="head">Стоит держать в поле зрения</p>
+      <p>id 10 (USERNAME) — не просто нерешённый пробел, а маскирование не того токена (ключ вместо значения); id 2 (нестандартный телефон) и id 18 (хвост «vich») — точечные пропуски без изменений с прошлой проверки.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Сценарий 2</span> Форматы документов — 60% → 73%</h2>
+    <div class="tiles">
+      <div class="tile ok"><p class="label">Общее качество сценария</p><p class="num tabular">73%</p><p class="meta">было 60%</p></div>
+      <div class="tile ok"><p class="label">.pptx</p><p class="num tabular">0% → 54%</p><p class="meta">раньше — отказ «Недопустимый формат файла»; таблицы внутри пока не считываются</p></div>
+      <div class="tile ok"><p class="label">.xml</p><p class="num tabular">загружается</p><p class="meta">поддержка добавлена</p></div>
+      <div class="tile ok"><p class="label">Ложное срабатывание снято</p><p class="num tabular">1</p><p class="meta">ИНН в шапке был технически невалиден — не баг</p></div>
+    </div>
+  </section>
+
+  <footer class="note">Источники: трекер D8 — снимки 05.09 (<code>case-13-test-tracker-d8-v3.xlsx</code>) и 07.09 (загружен пользователем), листы «Тест-кейсы», «Сценарий 6», «Сценарий 2», «Список замечаний». Полный технический разбор Сценария 6 — в переписке сессии; статусы «Тест ОК» — согласованный с заказчиком факт.</footer>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var icon = document.getElementById('themeIcon');
+    var label = document.getElementById('themeLabel');
+    var KEY = 'case23-dashboard-theme';
+    function systemDark() { return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+    function apply(mode) {
+      if (mode === 'dark') { root.setAttribute('data-theme', 'dark'); icon.textContent = '☀️'; label.textContent = 'Светлая'; }
+      else { root.setAttribute('data-theme', 'light'); icon.textContent = '🌙'; label.textContent = 'Тёмная'; }
+    }
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    apply(saved ? saved : (systemDark() ? 'dark' : 'light'));
+    btn.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      apply(next);
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+    });
+  })();
+</script>

@@ -109,7 +109,7 @@
     <div class="tiles">
       <div class="tile ok"><p class="label">Статус сменился на «Успешно»</p><p class="num tabular">4</p><p class="meta">Сценарий 6, Сценарий 8 (анон.), Сценарий 4 платформы</p></div>
       <div class="tile ok"><p class="label">Сценарий 6: реально исправлено</p><p class="num tabular">3 / 18</p><p class="meta">id 3, 11, 15 — включая регресс id 15</p></div>
-      <div class="tile ok"><p class="label">Сценарий 2: новый формат</p><p class="num tabular">.pptx</p><p class="meta">0% → 54%, раньше — жёсткий отказ</p></div>
+      <div class="tile ok"><p class="label">Сценарий 2: новые форматы</p><p class="num tabular">.pptx / .xml</p><p class="meta">pptx: 0% → 54%, раньше — жёсткий отказ; .xml — теперь загружается</p></div>
       <div class="tile warn"><p class="label">Платформа данных: сдвинулось, не закрыто</p><p class="num tabular">3</p><p class="meta">Сценарий 1, 2, 3, 5 — «В работе ITQ»</p></div>
     </div>
   </section>
@@ -122,7 +122,7 @@
         <thead><tr><th>Сценарий</th><th>05.09</th><th></th><th>07.09</th><th>Ошибок было</th><th></th><th>Ошибок стало</th><th>Комментарий 07.09</th></tr></thead>
         <tbody>
           <tr class="grp-row"><td colspan="8">АНОНИМИЗАТОР</td></tr>
-          <tr><td>2 — Обезличивание в документе</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="tabular">3</td><td class="arrow">→</td><td class="tabular">1</td><td class="cmt">Пофиксили xml, pptx. Анонимизация 73% (было 60%). Таблицы в pptx пока не считываются.</td></tr>
+          <tr><td>2 — Обезличивание в документе</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="tabular">3</td><td class="arrow">→</td><td class="tabular">2</td><td class="cmt">Пофиксили xml, pptx. Анонимизация 73% (было 60%). Таблицы в pptx пока не считываются. Не подключена модель с VL (пока принимается как ошибка).</td></tr>
           <tr><td>6 — Сложные данные</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="tabular">10</td><td class="arrow">→</td><td class="tabular">0</td><td class="cmt">Изменения в тестах №3, №11, №15. Точность признана приемлемой для приёмки (согласовано с заказчиком).</td></tr>
           <tr><td>7 — Лимиты пользователей</td><td><span class="pill mut">Не проверялось</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="tabular">0</td><td class="arrow">→</td><td class="tabular">2</td><td class="cmt">Настроить удалось; отчёт по детализации списания падает с ошибкой; вопросы по валюте тарифа.</td></tr>
           <tr><td>8 — Работа из агентов</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="tabular">1</td><td class="arrow">→</td><td class="tabular">0</td><td class="cmt">Деанонимизация через API починена (настройками для агентов).</td></tr>

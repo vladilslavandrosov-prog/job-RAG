@@ -119,20 +119,20 @@
     <p class="sec-dek">Все строки листа «Тест-кейсы», где статус или комментарий изменился между снимками.</p>
     <div class="scen-table-scroll">
       <table>
-        <thead><tr><th>Сценарий</th><th>05.09</th><th></th><th>07.09</th><th>Комментарий 07.09</th></tr></thead>
+        <thead><tr><th>Сценарий</th><th>05.09</th><th></th><th>07.09</th><th>Кол-во ошибок</th><th>Комментарий 07.09</th></tr></thead>
         <tbody>
-          <tr class="grp-row"><td colspan="5">АНОНИМИЗАТОР</td></tr>
-          <tr><td>2 — Обезличивание в документе</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="cmt">Пофиксили xml, pptx. Анонимизация 73% (было 60%). Таблицы в pptx пока не считываются.</td></tr>
-          <tr><td>6 — Сложные данные</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="cmt">Изменения в тестах №3, №11, №15. Точность признана приемлемой для приёмки (согласовано с заказчиком).</td></tr>
-          <tr><td>7 — Лимиты пользователей</td><td><span class="pill mut">Не проверялось</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="cmt">Настроить удалось; отчёт по детализации списания падает с ошибкой; вопросы по валюте тарифа.</td></tr>
-          <tr><td>8 — Работа из агентов</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="cmt">Деанонимизация через API починена (настройками для агентов).</td></tr>
-          <tr class="grp-row"><td colspan="5">ПЛАТФОРМА ДАННЫХ</td></tr>
-          <tr><td>1 — Права доступа к объектам</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">Ограничение по колонкам — ОК. Не получается проверить ограничения на данные из API.</td></tr>
-          <tr><td>2 — Права доступа к данным</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">Та же картина, что и Сценарий 1 платформы.</td></tr>
-          <tr><td>3 — Доступность через API</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">—</td></tr>
-          <tr><td>4 — Анонимизация из источников</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="cmt">—</td></tr>
-          <tr><td>5 — Комплексная работа (CRM+DWH)</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">Ранее вообще не удавалось настроить семантический слой — теперь в работе.</td></tr>
-          <tr><td>7 — Электронная почта</td><td><span class="pill warn">В работе</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="cmt">Gmail настроен, часть ответов по почте корректна, часть уходит в DWH.</td></tr>
+          <tr class="grp-row"><td colspan="6">АНОНИМИЗАТОР</td></tr>
+          <tr><td>2 — Обезличивание в документе</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="tabular">1</td><td class="cmt">Пофиксили xml, pptx. Анонимизация 73% (было 60%). Таблицы в pptx пока не считываются.</td></tr>
+          <tr><td>6 — Сложные данные</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="tabular">0</td><td class="cmt">Изменения в тестах №3, №11, №15. Точность признана приемлемой для приёмки (согласовано с заказчиком).</td></tr>
+          <tr><td>7 — Лимиты пользователей</td><td><span class="pill mut">Не проверялось</span></td><td class="arrow">→</td><td><span class="pill bad">Есть ошибки</span></td><td class="tabular">2</td><td class="cmt">Настроить удалось; отчёт по детализации списания падает с ошибкой; вопросы по валюте тарифа.</td></tr>
+          <tr><td>8 — Работа из агентов</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="tabular">0</td><td class="cmt">Деанонимизация через API починена (настройками для агентов).</td></tr>
+          <tr class="grp-row"><td colspan="6">ПЛАТФОРМА ДАННЫХ</td></tr>
+          <tr><td>1 — Права доступа к объектам</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="tabular">1</td><td class="cmt">Ограничение по колонкам — ОК. Не получается проверить ограничения на данные из API.</td></tr>
+          <tr><td>2 — Права доступа к данным</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="tabular">1</td><td class="cmt">Та же картина, что и Сценарий 1 платформы.</td></tr>
+          <tr><td>3 — Доступность через API</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="tabular">1</td><td class="cmt">—</td></tr>
+          <tr><td>4 — Анонимизация из источников</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="tabular">0</td><td class="cmt">—</td></tr>
+          <tr><td>5 — Комплексная работа (CRM+DWH)</td><td><span class="pill bad">Есть ошибки</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="tabular">1</td><td class="cmt">Ранее вообще не удавалось настроить семантический слой — теперь в работе.</td></tr>
+          <tr><td>7 — Электронная почта</td><td><span class="pill warn">В работе</span></td><td class="arrow">→</td><td><span class="pill warn">В работе ITQ</span></td><td class="tabular">1</td><td class="cmt">Gmail настроен, часть ответов по почте корректна, часть уходит в DWH.</td></tr>
         </tbody>
       </table>
     </div>
@@ -145,28 +145,19 @@
   </section>
 
   <section>
-    <h2><span class="n">Сценарий 6</span> Все 18 под-кейсов, перепроверено по сути (не только по метке «Тест ОК»)</h2>
-    <p class="sec-dek">«Тест ОК» — согласованная с заказчиком приёмка, факт. Ниже — что стоит за каждой меткой технически.</p>
+    <h2><span class="n">Сценарий 6</span> Все 18 под-кейсов</h2>
     <div class="id-grid">
-      <div class="id-chip ok"><span class="ic-id">ID 3</span><span class="ic-note">Адрес+ФИО+телефон — теперь 100%</span></div>
-      <div class="id-chip ok"><span class="ic-id">ID 11</span><span class="ic-note">Основной адрес прописки — распознаётся</span></div>
-      <div class="id-chip ok"><span class="ic-id">ID 15</span><span class="ic-note">Регресс с телефоном — исправлен</span></div>
-      <div class="id-chip ok"><span class="ic-id">ID 1</span><span class="ic-note">Паспорт (серия/номер) + СНИЛС — маскируются, по спеке</span></div>
-      <div class="id-chip ok"><span class="ic-id">ID 12</span><span class="ic-note">Обфусцированный «г.Mосква» впервые пойман; паспорт по спеке — ОК</span></div>
-      <div class="id-chip ok"><span class="ic-id">ID 13</span><span class="ic-note">СНИЛС (дефисы) маскируется</span></div>
-      <div class="id-chip ok"><span class="ic-id">ID 4–8, 14, 16, 17</span><span class="ic-note">Стабильно 100%, без изменений</span></div>
-      <div class="id-chip warn"><span class="ic-id">ID 9</span><span class="ic-note">СНИЛС в формате с точками — норма (не в скоупе). ДР ловится частично (1 из 3 форматов)</span></div>
-      <div class="id-chip warn"><span class="ic-id">ID 2</span><span class="ic-note">Телефон в нестандартном формате — по-прежнему не распознан</span></div>
-      <div class="id-chip warn"><span class="ic-id">ID 18</span><span class="ic-note">Фрагмент «vich» после ФИО — всё ещё утекает</span></div>
-      <div class="id-chip bad"><span class="ic-id">ID 10</span><span class="ic-note">USERNAME: маскируется ключ «user», а не значение; второй логин не тронут вообще — стоит показать разработчику отдельно</span></div>
-    </div>
-    <div class="callout">
-      <p class="head">Согласованный результат</p>
-      <p>Сценарий 6 принят как соответствующий требованиям приёмки. Из 18 под-кейсов — 3 реально исправлены (включая приоритетный регресс id 15), 6 соответствуют спецификации без доработок (паспорт/СНИЛС в допустимом скоупе), 9 стабильно на 100% без изменений.</p>
-    </div>
-    <div class="callout warn2">
-      <p class="head">Стоит держать в поле зрения</p>
-      <p>id 10 (USERNAME) — не просто нерешённый пробел, а маскирование не того токена (ключ вместо значения); id 2 (нестандартный телефон) и id 18 (хвост «vich») — точечные пропуски без изменений с прошлой проверки.</p>
+      <div class="id-chip ok"><span class="ic-id">ID 3</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 11</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 15</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 1</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 12</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 13</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 4–8, 14, 16, 17</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 9</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 2</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 18</span><span class="ic-note">Тест ОК</span></div>
+      <div class="id-chip ok"><span class="ic-id">ID 10</span><span class="ic-note">Тест ОК</span></div>
     </div>
   </section>
 

@@ -1,0 +1,223 @@
+<title>Динамика теста: 07.09 → 08.09</title>
+<style>
+  :root {
+    --bg: #F5F7F9; --surface: #FFFFFF; --surface-2: #EDF1F3; --ink: #17212B;
+    --muted: #5C6B7A; --muted-2: #8695A3; --line: #E1E7EB; --line-2: #D2DADF;
+    --accent: #0E6E63; --accent-ink: #0B564D; --accent-tint: #E4F0EE;
+    --ok: #1E7A4C; --ok-tint: #E3F1E8;
+    --warn: #93630F; --warn-tint: #FBF0DC;
+    --bad: #A8393B; --bad-tint: #FBE7E7;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 24px 64px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 22px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 23px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; text-wrap: balance; }
+  .sub { font-size: 13.5px; color: var(--muted); margin: 0; max-width: 68ch; }
+  .hdr-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .snap { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .04em; font-weight: 700; text-transform: uppercase; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 13px; color: var(--muted); white-space: nowrap; }
+  .snap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 12px 6px 10px; color: var(--muted); cursor: pointer; white-space: nowrap; font-family: inherit; }
+  .theme-toggle:hover { border-color: var(--line-2); color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section { margin-top: 30px; }
+  h2 { font-size: 15px; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+  h2 .n { font-size: 10.5px; color: var(--accent-ink); background: var(--accent-tint); border-radius: 5px; padding: 2px 7px; }
+  .sec-dek { font-size: 12.5px; color: var(--muted); margin: 0 0 14px; max-width: 72ch; }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
+  @media (max-width: 820px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tiles.cols2 { grid-template-columns: repeat(2, 1fr); }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px 11px; box-shadow: var(--shadow); border-top: 3px solid var(--line-2); }
+  .tile.ok { border-top-color: var(--ok); }
+  .tile.warn { border-top-color: var(--warn); }
+  .tile.bad { border-top-color: var(--bad); }
+  .tile .label { font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); font-weight: 700; margin: 0 0 6px; }
+  .tile .num { font-size: 21px; font-weight: 700; margin: 0 0 3px; }
+  .tile .meta { font-size: 11.5px; color: var(--muted); margin: 0; }
+
+  .scen-table-scroll { overflow-x: auto; margin: 0 0 6px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 13px; background: var(--surface); }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  .grp-row td { background: var(--surface-2); font-weight: 700; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); padding: 6px 12px; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 100px; white-space: nowrap; }
+  .pill.ok { background: var(--ok-tint); color: var(--ok); }
+  .pill.bad { background: var(--bad-tint); color: var(--bad); }
+  .pill.warn { background: var(--warn-tint); color: var(--warn); }
+  .pill.mut { background: var(--surface-2); color: var(--muted); }
+  .arrow { color: var(--muted-2); font-size: 12px; margin: 0 6px; }
+  .cmt { font-size: 11.5px; color: var(--muted); max-width: 360px; }
+
+  .id-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  .id-chip { display: flex; flex-direction: column; gap: 2px; min-width: 150px; padding: 8px 11px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
+  .id-chip.ok { border-left: 3px solid var(--ok); }
+  .id-chip.warn { border-left: 3px solid var(--warn); }
+  .id-chip.bad { border-left: 3px solid var(--bad); }
+  .id-chip .ic-id { font-size: 10px; font-weight: 700; color: var(--muted-2); }
+  .id-chip .ic-note { font-size: 11px; color: var(--ink); }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 10px 0 18px; font-size: 11.5px; color: var(--muted); }
+  .legend span.sw { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+  .col-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 15px 17px; box-shadow: var(--shadow); }
+  .col-card.ok-edge { border-left: 3px solid var(--ok); }
+  .col-card.warn-edge { border-left: 3px solid var(--warn); }
+  .col-card h3 { font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 10px; color: var(--muted-2); font-weight: 700; }
+  .col-card ul { margin: 0; padding-left: 18px; font-size: 13px; }
+  .col-card li { margin-bottom: 8px; }
+  .col-card li:last-child { margin-bottom: 0; }
+  .col-card li b { font-weight: 700; }
+
+  .flag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; padding: 2px 7px; border-radius: 5px; margin-right: 6px; vertical-align: 1px; }
+  .flag.form { background: var(--accent-tint); color: var(--accent-ink); }
+  .flag.chat { background: var(--surface-2); color: var(--muted); }
+
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 0 0 14px; border: 1.5px solid var(--warn); background: var(--warn-tint); }
+  .callout .head { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; margin: 0 0 6px; color: var(--warn); }
+  .callout p { margin: 0; font-size: 13px; color: var(--ink); }
+  .callout p + p { margin-top: 6px; }
+
+  footer.note { margin-top: 28px; font-size: 11.5px; color: var(--muted-2); border-top: 1px solid var(--line); padding-top: 13px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Что изменилось: 07.09 → 08.09</h1>
+      <p class="sub">Формальные изменения по файлу трекера (лист «Тест-кейсы») плюс качественная сводка по переписке команды за 08.09 — там, где статус в трекере ещё не обновился, но по факту ситуация сдвинулась.</p>
+    </div>
+    <div class="hdr-right">
+      <span class="snap"><span class="dot"></span>07.09 → 08.09</span>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему"><span class="ico" id="themeIcon">🌙</span><span id="themeLabel">Тёмная</span></button>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="n">Итог</span> Сдвиг за день</h2>
+    <div class="tiles">
+      <div class="tile ok"><p class="label">Платформа данных: статус «Успешно»</p><p class="num tabular">2</p><p class="meta">Сценарий 1 и 2 — оба закрыты по ограничению доступа через API</p></div>
+      <div class="tile bad"><p class="label">Сценарий 3 (Bitrix+DWH)</p><p class="num tabular">не закрыт</p><p class="meta">SQL-фикс подтверждён, но обход Bitrix воспроизводится повторно</p></div>
+      <div class="tile warn"><p class="label">n8n-путь</p><p class="num tabular">неформально ОК</p><p class="meta">подтверждение разработчика 11:02, формального ретеста по всем сценариям ещё нет</p></div>
+      <div class="tile warn"><p class="label">Сценарий 7 (биллинг)</p><p class="num tabular">ошибка ушла</p><p class="meta">корректность расчёта тарифа — открытый вопрос</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Тест-кейсы</span> Формальные изменения статуса</h2>
+    <p class="sec-dek">Построчное сравнение файла трекера 07.09 → 08.09 (лист «Тест-кейсы», листы «Список замечаний» / «Сценарий 1–6» / «Общее описание» / «Доработки» — без изменений). Изменились только две строки.</p>
+    <div class="scen-table-scroll">
+      <table>
+        <thead><tr><th>Сценарий</th><th>07.09</th><th></th><th>08.09</th><th>Комментарий 08.09</th></tr></thead>
+        <tbody>
+          <tr class="grp-row"><td colspan="5">ПЛАТФОРМА ДАННЫХ</td></tr>
+          <tr><td>1 — Права доступа к информационным объектам</td><td><span class="pill warn">В работе ITQ</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="cmt">Горячев: «Ограничение доступа к методу API работает.»</td></tr>
+          <tr><td>2 — Настройка прав доступа к данным</td><td><span class="pill warn">В работе ITQ</span></td><td class="arrow">→</td><td><span class="pill ok">Успешно</span></td><td class="cmt">Горячев: «Ограничение доступа к части данных, возвращаемых через API, работает.»</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--ok)"></span>Успешно</span>
+      <span><span class="sw" style="background:var(--warn)"></span>В работе</span>
+      <span><span class="sw" style="background:var(--bad)"></span>Есть ошибки</span>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Детали</span> Что именно закрылось внутри Сценария 1 и 2</h2>
+    <p class="sec-dek">Оба сценария были блокированы одним и тем же: ответы по данным, возвращаемым через API, нельзя было получить из чата — из-за этого нельзя было проверить сами ограничения доступа на данные из API. 08.09 это заработало, под-проверки сдвинулись:</p>
+    <div class="tiles cols2">
+      <div class="tile ok"><p class="label">Сценарий 1 — успешных под-проверок</p><p class="num tabular">2 → 4</p><p class="meta">из 8 всего; «Есть ошибки» — 0, без изменений</p></div>
+      <div class="tile ok"><p class="label">Сценарий 2 — осталось «в работе»</p><p class="num tabular">5 → 3</p><p class="meta">«Не проверялось» — 1, без изменений</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Сценарий 3</span> Bitrix + DWH — статус в трекере не менялся, но картина сложнее</h2>
+    <p class="sec-dek">В файле трекера строка «Сценарий 3 — Доступность через API» весь день оставалась «В работе ITQ» — формальных изменений нет. По переписке за 08.09 картина неоднородная: часть проблемы починена и подтверждена, часть — воспроизвелась заново, плюс найдена отдельная, более серьёзная проблема.</p>
+    <div class="cols">
+      <div class="col-card ok-edge">
+        <h3>Подтверждено</h3>
+        <ul>
+          <li><span class="flag chat">чат</span>Запрос «счета по договору BP33431 + реквизиты клиента» отработал корректно через прямой чат-интерфейс — данные из <code>bitrix.crm.default.items</code> и <code>&quot;test DWH&quot;.dwh.report.account</code> соединились правильно.</li>
+          <li><b>08:49, Андрей Савичев</b> прислал сам SQL-запрос как подтверждение починки на уровне запроса к данным (JOIN по <code>uf_crm_id_bo</code> / <code>CUSTOMER_ID</code>), с комментарием «как часы».</li>
+          <li><b>11:02, Андрей Савичев:</b> «щаз у Юрия я смотрю все нормально проходит из n8n» — первое положительное, но неформальное подтверждение по пути n8n.</li>
+        </ul>
+      </div>
+      <div class="col-card warn-edge">
+        <h3>Не закрыто / новые находки</h3>
+        <ul>
+          <li><b>Повторный обход Bitrix.</b> Новая сессия (10:27–10:31) снова показала «мимо битрикса и опять в DWH», затем упала с ошибкой «источник данных временно недоступен» — воспроизводится и по номеру договора, и по фамилии.</li>
+          <li><b>Ошибка не дошла до пользователя.</b> В одной из таких сессий пользователю в чат не вернулось вообще никакого сообщения об ошибке — сбой на бэкенде произошёл молча. Отдельная проблема уровня UX/надёжности, не про корректность самого запроса.</li>
+          <li><b>Гипотеза причины (Савичев):</b> медленная шина Bitrix не успевает отдать данные за разумное время — таймаут, а не логическая ошибка джойна. Варианты фикса (кастомные таймауты по источнику, фоновая обработка) обсуждались, не реализованы.</li>
+          <li><b>Чувствительность к формулировке.</b> Юрий подтвердил: срабатывание Bitrix зависит от точной фразы запроса, не только от смысла.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <p class="head">Важная оговорка по методологии</p>
+      <p>Демонстрация «работает через интерфейс чата» и демонстрация «работает через n8n» — это два разных подтверждения. Судя по тому, что тестировщик системно проверяет именно вызов через n8n, вероятная реальная цель приёмки — паритет интерфейс/API, а не просто корректный ответ в чате. Неформальное «я смотрю, вроде нормально» от разработчика — это не то же самое, что формальный повторный тест по всем сценариям через n8n.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">Сопутствующее</span> Билинг, поисковый API, UX</h2>
+    <div class="tiles cols2">
+      <div class="tile warn"><p class="label">Сценарий 7 — лимиты/биллинг</p><p class="num tabular">ошибка ушла</p><p class="meta">Юрий прислал invoice_2.xlsx: ошибки нет, но детализация по тарифу непонятна — открытый вопрос к корректности расчёта. Кэшированные токены в биллинге учитываются (подтверждено).</p></div>
+      <div class="tile ok"><p class="label">Поисковый API</p><p class="num tabular">не баг</p><p class="meta">Олег: для прямых ссылок нужно подключить поисковый API на стороне клиента. Платформа сама не ходит по внешним ссылкам осознанно — по соображениям безопасности (риск эксплойтов/промт-инъекций).</p></div>
+      <div class="tile warn"><p class="label">UX: плашки-пресеты в чате</p><p class="num tabular">заглушка</p><p class="meta">Новые плашки («Найти в документах» и т.п., кроме «Следить») просто подставляют текст в промпт — не полноценная функция. Юрий попросил скрыть их до демо; решение прорабатывается.</p></div>
+      <div class="tile ok"><p class="label">Платформа данных, Сценарий 1 и 2 (данные)</p><p class="num tabular">пройдено</p><p class="meta">Саша Каява и Андрей Горячев прошли сценарии сегодня, зафиксировали в трекере — «+3 успешных за сегодня».</p></div>
+    </div>
+  </section>
+
+  <footer class="note">Источники: трекер D8 — снимки 07.09 (<code>case-13-test-tracker-d8-v4-07-09.xlsx</code>) и 08.09 вечер (<code>case-13-test-tracker-d8-v5-08-09.xlsx</code>), построчное сравнение всех листов; переписка команды («Пилот Д8 &amp; ITQ Pro», «Команда Д8 &amp; ITQ Pro») за 08.09, ранее зафиксированная в <code>case-24-utro-08-09-status.md</code>. Статусы «Успешно»/«Тест ОК» — согласованный с заказчиком факт, не переаудитируются.</footer>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var icon = document.getElementById('themeIcon');
+    var label = document.getElementById('themeLabel');
+    var KEY = 'case25-dashboard-theme';
+    function systemDark() { return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+    function apply(mode) {
+      if (mode === 'dark') { root.setAttribute('data-theme', 'dark'); icon.textContent = '☀️'; label.textContent = 'Светлая'; }
+      else { root.setAttribute('data-theme', 'light'); icon.textContent = '🌙'; label.textContent = 'Тёмная'; }
+    }
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    apply(saved ? saved : (systemDark() ? 'dark' : 'light'));
+    btn.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      apply(next);
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+    });
+  })();
+</script>

@@ -1,0 +1,475 @@
+<title>Раздел «База секретов»</title>
+<style>
+  :root {
+    --bg: #F5F7F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F3;
+    --ink: #17212B;
+    --muted: #5C6B7A;
+    --muted-2: #8695A3;
+    --line: #E1E7EB;
+    --line-2: #D2DADF;
+    --accent: #0E6E63;
+    --accent-ink: #0B564D;
+    --accent-tint: #E4F0EE;
+    --ok: #1E7A4C;
+    --ok-tint: #E3F1E8;
+    --warn: #93630F;
+    --warn-tint: #FBF0DC;
+    --bad: #A8393B;
+    --bad-tint: #FBE7E7;
+    --open: #5B4B93;
+    --open-tint: #ECE8F7;
+    --code-bg: #EDF1F3;
+    --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519;
+      --surface: #161E24;
+      --surface-2: #1C252C;
+      --ink: #E7ECEF;
+      --muted: #93A2AF;
+      --muted-2: #6D7C8A;
+      --line: #263039;
+      --line-2: #2E3941;
+      --accent: #4FC3B4;
+      --accent-ink: #7CD9CC;
+      --accent-tint: #16302C;
+      --ok: #58B983;
+      --ok-tint: #16301F;
+      --warn: #E0AC4E;
+      --warn-tint: #362808;
+      --bad: #E6787A;
+      --bad-tint: #3A1618;
+      --open: #B29EE8;
+      --open-tint: #251F3A;
+      --code-bg: #1C252C;
+      --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0F1519;
+    --surface: #161E24;
+    --surface-2: #1C252C;
+    --ink: #E7ECEF;
+    --muted: #93A2AF;
+    --muted-2: #6D7C8A;
+    --line: #263039;
+    --line-2: #2E3941;
+    --accent: #4FC3B4;
+    --accent-ink: #7CD9CC;
+    --accent-tint: #16302C;
+    --ok: #58B983;
+    --ok-tint: #16301F;
+    --warn: #E0AC4E;
+    --warn-tint: #362808;
+    --bad: #E6787A;
+    --bad-tint: #3A1618;
+    --open: #B29EE8;
+    --open-tint: #251F3A;
+    --code-bg: #1C252C;
+    --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .mono { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 760px);
+    justify-content: center;
+    gap: 56px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; }
+    .nav-rail { display: none; }
+  }
+
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow {
+    font-size: 11px; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--muted-2); font-weight: 600; margin: 0 0 14px;
+  }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list li { margin: 0; }
+  .nav-list a {
+    display: flex; gap: 10px; align-items: baseline;
+    padding: 7px 0 7px 16px; margin-left: -1px;
+    border-left: 2px solid transparent;
+    color: var(--muted); text-decoration: none; font-size: 13.5px;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 14px; }
+  .nav-status {
+    margin-top: 28px; padding: 14px 16px; border-radius: 8px;
+    background: var(--ok-tint);
+    border: 1px solid color-mix(in srgb, var(--ok) 30%, transparent);
+  }
+  .nav-status .label {
+    font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase;
+    font-weight: 700; color: var(--ok); margin: 0 0 6px;
+  }
+  .nav-status p { margin: 0; font-size: 12.5px; color: var(--ink); line-height: 1.5; }
+  .nav-status .date { color: var(--muted); }
+
+  header.doc-head { margin-bottom: 44px; }
+  .eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--accent-ink); font-weight: 700; margin: 0 0 16px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title {
+    font-size: 30px; line-height: 1.22; letter-spacing: -.01em;
+    font-weight: 700; margin: 0 0 12px; text-wrap: balance;
+  }
+  .subtitle { font-size: 16px; color: var(--muted); margin: 0 0 22px; max-width: 62ch; }
+  .lede {
+    font-size: 16px; color: var(--ink); max-width: 68ch; margin: 0;
+    padding-top: 22px; border-top: 1px solid var(--line);
+  }
+
+  section { margin-top: 52px; scroll-margin-top: 32px; }
+  h2.sec {
+    display: flex; align-items: baseline; gap: 10px;
+    font-size: 21px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 16px;
+  }
+  h2.sec .n { font-size: 14px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  h3.sub { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: var(--ink); }
+  p { margin: 0 0 14px; max-width: 68ch; }
+  section > p:last-child { margin-bottom: 0; }
+
+  code {
+    font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+    font-size: .89em; background: var(--code-bg); color: var(--code-ink);
+    padding: .12em .38em; border-radius: 4px; word-break: break-word;
+  }
+
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 14px; background: var(--surface); }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    background: var(--surface-2); font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); white-space: nowrap; font-weight: 600; width: 1%; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 700; padding: 3px 9px 3px 7px;
+    border-radius: 100px; line-height: 1.4; white-space: nowrap;
+  }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+  .pill.ok { background: var(--ok-tint); color: var(--ok); }
+  .pill.ok::before { background: var(--ok); }
+  .pill.warn { background: var(--warn-tint); color: var(--warn); }
+  .pill.warn::before { background: var(--warn); }
+  .pill.bad { background: var(--bad-tint); color: var(--bad); }
+  .pill.bad::before { background: var(--bad); }
+
+  .tag {
+    display: inline-block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase;
+    font-weight: 700; padding: 3px 8px; border-radius: 5px; margin-bottom: 10px;
+  }
+  .tag.ok { background: var(--ok-tint); color: var(--ok); }
+  .tag.note { background: var(--accent-tint); color: var(--accent-ink); }
+
+  .callout {
+    border-radius: 10px; padding: 16px 18px; margin: 0 0 18px;
+    border: 1px solid var(--line); border-left: 3px solid var(--line-2);
+    background: var(--surface); box-shadow: var(--shadow);
+  }
+  .callout .head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14.5px; max-width: none; }
+  .callout p + p { margin-top: 8px; }
+  .callout.note { border-left-color: var(--accent); }
+  .callout.note .head { color: var(--accent-ink); }
+  .callout.ok { border-left-color: var(--ok); background: var(--ok-tint); }
+  .callout.ok .head { color: var(--ok); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-tint); }
+  .callout.warn .head { color: var(--warn); }
+
+  ol.steps { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: step; }
+  ol.steps li { counter-increment: step; position: relative; padding: 0 0 16px 34px; font-size: 15px; max-width: 66ch; }
+  ol.steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 1px;
+    width: 22px; height: 22px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink);
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps li:last-child { padding-bottom: 0; }
+
+  ul.plain { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.plain li { position: relative; padding: 0 0 14px 20px; font-size: 15px; max-width: 66ch; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  ul.plain li:last-child { padding-bottom: 0; }
+
+  .qa-card {
+    border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+    box-shadow: var(--shadow); padding: 18px 20px; margin: 0 0 16px;
+  }
+  .qa-card .q { font-weight: 700; font-size: 14.5px; margin: 0 0 10px; display: flex; gap: 8px; }
+  .qa-card .q .qmark {
+    flex: none; width: 20px; height: 20px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink);
+    font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+  .qa-card .a { font-size: 14px; color: var(--muted); margin: 0 0 10px; padding-left: 28px; }
+  .qa-card .src { display: flex; gap: 8px; flex-wrap: wrap; padding-left: 28px; }
+  .src-pill {
+    font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: var(--accent-ink);
+    background: var(--accent-tint); border-radius: 100px; padding: 3px 10px;
+  }
+
+  .see-also { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .see-also li { display: flex; gap: 10px; align-items: baseline; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .see-also .path { font-family: "SF Mono", Consolas, monospace; font-size: 12.5px; color: var(--accent-ink); flex: none; }
+  .see-also .desc { color: var(--muted); }
+
+  footer.doc-foot {
+    margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted-2); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s1"><span class="nav-num tabular">1</span> Что это за раздел</a></li>
+      <li><a href="#s2"><span class="nav-num tabular">2</span> Провайдеры</a></li>
+      <li><a href="#s3"><span class="nav-num tabular">3</span> Наполнение базы и поиск</a></li>
+      <li><a href="#s4"><span class="nav-num tabular">4</span> Тест детекции</a></li>
+      <li><a href="#s5"><span class="nav-num tabular">5</span> Реранкинг</a></li>
+      <li><a href="#s6"><span class="nav-num tabular">6</span> Словари и блэклист</a></li>
+      <li><a href="#s7"><span class="nav-num tabular">7</span> Regex-паттерны</a></li>
+      <li><a href="#s8"><span class="nav-num tabular">8</span> Управление базой, интеграция</a></li>
+      <li><a href="#s9"><span class="nav-num tabular">9</span> Не описано / См. также</a></li>
+    </ul>
+    <div class="nav-status">
+      <p class="label">Глобальные пороги</p>
+      <p>PASS &lt; 0.75 · REVIEW 0.75–0.88 · BLOCK ≥ 0.88 — одни и те же в тесте и в «Управлении базой».</p>
+    </div>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Платформа · База секретов</p>
+      <h1 class="title">База секретов</h1>
+      <p class="subtitle">Админка векторной базы коммерческой тайны и настроек DLP-детекции: провайдеры моделей, чанки, реранкинг, словари, кастомные regex-паттерны, управление коллекцией Qdrant и токены интеграции.</p>
+      <p class="lede">Это практическая реализация связки, описанной в документе разработчика: <code>pii-shield</code> (детекция PII) + <code>dlp-secret</code> (проверка политики секретности, вызывается отдельно, только PASS/REVIEW/BLOCK).</p>
+    </header>
+
+    <section id="s1">
+      <h2 class="sec"><span class="n tabular">01</span> Что это за раздел</h2>
+      <p>Отдельный верхнеуровневый пункт меню (наравне с «Платформа», «Качество», «Рабочее место ИБ»), не пересекающийся с «Источники → Документы».</p>
+      <h3 class="sub">Полный список пунктов меню</h3>
+      <p>Список документов, Добавить, Загрузить, Поиск, Тест детекции, Реранкинг, Ключевые слова, Провайдеры, Блэклист ОМ, Загрузить блэклист, Тест детекции, Политики синхронизации, Regex-паттерны, Управление базой, Интеграция.</p>
+      <p>Ниже описаны экраны, увиденные на скриншотах; непросмотренные перечислены в разделе 9.</p>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec"><span class="n tabular">02</span> Провайдеры</h2>
+      <p>Список из 12 подключённых провайдеров моделей — с фильтрами по типу («Облачная LLM» / «Эмбеддинги») и статусу (по умолчанию <code>active</code>). Из увиденного:</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Провайдер</th><th>Тип</th><th>Домен</th></tr></thead>
+          <tbody>
+            <tr><td class="k"><code>ollama ext</code></td><td>Облачная LLM</td><td><code>gpt.iqi.internal</code></td></tr>
+            <tr><td class="k"><code>ollama loc</code></td><td>Облачная LLM</td><td><code>gpt.iqi.internal</code></td></tr>
+            <tr><td class="k"><code>TEI (jina-code)</code></td><td>Эмбеддинги</td><td>—</td></tr>
+            <tr><td class="k"><code>TEI (bge-m3)</code></td><td>Эмбеддинги</td><td>—</td></tr>
+            <tr><td class="k"><code>Amazon Bedrock</code></td><td>Облачная LLM</td><td><code>bedrock-runtime.amazonaws...</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Это, судя по всему, реестр реальных бэкендов, на которые платформа route-ит вызовы моделей — отдельный от селектора модели в самом чате.</p>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec"><span class="n tabular">03</span> Наполнение базы и поиск</h2>
+      <h3 class="sub">Добавить (чанк вручную)</h3>
+      <p>Форма добавления фрагмента коммерческой тайны напрямую в базу — без загрузки файла. Поля: текст фрагмента (плейсхолдер «Вставьте текст коммерческой тайны…»), уровень секретности (<code>SECRET</code> / <code>CONFIDENTIAL</code> / <code>INTERNAL</code> / <code>PUBLIC</code>), категория, тип документа, «Подтверждено (логин ИБ)» — необязательное поле, пусто = требует проверки ИБ.</p>
+      <p>Механика (из встроенной подсказки «Как это работает»):</p>
+      <ol class="steps">
+        <li>Текст автоматически бьётся на чанки — ~400 токенов, перекрытие 25%.</li>
+        <li>Каждый чанк векторизуется моделью <code>ru-en-RoSBERTa</code> (dim=768).</li>
+        <li>Чанки сохраняются в коллекцию <code>confidential_chunks</code> в Qdrant.</li>
+        <li>Пайплайн детекции начинает использовать их немедленно — без отдельного шага переиндексации.</li>
+      </ol>
+      <h3 class="sub">Поиск (семантический)</h3>
+      <p>Поиск похожих чанков по смыслу: векторизация запроса + поиск ближайших, без требования точного совпадения слов. Фильтры: уровень секретности (по умолчанию «Все»), статус (по умолчанию <code>active</code>), Top-K результатов (по умолчанию 10).</p>
+    </section>
+
+    <section id="s4">
+      <h2 class="sec"><span class="n tabular">04</span> Тест детекции (текст против базы)</h2>
+      <p>Проверка произвольного текста на присутствие коммерческой тайны. Фильтр по уровню секретности, Top-K совпадений на чанк (по умолчанию 3). Кросс-энкодер в этом тесте отключён (<code>CROSS_ENCODER_ENABLED=false</code>) — используется чистая косинусная близость.</p>
+      <p>Механика (из подсказки «Как работает тест»):</p>
+      <ol class="steps">
+        <li>Текст разбивается на чанки.</li>
+        <li>Каждый чанк проверяется по справочнику ключевых слов.</li>
+        <li>Каждый чанк векторизуется и ищется в базе коммерческой тайны (косинус).</li>
+        <li>Максимальный score по чанку определяет решение.</li>
+        <li>Совпадения по ключевым словам добавляют +0.05 к score (максимум за 3 слова).</li>
+      </ol>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Score</th><th>Решение</th></tr></thead>
+          <tbody>
+            <tr><td class="k"><code>score &lt; 0.75</code></td><td><span class="pill ok">PASS</span></td></tr>
+            <tr><td class="k"><code>0.75–0.88</code></td><td><span class="pill warn">REVIEW</span></td></tr>
+            <tr><td class="k"><code>score ≥ 0.88</code></td><td><span class="pill bad">BLOCK</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout note">
+        <p class="head">Пороги — глобальные</p>
+        <p>Пороги PASS/BLOCK совпадают с теми, что показаны на экране «Управление базой» (раздел 8) — значит это глобальная настройка, а не параметр конкретного теста.</p>
+      </div>
+    </section>
+
+    <section id="s5">
+      <h2 class="sec"><span class="n tabular">05</span> Реранкинг (тестирование кросс-энкодеров)</h2>
+      <p>Отдельный экран для подбора и сравнения моделей реранкинга. Активная production-модель — <code>cross-encoder/mmarco-mMiniLMv2-L12-H384-v1</code> (реранкинг включён, <code>max_length=512</code>). Форма теста: текст запроса → векторизация → топ-50 кандидатов → реранжирование выбранной моделью; настраиваются модель, Top-K результатов, фильтр по уровню секретности.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Модель</th><th>Языки</th><th>Размер</th><th>Качество</th><th>Статус</th><th>Примечание</th></tr></thead>
+          <tbody>
+            <tr><td class="k"><code>cross-encoder/mmarco-mMiniLMv2-L12-H384-v1</code></td><td>50 языков, вкл. RU</td><td>470 MB</td><td>★★★☆☆</td><td>production</td><td>MVP-выбор: CPU-friendly, ~80 мс/чанк</td></tr>
+            <tr><td class="k"><code>BAAI/bge-reranker-v2-m3</code></td><td>Многоязычный</td><td>2200 MB</td><td>★★★★★</td><td>не загружена</td><td>State-of-the-art; требует ≥8 GB RAM</td></tr>
+            <tr><td class="k"><code>BAAI/bge-reranker-base</code></td><td>Многоязычный</td><td>1100 MB</td><td>★★★☆☆</td><td>не загружена</td><td>Компромисс между base и v2-m3</td></tr>
+            <tr><td class="k"><code>DiTy/cross-encoder-russian-msmarco</code></td><td>Только RU</td><td>700 MB</td><td>★★★★☆</td><td>не загружена</td><td>Лучшее качество на чисто русских документах</td></tr>
+            <tr><td class="k"><code>amberoad/bert-multilingual-passage-reranking-msmarco</code></td><td>Многоязычный</td><td>700 MB</td><td>★★☆☆☆</td><td>не загружена</td><td>Устарел; уступает mMiniLMv2 при том же размере</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Дозагрузка моделей — <code>python scripts/download_cross_encoders.py --recommended</code>.</p>
+    </section>
+
+    <section id="s6">
+      <h2 class="sec"><span class="n tabular">06</span> Словари и блэклист</h2>
+      <h3 class="sub">Ключевые слова (справочник)</h3>
+      <p>Справочник ключевых слов/синонимов, участвующий в скоринге теста детекции (+0.05 к score, см. раздел 4). На момент снимка пуст (0 активных / 0 всего). Фильтры: поиск по слову/синониму/категории, категория, показывать «Только активные». Добавление — кнопка «+ Добавить».</p>
+      <h3 class="sub">Блэклист ОМ</h3>
+      <p>Термины из OpenMetadata с тегом типа <code>blacklist</code>, загружаются автоматически. На момент снимка пуст (0 активных / 0 всего). Фильтры: поиск по термину/источнику, тип сущности, тип токена, показывать «Только активные». Кнопки «Загрузить из файла» и «Тест детекции».</p>
+      <h3 class="sub">Тест-площадка: блэклист</h3>
+      <p>Отдельный от общего «Теста детекции» экран (тот тестирует совпадение с базой коммерческой тайны по векторному сходству — PASS/REVIEW/BLOCK). Здесь — поле ввода текста, кнопки «Проверить»/«Очистить», результат вида «Совпадений не найдено» / список совпадений, с пометкой «Детекция через pii-shield».</p>
+      <div class="callout warn">
+        <p class="head">Проверено на практике (17.08.2026)</p>
+        <p>Паттерн «Номер договора / брокерский-лицевой счёт (Д8)» (<code>\b[А-Я]{2}\d{4,6}(?:-[А-Я]{2}-\d{1,3})?\b</code>, тип токена <code>CUSTOM</code>) подтверждённо сохранён на экране «Regex-паттерны» и активен («статус: активен»), но тест на этом экране с текстом, содержащим совпадающую строку («ВР33431»), вернул «Совпадений не найдено».</p>
+        <p>Раз паттерн активен и корректен, а совпадения всё равно нет — это подтверждает, что «Тест-площадка: блэклист» проверяет именно термины блэклиста (<code>catalog_blacklist</code>, точное совпадение по значениям из OM), а не пользовательские regex-паттерны из таблицы <code>custom_patterns</code>, несмотря на пометку «Детекция через pii-shield».</p>
+        <p>Надёжный способ проверить именно применение кастомного regex-паттерна с заменой на токен маски — не через этот экран, а через реальный чат + «Журнал LLM-сессий» (см. открытый вопрос в реестре и <code>case-03-instrukciya-proverka-maskirovaniya.md</code>).</p>
+      </div>
+      <h3 class="sub">Политики синхронизации (блэклиста)</h3>
+      <p>Таблица формируется автоматически воркером синхронизации — по одной строке на каждую колонку, извлечённую из OpenMetadata; позволяет отключить отдельную колонку или удалить её вместе со всеми накопленными терминами. На момент снимка пуста — заполняется при первом запуске воркера, требует <code>OM_SYNC_ENABLED=true</code> и заданных <code>OM_URL</code>, <code>OM_TOKEN</code> в <code>.env</code>.</p>
+    </section>
+
+    <section id="s7">
+      <h2 class="sec"><span class="n tabular">07</span> Regex-паттерны (пользовательские)</h2>
+      <p>URL: <code>/dlp/patterns/</code>. Форма добавления кастомного regex-паттерна:</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Поле</th><th>Что вводится</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Название</td><td>Например, «ИНН физлица»</td></tr>
+            <tr><td class="k">Regex-паттерн</td><td>Синтаксис Python <code>re</code>, валидируется перед сохранением; в примере плейсхолдера — <code>\b\d{12}\b</code></td></tr>
+            <tr><td class="k">Тип токена</td><td><strong>Закрытый выпадающий список из 5 значений</strong>: <code>PERSON</code>, <code>PROJECT</code>, <code>COMPANY</code>, <code>PRODUCT</code>, <code>CUSTOM</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Ниже — таблица уже добавленных паттернов: Название, Паттерн, Тип токена, Статус (активен/откл.), Добавлен (дата), действия «Изменить» / «Откл.» / «Удалить». На практике (17.08.2026) добавлены и подтверждены активными оба паттерна из инструкции по новым атрибутам маскирования — «Номер договора / брокерский-лицевой счёт (Д8)» и «Номер лицензии брокера (Д8)», тип токена <code>CUSTOM</code> у обоих.</p>
+      <div class="callout ok">
+        <p class="head">Найден встроенный тест одного паттерна</p>
+        <p>По кнопке «Изменить» у строки паттерна разворачивается инлайн-форма редактирования с дополнительным полем <strong>«Тестовый текст»</strong> и кнопкой <strong>«Проверить»</strong> — точечная проверка именно этого паттерна на введённом тексте, без похода на отдельный экран «Тест детекции»/«Тест-площадка: блэклист».</p>
+        <p>Это, вероятно, самый прямой способ проверить конкретный regex-паттерн — важно только вводить в это поле реальный пример текста (например <code>ВР33431</code>), а не сам паттерн: подстановка regex-синтаксиса как тестового текста закономерно даёт «Совпадений не найдено» и ничего не говорит о работоспособности паттерна.</p>
+      </div>
+      <p>На практике (17.08.2026) в оба поля «Тестовый текст» была вставлена копия самого regex-паттерна вместо примера реальных данных — оба теста закономерно вернули «Совпадений не найдено». Тестирование настоящим примером (<code>ВР33431</code>, <code>045-07514-100000</code>) ещё предстоит.</p>
+      <h3 class="sub">Про тип токена</h3>
+      <p>Это не текстовое поле и не совпадает с 20 встроенными <code>PIIType</code> из документа разработчика (там нет <code>PROJECT</code>/<code>PRODUCT</code>, а <code>ORG</code>/<code>COMPANY</code> — разные имена типа). <code>CUSTOM</code>, судя по всему, — общий catch-all для всего, что не подпадает под первые четыре категории; отдельного, узнаваемого префикса маски под конкретный кастомный атрибут (типа <code>[CONTRACT_N]</code>) через этот экран завести нельзя — только общий <code>[CUSTOM_N]</code>.</p>
+      <h3 class="sub">Механика (из подсказки «Как это работает»)</h3>
+      <p>Паттерны хранятся в таблице <code>custom_patterns</code> и выдаются <code>pii-shield</code> через <code>GET /api/v1/shield-config</code>; <code>pii-shield</code> поллит этот endpoint каждые N секунд (интервал — <code>PII_CATALOG_BLACKLIST_SYNC_INTERVAL</code>) и применяет паттерны в своём <code>RegexDetector</code>.</p>
+      <div class="callout warn">
+        <p class="head">Открытый вопрос</p>
+        <p>Остаётся не до конца ясным (см. реестр открытых вопросов): это самостоятельный, более простой механизм, чем <code>CustomPIIType</code> из документа разработчика (<code>id</code>/<code>prefix</code>/<code>display_name</code>/валидатор через <code>config.py</code>), или упрощённая UI-надстройка над тем же самым, где <code>prefix</code> в этом конкретном развёртывании зафиксирован пятью значениями.</p>
+      </div>
+    </section>
+
+    <section id="s8">
+      <h2 class="sec"><span class="n tabular">08</span> Управление базой и интеграция</h2>
+      <h3 class="sub">Управление базой (коммерческой тайны)</h3>
+      <p>Статистика (на момент снимка все нули): активных чанков, всего чанков (вкл. архив), негативных примеров.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Параметр конфигурации</th><th>Значение</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Основная коллекция</td><td><code>confidential_chunks</code></td></tr>
+            <tr><td class="k">Коллекция негативов</td><td><code>negative_examples</code></td></tr>
+            <tr><td class="k">Путь к данным Qdrant</td><td><code>./data/qdrant</code></td></tr>
+            <tr><td class="k">Порог PASS</td><td><code>0.75</code></td></tr>
+            <tr><td class="k">Порог BLOCK</td><td><code>0.88</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Это те же значения порогов, что и в «Тест детекции» (раздел 4).</p>
+      <div class="callout warn">
+        <p class="head">«Опасная зона»</p>
+        <p>Полный необратимый сброс коллекции (секреты, негативы или обе сразу), подтверждение — ввод слова «УДАЛИТЬ». После сброса требуется заново запустить bootstrap или загрузить документы.</p>
+      </div>
+      <h3 class="sub">Интеграция (токены)</h3>
+      <p>Управление токенами, которыми <code>pii-shield</code> авторизуется при вызове <code>POST /api/v1/check</code> — через заголовок <code>X-Internal-Token</code>. Форма создания токена (название для идентификации, например <code>pii-shield-prod</code>), таблица активных токенов (название, значение токена, дата создания, кнопка «Отозвать» — независимый отзыв на каждый токен).</p>
+      <p>Инструкция «Как подключить pii-shield»:</p>
+      <ol class="steps">
+        <li>Создать токен, скопировать значение.</li>
+        <li>В <code>pii-shield</code> указать токен — либо переменной окружения <code>DLP_INTERNAL_TOKEN=...</code>, либо в тестовом чате: sidebar → DLP Integration → Internal token.</li>
+        <li>Указать endpoint <code>DLP_ENDPOINT=http://localhost:8000</code>.</li>
+        <li>Включить DLP: <code>DLP_ENABLED=true</code>.</li>
+      </ol>
+      <div class="callout note">
+        <p class="head">Подтверждение архитектуры</p>
+        <p>Это прямое подтверждение архитектуры из документа разработчика: <code>dlp-secret</code> (политика секретности PASS/REVIEW/BLOCK) — отдельный сервис от <code>pii-shield</code> (детекция PII), связаны через этот internal-токен и HTTP-вызов, а не общий процесс.</p>
+      </div>
+    </section>
+
+    <section id="s9">
+      <h2 class="sec"><span class="n tabular">09</span> Не описано ещё и См. также</h2>
+      <p>Пункты меню, скриншоты которых пока не поступали:</p>
+      <ul class="plain">
+        <li><strong>Список документов</strong> — вероятно, отдельный от «Управление базой» просмотр списка загруженных/добавленных фрагментов (сейчас видна только сводная статистика).</li>
+        <li><strong>Загрузить</strong> — вероятно, массовая загрузка документа/файла в базу коммерческой тайны, в отличие от ручного ввода одного фрагмента в «Добавить».</li>
+        <li><strong>Загрузить блэклист</strong> — массовая загрузка терминов блэклиста из файла (кнопка видна на экране «Блэклист ОМ», но сама форма загрузки не просмотрена).</li>
+      </ul>
+      <ul class="see-also">
+        <li><span class="path">sources/pii-shield-masking-span-registry.docx</span><span class="desc">Документ разработчика: архитектура <code>pii-shield</code>/<code>dlp-secret</code>, каталог встроенных типов, механизм <code>CustomPIIType</code>.</span></li>
+        <li><span class="path">analysis/pokrytie-maskirovaniya-perechen-d8.xlsx</span><span class="desc">Лист «Три слоя маскирования», раздел 4 — предложения по кастомным типам для сверки с экраном «Regex-паттерны».</span></li>
+        <li><span class="path">otkrytye-voprosy.md</span><span class="desc">Сводный реестр открытых вопросов.</span></li>
+      </ul>
+    </section>
+
+    <footer class="doc-foot">
+      <span>База знаний по платформе</span>
+      <span>Раздел «База секретов»</span>
+    </footer>
+  </main>
+</div>

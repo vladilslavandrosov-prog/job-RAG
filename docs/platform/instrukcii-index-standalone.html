@@ -1,0 +1,255 @@
+<title>Коллекция инструкций — Камерата</title>
+<style>
+  :root {
+    --bg: #F5F7F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F3;
+    --ink: #17212B;
+    --muted: #5C6B7A;
+    --muted-2: #8695A3;
+    --line: #E1E7EB;
+    --line-2: #D2DADF;
+    --accent: #0E6E63;
+    --accent-ink: #0B564D;
+    --accent-tint: #E4F0EE;
+    --ok: #1E7A4C;
+    --ok-tint: #E3F1E8;
+    --warn: #93630F;
+    --warn-tint: #FBF0DC;
+    --bad: #A8393B;
+    --bad-tint: #FBE7E7;
+    --open: #5B4B93;
+    --open-tint: #ECE8F7;
+    --code-bg: #EDF1F3;
+    --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+      --code-bg: #1C252C; --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+    --code-bg: #1C252C; --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  header.top { margin-bottom: 48px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title { font-size: 32px; line-height: 1.2; letter-spacing: -.01em; font-weight: 700; margin: 0 0 12px; text-wrap: balance; }
+  .subtitle { font-size: 16px; color: var(--muted); margin: 0; max-width: 66ch; }
+
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .toc a { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); background: var(--accent-tint); border-radius: 100px; padding: 6px 14px; text-decoration: none; }
+  .toc a:hover { background: var(--accent); color: var(--surface); }
+
+  section.group { margin-top: 52px; scroll-margin-top: 24px; }
+  h2.sec { display: flex; align-items: baseline; gap: 10px; font-size: 20px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 6px; }
+  .sec-dek { font-size: 13.5px; color: var(--muted); margin: 0 0 20px; max-width: 68ch; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+
+  .card { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); text-decoration: none; color: inherit; transition: border-color .15s ease, transform .15s ease; }
+  .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .card .card-title { font-size: 15px; font-weight: 700; color: var(--ink); }
+  .card .card-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .card .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+  .card .tag { display: inline-block; font-size: 10px; letter-spacing: .03em; text-transform: uppercase; font-weight: 700; padding: 2px 7px; border-radius: 5px; }
+  .tag.role-user { background: var(--ok-tint); color: var(--ok); }
+  .tag.role-admin { background: var(--accent-tint); color: var(--accent-ink); }
+  .tag.role-ib { background: var(--bad-tint); color: var(--bad); }
+  .tag.role-integ { background: var(--open-tint); color: var(--open); }
+  .tag.fmt { background: var(--surface-2); color: var(--muted-2); }
+
+  .card.pending { opacity: .55; border-style: dashed; }
+  .card.pending:hover { transform: none; border-color: var(--line); }
+  .card .soon { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted-2); }
+
+  footer.doc-foot { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted-2); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow"><span class="dot"></span>База знаний · Платформа «Камерата»</p>
+    <h1 class="title">Коллекция инструкций</h1>
+    <p class="subtitle">Все инструкции по платформе в одном месте — для пользователя, администратора, службы ИБ и интеграторов. Каждая карточка ведёт на самостоятельный HTML-документ с той же визуальной системой.</p>
+    <nav class="toc" aria-label="Разделы">
+      <a href="#g-start">Первое знакомство</a>
+      <a href="#g-user">Пользователь</a>
+      <a href="#g-admin">Администратор</a>
+      <a href="#g-ib">Служба ИБ</a>
+      <a href="#g-integ">Интеграции</a>
+    </nav>
+  </header>
+
+  <section class="group" id="g-start">
+    <h2 class="sec">Первое знакомство</h2>
+    <p class="sec-dek">С чего начать, если видите платформу впервые.</p>
+    <div class="grid">
+      <a class="card" href="obshee-opisanie-sistemy-standalone.html">
+        <div class="card-title">Общее описание системы</div>
+        <div class="card-desc">Пять понятий, два режима поставки, что нужно от заказчика, чем платформа честно не является.</div>
+        <div class="card-tags"><span class="tag role-user">Для всех</span></div>
+      </a>
+      <a class="card" href="rukovodstvo-polzovatelya-standalone.html">
+        <div class="card-title">Руководство пользователя</div>
+        <div class="card-desc">Чат с помощником, документы и коллекции, каталог данных, защита данных глазами пользователя, шаблоны, выгрузка результатов.</div>
+        <div class="card-tags"><span class="tag role-user">Пользователь</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="group" id="g-user">
+    <h2 class="sec">Для пользователя</h2>
+    <p class="sec-dek">Повседневная работа в интерфейсе: чат, документы, шаблоны.</p>
+    <div class="grid">
+      <a class="card" href="instrukciya-rabota-s-rag-standalone.html">
+        <div class="card-title">Как работать с RAG</div>
+        <div class="card-desc">Загрузка документов, вопросы в чате, примеры на отчёте брокера, как получить более качественный результат.</div>
+        <div class="card-tags"><span class="tag role-user">Пользователь</span></div>
+      </a>
+      <a class="card" href="chat-standalone.html">
+        <div class="card-title">Чат</div>
+        <div class="card-desc">История диалогов, выбор модели/агента, экспорт в PDF, переключатель «Рассуждения».</div>
+        <div class="card-tags"><span class="tag role-user">Пользователь</span></div>
+      </a>
+      <a class="card" href="moi-shablony-standalone.html">
+        <div class="card-title">Мои шаблоны</div>
+        <div class="card-desc">Курируемые образцы ответов, recall на похожий вопрос, строгий vs обычный режим.</div>
+        <div class="card-tags"><span class="tag role-user">Пользователь</span></div>
+      </a>
+      <a class="card" href="istochniki-dokumenty-standalone.html">
+        <div class="card-title">Источники → Документы</div>
+        <div class="card-desc">Реестр загруженных источников, статус индексации, фрагменты, домены/коллекции.</div>
+        <div class="card-tags"><span class="tag role-user">Пользователь</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="group" id="g-admin">
+    <h2 class="sec">Для администратора платформы</h2>
+    <p class="sec-dek">Настройка доступа, данных, агентов и лимитов.</p>
+    <div class="grid">
+      <a class="card" href="rukovodstvo-administratora-standalone.html">
+        <div class="card-title">Руководство администратора</div>
+        <div class="card-desc">Роли и доступ, коллекции, провайдеры/модели, защита данных, инциденты, бюджеты.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+      <a class="card" href="administrirovanie-polzovateli-standalone.html">
+        <div class="card-title">Администрирование пользователей</div>
+        <div class="card-desc">«Рабочее место ИБ» → «Сотрудники ИБ» (доступ в саму админку) и отдельно «Пользователи и доступ» (LLM-провайдеры, лимиты токенов, API-ключи) — три разных экрана.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+      <a class="card" href="instrukciya-domeny-i-dostup-standalone.html">
+        <div class="card-title">Домены и доступ</div>
+        <div class="card-desc">Создание домена, привязка коллекции, рабочий механизм реального доступа (домен на профиле/команде + роль Domain Only Access Role), частые заблуждения.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+      <a class="card" href="instrukciya-limity-tokenov-i-billing-standalone.html">
+        <div class="card-title">Лимиты токенов и биллинг</div>
+        <div class="card-desc">Лимит на пользователя и на команду, ловушка «что означает 0», тарифы, формула стоимости вызова, бюджеты и Alert %.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+      <a class="card" href="agenty-standalone.html">
+        <div class="card-title">Агенты</div>
+        <div class="card-desc">Конструктор агентов на «канвасе», согласование дата-стюард → ИБ.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+      <a class="card" href="upravlenie-dannymi-standalone.html">
+        <div class="card-title">Управление данными</div>
+        <div class="card-desc">Анализ схем, Граф процедур, Граф код→таблица, Граф доступа.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+      <a class="card" href="zadachi-review-pipeline-standalone.html">
+        <div class="card-title">Задачи — конвейер модерации</div>
+        <div class="card-desc">Предложения, Агенты на утверждении, Статистика, Очередь обработки, Промпты персон.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+      <a class="card" href="kalibrovka-politiki-poiska-standalone.html">
+        <div class="card-title">Калибровка политик поиска</div>
+        <div class="card-desc">Ранжирование чанков, планировщик/реплан, роутинг вопросов.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+      <a class="card" href="kalibrovka-detektora-i-otladka-standalone.html">
+        <div class="card-title">Калибровка детектора и отладка</div>
+        <div class="card-desc">Пороги детектора таблиц; отладка сессий — разбор диалогов по инструментам/плану/ответам.</div>
+        <div class="card-tags"><span class="tag role-admin">Администратор</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="group" id="g-ib">
+    <h2 class="sec">Для службы ИБ</h2>
+    <p class="sec-dek">Маскирование, доступ на уровне строк/полей, коммерческая тайна, внешние клиенты.</p>
+    <div class="grid">
+      <a class="card" href="rukovodstvo-administratora-ib-standalone.html">
+        <div class="card-title">Руководство администратора ИБ</div>
+        <div class="card-desc">PII Shield и построчная фильтрация, база секретов, журналы аудита, реагирование на инциденты, соответствие ФСТЭК №17/21, модель угроз.</div>
+        <div class="card-tags"><span class="tag role-ib">ИБ</span></div>
+      </a>
+      <a class="card" href="instrukciya-rls-nastroika-prav-standalone.html">
+        <div class="card-title">Настройка прав (RLS)</div>
+        <div class="card-desc">Построчный/поколоночный доступ — row_filters, masked_columns.</div>
+        <div class="card-tags"><span class="tag role-ib">ИБ</span></div>
+      </a>
+      <a class="card" href="instrukciya-smyslovaya-proverka-kt-standalone.html">
+        <div class="card-title">Смысловая проверка коммерческой тайны</div>
+        <div class="card-desc">Наполнение Базы коммерческой тайны, ключевые слова, грифы вложений, структурные шаблоны, чёрный список, калибровка чувствительности — для ИБ-аналитика.</div>
+        <div class="card-tags"><span class="tag role-ib">ИБ-аналитик</span></div>
+      </a>
+      <a class="card" href="instrukciya-semanticheskaya-proverka-dlp-standalone.html">
+        <div class="card-title">Семантическая проверка DLP — операционный фокус</div>
+        <div class="card-desc">Словарь терминов, сбор эталона секретов, «Тест детекции», вердикты PASS/REVIEW/BLOCK, чек-лист первичного запуска.</div>
+        <div class="card-tags"><span class="tag role-ib">ИБ</span></div>
+      </a>
+      <a class="card" href="baza-sekretov-standalone.html">
+        <div class="card-title">База секретов</div>
+        <div class="card-desc">Провайдеры моделей, чанки, реранкинг, ключевые слова, блэклист из OpenMetadata, regex-паттерны, коллекция Qdrant, токены интеграции.</div>
+        <div class="card-tags"><span class="tag role-ib">ИБ</span></div>
+      </a>
+      <a class="card" href="instrukciya-novye-atributy-maskirovaniya-otchet-brokera-standalone.html">
+        <div class="card-title">Regex-паттерны маскирования — отчёт брокера</div>
+        <div class="card-desc">Конкретные regex/названия для номера договора, счёта и лицензии брокера на реальном примере отчёта.</div>
+        <div class="card-tags"><span class="tag role-ib">ИБ-аналитик</span></div>
+      </a>
+      <a class="card" href="instrukciya-vneshnie-agentskie-sistemy-ib-standalone.html">
+        <div class="card-title">Внешние агентские системы</div>
+        <div class="card-desc">Реестр внешних клиентов, карточка клиента, «Ротация секрета» vs «Перевыпустить токен», аудит MCP-вызовов.</div>
+        <div class="card-tags"><span class="tag role-ib">ИБ</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="group" id="g-integ">
+    <h2 class="sec">Интеграции</h2>
+    <p class="sec-dek">Подключение внешних систем к платформе.</p>
+    <div class="grid">
+      <a class="card" href="instrukciya-mcp-gateway-podklyuchenie-standalone.html">
+        <div class="card-title">Подключение к MCP Gateway</div>
+        <div class="card-desc">OAuth client_credentials, Streamable HTTP, tools/list и tools/call, разбор ошибок — для интегратора-вендора и для ИБ, заводящей доступ.</div>
+        <div class="card-tags"><span class="tag role-integ">Интегратор</span><span class="tag role-ib">ИБ</span></div>
+      </a>
+    </div>
+  </section>
+
+  <footer class="doc-foot">
+    <span>Платформа «Камерата» · внутренняя база знаний</span>
+    <span>Источник — <code>docs/platform/</code> в репозитории</span>
+  </footer>
+</div>

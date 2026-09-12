@@ -1,0 +1,242 @@
+<title>Изолированный тест — коллекция «ЭКО_2»</title>
+<style>
+  :root {
+    --bg: #F5F7F9;
+    --surface: #FFFFFF;
+    --surface-2: #EDF1F3;
+    --ink: #17212B;
+    --muted: #5C6B7A;
+    --muted-2: #8695A3;
+    --line: #E1E7EB;
+    --line-2: #D2DADF;
+    --accent: #0E6E63;
+    --accent-ink: #0B564D;
+    --accent-tint: #E4F0EE;
+    --ok: #1E7A4C;
+    --ok-tint: #E3F1E8;
+    --warn: #93630F;
+    --warn-tint: #FBF0DC;
+    --bad: #A8393B;
+    --bad-tint: #FBE7E7;
+    --open: #5B4B93;
+    --open-tint: #ECE8F7;
+    --code-bg: #EDF1F3;
+    --code-ink: #1C4B44;
+    --shadow: 0 1px 2px rgba(23,33,43,.04), 0 8px 24px rgba(23,33,43,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+      --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+      --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+      --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+      --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+      --code-bg: #1C252C; --code-ink: #7CD9CC;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1519; --surface: #161E24; --surface-2: #1C252C; --ink: #E7ECEF;
+    --muted: #93A2AF; --muted-2: #6D7C8A; --line: #263039; --line-2: #2E3941;
+    --accent: #4FC3B4; --accent-ink: #7CD9CC; --accent-tint: #16302C;
+    --ok: #58B983; --ok-tint: #16301F; --warn: #E0AC4E; --warn-tint: #362808;
+    --bad: #E6787A; --bad-tint: #3A1618; --open: #B29EE8; --open-tint: #251F3A;
+    --code-bg: #1C252C; --code-ink: #7CD9CC;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.6;
+  }
+  .mono { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+  .shell {
+    display: grid; grid-template-columns: 232px minmax(0, 760px);
+    justify-content: center; gap: 56px; max-width: 1180px; margin: 0 auto; padding: 56px 24px 96px;
+  }
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: minmax(0, 1fr); padding: 32px 18px 64px; }
+    .nav-rail { display: none; }
+  }
+  .nav-rail { position: sticky; top: 40px; align-self: start; }
+  .nav-eyebrow { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted-2); font-weight: 600; margin: 0 0 14px; }
+  .nav-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+  .nav-list a {
+    display: flex; gap: 10px; align-items: baseline; padding: 7px 0 7px 16px; margin-left: -1px;
+    border-left: 2px solid transparent; color: var(--muted); text-decoration: none; font-size: 13.5px;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .nav-list a:hover { color: var(--ink); border-left-color: var(--line-2); }
+  .nav-num { font-size: 11px; color: var(--muted-2); min-width: 14px; }
+  .nav-status { margin-top: 28px; padding: 14px 16px; border-radius: 8px; background: var(--accent-tint); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+  .nav-status .label { font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; color: var(--accent-ink); margin: 0 0 6px; }
+  .nav-status p { margin: 0; font-size: 12.5px; color: var(--ink); line-height: 1.5; }
+  header.doc-head { margin-bottom: 44px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1.title { font-size: 30px; line-height: 1.22; letter-spacing: -.01em; font-weight: 700; margin: 0 0 12px; text-wrap: balance; }
+  .subtitle { font-size: 16px; color: var(--muted); margin: 0 0 22px; max-width: 62ch; }
+  .lede { font-size: 16px; color: var(--ink); max-width: 68ch; margin: 0; padding-top: 22px; border-top: 1px solid var(--line); }
+  section { margin-top: 52px; scroll-margin-top: 32px; }
+  h2.sec { display: flex; align-items: baseline; gap: 10px; font-size: 21px; font-weight: 700; letter-spacing: -.005em; margin: 0 0 16px; }
+  h2.sec .n { font-size: 14px; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  h3.sub { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: var(--ink); }
+  p { margin: 0 0 14px; max-width: 68ch; }
+  section > p:last-child { margin-bottom: 0; }
+  code { font-family: "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace; font-size: .89em; background: var(--code-bg); color: var(--code-ink); padding: .12em .38em; border-radius: 4px; word-break: break-word; }
+  .table-scroll { overflow-x: auto; margin: 0 0 18px; border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 14px; background: var(--surface); }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--surface-2); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.k { color: var(--muted); white-space: nowrap; font-weight: 600; width: 1%; }
+  .tag { display: inline-block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; padding: 3px 8px; border-radius: 5px; margin-bottom: 10px; }
+  .tag.ok { background: var(--ok-tint); color: var(--ok); }
+  .tag.note { background: var(--accent-tint); color: var(--accent-ink); }
+  .tag.warn { background: var(--warn-tint); color: var(--warn); }
+  .callout { border-radius: 10px; padding: 16px 18px; margin: 0 0 18px; border: 1px solid var(--line); border-left: 3px solid var(--line-2); background: var(--surface); box-shadow: var(--shadow); }
+  .callout .head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; margin: 0 0 8px; }
+  .callout p { margin: 0; font-size: 14.5px; max-width: none; }
+  .callout p + p { margin-top: 8px; }
+  .callout.note { border-left-color: var(--accent); }
+  .callout.note .head { color: var(--accent-ink); }
+  .callout.ok { border-left-color: var(--ok); background: var(--ok-tint); }
+  .callout.ok .head { color: var(--ok); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-tint); }
+  .callout.warn .head { color: var(--warn); }
+  ol.steps { list-style: none; margin: 0 0 18px; padding: 0; counter-reset: step; }
+  ol.steps li { counter-increment: step; position: relative; padding: 0 0 16px 34px; font-size: 15px; max-width: 66ch; }
+  ol.steps li::before { content: counter(step); position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 6px; background: var(--accent-tint); color: var(--accent-ink); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
+  ol.steps li:last-child { padding-bottom: 0; }
+  ul.plain { list-style: none; margin: 0 0 18px; padding: 0; }
+  ul.plain li { position: relative; padding: 0 0 14px 20px; font-size: 15px; max-width: 66ch; }
+  ul.plain li::before { content: "–"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  ul.plain li:last-child { padding-bottom: 0; }
+  .see-also { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .see-also li { display: flex; gap: 10px; align-items: baseline; font-size: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .see-also .path { font-family: "SF Mono", Consolas, monospace; font-size: 12.5px; color: var(--accent-ink); flex: none; }
+  .see-also .desc { color: var(--muted); }
+  footer.doc-foot { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted-2); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+</style>
+
+<div class="shell">
+  <nav class="nav-rail" aria-label="Разделы">
+    <p class="nav-eyebrow">На странице</p>
+    <ul class="nav-list">
+      <li><a href="#s1"><span class="nav-num tabular">1</span> Зачем это делаем</a></li>
+      <li><a href="#s2"><span class="nav-num tabular">2</span> Что в комплекте</a></li>
+      <li><a href="#s3"><span class="nav-num tabular">3</span> Создать домен и коллекцию</a></li>
+      <li><a href="#s4"><span class="nav-num tabular">4</span> Загрузить документы</a></li>
+      <li><a href="#s5"><span class="nav-num tabular">5</span> Доступ и область поиска</a></li>
+      <li><a href="#s6"><span class="nav-num tabular">6</span> Прогнать тест дважды</a></li>
+      <li><a href="#s7"><span class="nav-num tabular">7</span> Что сравнивать</a></li>
+      <li><a href="#s8"><span class="nav-num tabular">8</span> Что тест не решит</a></li>
+    </ul>
+    <div class="nav-status">
+      <p class="label">Комплект готов</p>
+      <p>24 файла .docx, архивом <span class="mono">eco-converted-for-upload.zip</span></p>
+    </div>
+  </nav>
+
+  <main>
+    <header class="doc-head">
+      <p class="eyebrow"><span class="dot"></span>Инструкция · АО «Эко Ресурс»</p>
+      <h1 class="title">Изолированный тест на коллекции «ЭКО_2»</h1>
+      <p class="subtitle">Чистый повторный прогон 18 вопросов пилота на новой, отдельной коллекции — без изменения существующих <code>eco</code>/<code>Fedoseeva</code>, чтобы обе точки сравнения (старая и новая) остались доступны.</p>
+      <p class="lede">Загружаем полный, а не урезанный корпус — те же 24 документа, что были в исходном пилоте, просто пересобранные в <code>.docx</code>. Урезанный набор «только под эти вопросы» дал бы искусственно завышенную точность (меньше конкурирующего контента) и был бы несравним с прошлыми прогонами.</p>
+    </header>
+
+    <section id="s1">
+      <h2 class="sec"><span class="n tabular">01</span> Зачем это делаем</h2>
+      <p>Ре-тест 12.09.2026 на существующей коллекции <code>eco</code> дал смешанную картину: часть ошибок пилота исправлена, часть — нет, плюс найдена регрессия и дважды — явная аномалия цитирования источника (карточка показывала файл, не относящийся к корпусу СМК). Полный разбор — <code>pilot-test-02-retest-protocol.md</code>.</p>
+      <div class="callout warn">
+        <p class="head">Проблема существующего теста</p>
+        <p>Мы не знаем точно, что именно лежит в <code>eco</code>/<code>Fedoseeva</code> на платформе прямо сейчас — конвертировали ли уже часть файлов, остались ли дубли, и чем объясняются аномалии цитирования. Правки внутри уже работающих коллекций невозможно откатить для чистого сравнения.</p>
+      </div>
+      <p>Изолированная коллекция <code>ЭКО_2</code> с заведомо известным, полностью проверенным содержимым даёт контролируемый эксперимент: если ошибки пилота (2.2 / 2.3 / 6.2) исчезнут здесь — причина была в файлах/парсинге. Если сохранятся — причина в другом месте пайплайна (поиск, чанкование, что-то ещё), и переконвертация формата тут ни при чём.</p>
+    </section>
+
+    <section id="s2">
+      <h2 class="sec"><span class="n tabular">02</span> Что в комплекте</h2>
+      <span class="tag ok">24 из 27 файлов</span>
+      <p>Архив <code>eco-converted-for-upload.zip</code> — все 24 документа, которые были в исходном корпусе «Эко», пересобраны в чистый <code>.docx</code> (подробности конвертации — <code>README.md</code>, раздел «converted-for-upload»). Ни один документ не редактировался по содержанию — только формат.</p>
+      <div class="callout warn">
+        <p class="head">Не хватает 3 документов</p>
+        <p><strong>И-12-10-03</strong> «Корректировка Заказу покупателя в 1С», <strong>И-12-12-06</strong> «Оформление заказа Покупателя», <strong>ПР-08-00-14</strong> «Производственный процесс» (не путать с уже имеющимся ПР-09-00-14 «Контроль качества»). Судя по цитатам в ре-тесте 12.09, как минимум И-12-10-03 уже отдельно есть на платформе — но раз он не был прислан нам, в архиве его нет. Без этих трёх вопросы 2.2 и 3.2 в новой коллекции не смогут раскрыться полностью, даже если проблема была именно в формате.</p>
+      </div>
+    </section>
+
+    <section id="s3">
+      <h2 class="sec"><span class="n tabular">03</span> Создать домен и коллекцию</h2>
+      <p>Путь стандартный, как для любого нового домена/коллекции (см. <code>instrukciya-domeny-i-dostup.md</code>):</p>
+      <ol class="steps">
+        <li>Каталог → Data Marketplace → Домены → «+ Добавить домен» → назвать, например, «Эко — тест 2» (тип — Source-aligned, по аналогии с существующими доменами «Эко»).</li>
+        <li>Администрирование → Платформа → Коллекции → «Создать коллекцию»: Идентификатор — <code>eco_2</code>, Домен (текстовая метка) — например <code>eco_2</code>, Бизнес-домен(ы) ОМ — только что созданный домен «Эко — тест 2», Тип документа — «Регламент», Тип коллекции — «документы».</li>
+      </ol>
+      <div class="callout note">
+        <p class="head">Частая ошибка</p>
+        <p>«Домен» (текстовая метка) и «Бизнес-домен(ы) ОМ» — два независимых поля, оба обязательны. Выбор из списка «Бизнес-домен(ы) ОМ» не заполняет текстовое поле «Домен» автоматически.</p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <h2 class="sec"><span class="n tabular">04</span> Загрузить документы</h2>
+      <ol class="steps">
+        <li>Распакуйте <code>eco-converted-for-upload.zip</code> локально.</li>
+        <li>Источники → Документы → «+ Загрузить директорию» (пакетная загрузка) → выбрать распакованную папку → «Назначение: В коллекцию» → <code>eco_2</code>.</li>
+        <li>Дождаться завершения обработки всех 24 файлов — статус «готово» у каждого.</li>
+        <li>Если получится добыть 3 недостающих документа (см. §2) — догрузить их тем же способом до перехода к тестированию.</li>
+      </ol>
+    </section>
+
+    <section id="s5">
+      <h2 class="sec"><span class="n tabular">05</span> Доступ и область поиска</h2>
+      <p>Тестовому пользователю (тому же <code>eco_user@itq-group.com</code> или отдельному тестовому аккаунту) назначить домен «Эко — тест 2» + роль <code>Domain Only Access Role</code> — без этой роли назначенный домен ничего не ограничивает.</p>
+      <p>В самом чате при тестировании — открыть «Область поиска» и явно сузить до одной коллекции <code>ЭКО_2</code> (по аналогии с тем, как ре-тест 12.09 был сужен до «ЭКО»), чтобы результат не размывался остальными коллекциями платформы.</p>
+    </section>
+
+    <section id="s6">
+      <h2 class="sec"><span class="n tabular">06</span> Прогнать тест дважды — с двумя настройками области поиска</h2>
+      <p>Тот же список 18 вопросов, что и в исходном пилоте (<code>pilot-test-01-analysis.md</code>) и в ре-тесте (<code>pilot-test-02-retest-protocol.md</code>), в тех же формулировках. Два прохода, не один:</p>
+      <table>
+        <thead><tr><th>Проход</th><th>Область поиска — источники</th><th>Зачем</th></tr></thead>
+        <tbody>
+          <tr><td class="k">A</td><td>«Данные (каталог и SQL)» + «Документы»</td><td>Как было при ре-тесте 12.09 — прямое сравнение с тем прогоном</td></tr>
+          <tr><td class="k">B</td><td>только «Документы» (SQL выключен)</td><td>Диагностика аномалии цитирования: если посторонние файлы («Datafortest07.07.xlsx», «глоссарий») пропадут — путаница шла из SQL/каталога, а не из документов</td></tr>
+        </tbody>
+      </table>
+      <p>Условия обоих проходов зафиксировать так же подробно, как в §«Условия проведения» протокола ре-теста — модель, агент, режим рассуждений — на случай, если это тоже окажется значимой переменной.</p>
+      <div class="callout note">
+        <p class="head">Сохраняйте скриншоты по каждому вопросу</p>
+        <p>Как и в предыдущих раундах — именно по скриншотам живого чата (текст ответа + карточка источников) ведётся сверка, а не по пересказу.</p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <h2 class="sec"><span class="n tabular">07</span> Что сравнивать</h2>
+      <p>Три точки на каждый из 18 вопросов: пилот 11.09 (исходный) → ре-тест 12.09 на <code>eco</code> → тест на <code>ЭКО_2</code> (оба прохода A/B). Особое внимание — на 4 вопроса, которые на 12.09 остались нерешёнными:</p>
+      <ul class="plain">
+        <li><strong>2.2</strong> — корректировка Заказа на производство (нужен Д-08-04-01, которого не хватает).</li>
+        <li><strong>2.3</strong> — высота сброса тары (ответ должен появиться из <code>metodika-38.docx</code>, который в <code>ЭКО_2</code> точно есть и точно читаемый).</li>
+        <li><strong>5.2</strong> — приоритет заявок на ремонт (контрольный retrieval-случай — если и здесь не найдётся при читаемом источнике, это подтверждает, что проблема не в формате файлов вообще).</li>
+        <li><strong>6.2</strong> — добавление Спецификации (нужен И-08-05-08, который в <code>ЭКО_2</code> есть).</li>
+      </ul>
+    </section>
+
+    <section id="s8">
+      <h2 class="sec"><span class="n tabular">08</span> Что этот тест не решит</h2>
+      <div class="callout warn">
+        <p class="head">Ограничения эксперимента</p>
+        <p>Даже при чистом результате на <code>ЭКО_2</code> вопросы 2.2 и 3.2 не смогут быть закрыты полностью без 3 недостающих документов (§2) — их отсутствие в комплекте, а не проблема платформы.</p>
+        <p>Если аномалия цитирования (проход A) не исчезнет и при проходе B — это будет означать, что источник проблемы не в переключателе «Данные/SQL», и потребует отдельного разбора с командой платформы, не решаемого через настройку коллекции.</p>
+        <p>Табличные/форматные детали оригиналов (например, таблица высот в Методике №38) в <code>.docx</code>-версии сохранены только как текст, не как визуальная таблица — см. оговорку в <code>README.md</code>.</p>
+      </div>
+    </section>
+
+    <footer class="doc-foot">
+      <span>АО «Эко Ресурс» · внутренний технический материал</span>
+      <span>12.09.2026</span>
+    </footer>
+  </main>
+</div>

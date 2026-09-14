@@ -160,6 +160,8 @@
 
 ## См. также
 
+- [`docs/presentations/case-27-proekt-d8-skoup-i-voprosy.pptx`](../presentations/case-27-proekt-d8-skoup-i-voprosy.pptx) — презентация: программа проекта, диаграмма Ганта, реестр предложений, вопросы к заказчику.
+- [`docs/analysis/case-27-proekt-d8-skoup-i-voprosy.xlsx`](case-27-proekt-d8-skoup-i-voprosy.xlsx) — рабочая таблица (программа, вопросы, реестр).
 - [`docs/metodika-vnedreniya.md`](../metodika-vnedreniya.md) — методика, Кейс 2 (П1–П5).
 - [`docs/analysis/case-03-pilot-tz-ai-guard.md`](case-03-pilot-tz-ai-guard.md) — пилотное ТЗ, скоуп пилота и явные ограничения.
 - [`docs/analysis/case-02-tz-deep-analysis-and-proposals.md`](case-02-tz-deep-analysis-and-proposals.md) — разбор мастер-ТЗ, полный ландшафт источников/ролей.

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" font-family="Calibri, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0E7C86"/>
+    </marker>
+    <marker id="arrowGrey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5B6B7A"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="680" fill="#FFFFFF"/>
+
+  <text x="40" y="42" font-size="13" font-weight="700" fill="#0E7C86" letter-spacing="1.5">АРХИТЕКТУРА ПИЛОТА Д8</text>
+  <text x="40" y="70" font-size="22" font-weight="700" fill="#1A2733">Платформа «Камерата» — источники и получатели данных</text>
+
+  <!-- Source boxes (left) -->
+  <!-- КХД -->
+  <rect x="40" y="120" width="290" height="86" rx="8" fill="#F4F6F7" stroke="#D8DEE2" stroke-width="1.25"/>
+  <text x="60" y="148" font-size="15" font-weight="700" fill="#1A2733">КХД</text>
+  <text x="60" y="168" font-size="11.5" fill="#5B6B7A">4 таблицы: clients, managers,</text>
+  <text x="60" y="183" font-size="11.5" fill="#5B6B7A">mandates_targets, portfolios</text>
+  <text x="60" y="199" font-size="10.5" font-style="italic" fill="#C97A1A">⚠ portfolio value — известный пробел</text>
+
+  <!-- CRM Bitrix24 / ESB -->
+  <rect x="40" y="226" width="290" height="86" rx="8" fill="#F4F6F7" stroke="#D8DEE2" stroke-width="1.25"/>
+  <text x="60" y="254" font-size="15" font-weight="700" fill="#1A2733">CRM Bitrix24</text>
+  <text x="60" y="274" font-size="11.5" fill="#5B6B7A">через ESB (шину)</text>
+  <text x="60" y="292" font-size="11.5" fill="#5B6B7A">REST API / Webhook</text>
+
+  <!-- MCP-сервер -->
+  <rect x="40" y="332" width="290" height="86" rx="8" fill="#F4F6F7" stroke="#D8DEE2" stroke-width="1.25"/>
+  <text x="60" y="360" font-size="15" font-weight="700" fill="#1A2733">MCP-сервер</text>
+  <text x="60" y="380" font-size="11.5" fill="#5B6B7A">пилотный уровень,</text>
+  <text x="60" y="398" font-size="11.5" fill="#5B6B7A">без заявленного расширения</text>
+
+  <!-- RAG-документы -->
+  <rect x="40" y="438" width="290" height="86" rx="8" fill="#F4F6F7" stroke="#D8DEE2" stroke-width="1.25"/>
+  <text x="60" y="466" font-size="15" font-weight="700" fill="#1A2733">RAG-документы</text>
+  <text x="60" y="486" font-size="11.5" fill="#5B6B7A">2 коллекции документов</text>
+  <text x="60" y="504" font-size="11.5" fill="#5B6B7A">состав тем не зафиксирован</text>
+
+  <text x="185" y="548" font-size="11" fill="#8C99A6" text-anchor="middle">3 источника + RAG — весь скоуп пилота</text>
+
+  <!-- Platform hub (center) -->
+  <rect x="450" y="248" width="300" height="184" rx="14" fill="#0E7C86"/>
+  <text x="600" y="320" font-size="21" font-weight="700" fill="#FFFFFF" text-anchor="middle">Платформа</text>
+  <text x="600" y="348" font-size="21" font-weight="700" fill="#FFFFFF" text-anchor="middle">«Камерата»</text>
+  <text x="600" y="378" font-size="12" fill="#CFE8E9" text-anchor="middle">индексация · поиск (RAG)</text>
+  <text x="600" y="396" font-size="12" fill="#CFE8E9" text-anchor="middle">чат-интерфейс · API</text>
+
+  <!-- Arrows: sources -> platform -->
+  <path d="M330,163 C 390,163 390,300 448,320" fill="none" stroke="#0E7C86" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M330,269 C 390,269 400,310 448,325" fill="none" stroke="#0E7C86" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M330,375 C 390,375 400,355 448,340" fill="none" stroke="#0E7C86" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M330,481 C 390,481 390,360 448,346" fill="none" stroke="#0E7C86" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <text x="392" y="248" font-size="10.5" fill="#5B6B7A" text-anchor="middle">данные</text>
+
+  <!-- Recipients (right) -->
+  <rect x="870" y="248" width="290" height="184" rx="10" fill="#F4F6F7" stroke="#D8DEE2" stroke-width="1.25"/>
+  <text x="892" y="284" font-size="15" font-weight="700" fill="#1A2733">Пользователи платформы</text>
+  <text x="892" y="312" font-size="11.5" fill="#5B6B7A">до 20 пользователей (пилот)</text>
+  <text x="892" y="332" font-size="11.5" fill="#5B6B7A">2 роли из «до 5» в перспективе</text>
+  <text x="892" y="352" font-size="11.5" fill="#5B6B7A">(мастер-ТЗ: фронт-офис,</text>
+  <text x="892" y="370" font-size="11.5" fill="#5B6B7A">аналитик/УК, руководство,</text>
+  <text x="892" y="388" font-size="11.5" fill="#5B6B7A">бэк-офис — из них 2 в пилоте)</text>
+  <text x="892" y="412" font-size="10.5" font-style="italic" fill="#C97A1A">какие именно 2 — см. вопрос 6</text>
+
+  <!-- Arrows: platform <-> recipients -->
+  <path d="M750,320 L 866,320" fill="none" stroke="#0E7C86" stroke-width="2.25" marker-end="url(#arrow)"/>
+  <text x="808" y="308" font-size="10.5" fill="#5B6B7A" text-anchor="middle">ответ + ссылки</text>
+  <path d="M866,360 L 750,360" fill="none" stroke="#5B6B7A" stroke-width="1.75" stroke-dasharray="4 3" marker-end="url(#arrowGrey)"/>
+  <text x="808" y="378" font-size="10.5" fill="#8C99A6" text-anchor="middle">запрос</text>
+
+  <!-- legend / footnote -->
+  <text x="40" y="600" font-size="11.5" fill="#5B6B7A">Схема — по фактам пилота (не проектный скоуп). Расширение источников и ролей — см. §3 «Волны проекта».</text>
+  <text x="40" y="620" font-size="10.5" fill="#8C99A6">docs/analysis/case-27-proekt-d8-skoup-i-voprosy.md</text>
+</svg>
